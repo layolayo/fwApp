@@ -15,15 +15,15 @@
         public function __construct($db) {
             $this->conn = $db;
 
-            $query = 'SELECT 
+            $query = 'SELECT
                       id,
                       email,
                       userpassword,
                       disableuser,
                       superuser
-                      WHERE 
+                      WHERE
                        email =' . $this->email .
-                      'password = '. $this->password . 
+                      'password = '. $this->password .
                       'FROM' . $this->table;
 
 
