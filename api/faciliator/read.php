@@ -13,7 +13,7 @@ $db = $database->connect();
 
 // get number of facilator.
 $facilator = new Facilitator($db);
-$result = $faciltator->read();
+//$result = $faciltator->read();
 $count = $result->rowCount();
 //get the number if users
 

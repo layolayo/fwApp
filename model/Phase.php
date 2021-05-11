@@ -2,9 +2,9 @@
     /*
         This is repersents a facilitator model
     */
-    class Facilitator {
+    class Phase {
         private $conn;
-        private $table = "facilitator";
+        private $table = "phase";
 
         public $id;
         public $email;
