@@ -11,7 +11,7 @@
 
         public function connect() {
 
-            $this->conn = new mysqli($this->dbhost, $this->username, $this->password, $thid->dbname);
+            $this->conn = new mysqli($this->dbhost, $this->username, $this->password, $this->dbname);
 
             if (!$this->conn) {
                 die("Connection failed: " . mysqli_connect_error());
