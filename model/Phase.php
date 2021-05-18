@@ -43,6 +43,11 @@
             return $question_set;
         }
 
+        public function read_phase_titles() {
+            $query = "SELECT * FROM phase_title ORDER BY ID ASC";
+            return $this->conn->query($query); 
+        }
+
     }
 
 
