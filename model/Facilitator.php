@@ -6,31 +6,27 @@
         private $conn;
         private $table = "facilitator";
 
-        public $id;
         public $email;
         public $password;
-        public $disable;
-        public $superuser;
 
-        public function __construct($db) {
+        public function __construct($db, $email, $password) {
             $this->conn = $db;
+            $this->email = "'$email'";
+            $this->password = $password; // get email
 
-            $query = 'SELECT
-                      id,
-                      email,
-                      userpassword,
-                      disableuser,
-                      superuser
-                      WHERE
-                       email =' . $this->email .
-                      'password = '. $this->password .
-                      'FROM' . $this->table;
+        }
 
+        public function read() {
+            $query = "SELECT id, email, userpassword, disableuser, superuser FROM ".$this->table." WHERE email = ".$this->email;
+            $result = $this->conn->query($query);
 
-            $stmt = $this->conn->query($query) or die(mysqli_error());
-
-            return $stmt;
-
+            if (!$result) {
+                return die("An Error: ". mysqli_error($conn));
+            } 
+            $row = $result->fetch_assoc();
+            if (password_verify($password, $row["userpassword"]) == $password) {
+                return true;
+            }
         }
 
     }

@@ -12,7 +12,7 @@
         public function connect() {
 
             $this->conn = new mysqli($this->dbhost, $this->username, $this->password, $this->dbname);
-
+            mysqli_select_db($this->dbname, $this->conn);
             if (!$this->conn) {
                 die("Connection failed: " . mysqli_connect_error());
             }

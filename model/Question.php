@@ -4,7 +4,7 @@
     */
     class Question {
         private $conn;
-        private $table = "question_set";
+        private $table = "question";
 
         public $id;
         public $email;
@@ -12,27 +12,14 @@
         public $disable;
         public $superuser;
 
-        public function __construct($db, $id = NULL) {
+        public function __construct($db) {
             $this->conn = $db;
-            $query = "";
 
+        }
 
-            if ($id != NULL) {
-                $query = 'SELECT 
-                        * 
-                        FROM' . $this->table . 'WHERE id = ' . $id ; 
-            } else {
-                $query = 'SELECT 
-                      * 
-                      FROM' . $this->table;
-            }
-
-            $stmt = $this->conn->query($query) or die(mysqli_error());
-
-        
-            
-            return $stmt;
-
+        public function read($id) {
+            $query = "SELECT * FROM" .$this->table. " WHERE ID = " .$id;
+            return $this->conn->query($query);
         }
 
     }
