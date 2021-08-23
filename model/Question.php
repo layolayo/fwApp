@@ -4,7 +4,6 @@
     */
     class Question {
         private $conn;
-        private $table = "question";
 
         public $id;
         public $email;
@@ -18,8 +17,11 @@
         }
 
         public function read($id) {
-            $query = "SELECT * FROM" .$this->table. " WHERE ID = " .$id;
-            return $this->conn->query($query);
+            $stmt = $this->conn->prepare("SELECT * FROM question WHERE ID = ?"); 
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+
+            return $stmt->get_result();
         }
 
     }

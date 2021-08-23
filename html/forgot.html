@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+    <title>Register for facilitated writing</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../css/login.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+    <div>
+        <img class="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+        <h1 class="h3 mb-3 font-weight-normal">Forgot Password</h1>
+        <p>Please fill in this form to generate a new password.</p>
+        <p><small>Please enter token you have been given by the adminastrator</small></p>
+        <p style="display: none" id="warning-incorrect"> Email or Token appears to be incorrect </p>
+        <p style="display: none" id="warning-incorrect-psw"> Something went wrong, Try Again </p>
+
+        <hr>
+
+
+        <div id="container-input-token-email">
+            <form action="#">
+                <label for="token" class="sr-only"><strong>Token</strong></label>
+                <input type="text" class="form-control" placeholder="Enter Token" name="token" id="token" required>
+                <br>
+
+                <label for="inputEmail" class="sr-only"><strong>Email<strong></label>
+                <input type="text" class="form-control" placeholder="Enter Email" name="inputEmail" id="inputEmail" required>
+                <br>
+
+            </form>
+            <a class="btn btn-secondary" id="input-token-email">Enter</a>
+        </div>
+
+        <form action="#" id="container-input-password" style="visibility: hidden">
+            <label for="inputPassword" class="sr-only"><strong>Password</strong></label>
+            <input type="password" class="form-control" placeholder="Enter Password" name="inputPassword" id="inputPassword" required>
+            <br>
+
+            <label for="psw-repeat" class="sr-only"><strong>Repeat Password</strong></label>
+            <input type="password" class="form-control" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
+            <hr>
+            <a class="btn btn-secondary" id="password-submit" type="submit">Register</a>
+        </form>
+
+        <div class="container signin">
+            <p>Already have an account? <a href="/fwApp/html/login">Sign in</a>.</p>
+        </div>
+
+    </div>
+
+
+</body>
+<script>
+    document.getElementById("input-token-email").addEventListener("click", function() {
+        let token = document.getElementById('token').value;
+        let inputEmail = document.getElementById('inputEmail').value;
+
+        let url = new URL("http://www.uniquechange.com/fwApp/api/Request.php/forgot/");
+        console.log(url)
+        url.searchParams.set('token', token);
+        url.searchParams.set('email', inputEmail);
+        console.log(url.href)
+        loadDoc(url, inputEmailToken)
+
+    })
+
+    document.getElementById("password-submit").addEventListener("click", function() {
+        let password = document.getElementById("inputPassword").value;
+        let psword = document.getElementById("psw-repeat").value;
+        let inputEmail = document.getElementById('inputEmail').value;
+        if (!password || !psword || !(password === "") || !(psword === "")) {
+            if (password === psword) {
+                let url = new URL("http://www.uniquechange.com/fwApp/api/Request.php/newpsw/");
+                url.searchParams.set('password', password);
+                url.searchParams.set('email', inputEmail);
+                console.log(url);
+                loadDoc(url, passwordSuccess)
+            }
+        } else {
+            document.getElementById("warning-incorrect-psw").style.display = "block";
+        }
+    })
+
+    function loadDoc(url, func) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.onload = function() {
+            func(this);
+        }
+        xhttp.open("POST", url);
+        xhttp.send();
+    }
+
+
+    function inputEmailToken(xhttp) {
+        if (xhttp.responseText === "success") {
+            console.log(xhttp.responseText);
+            let containerForInputEmail = document.getElementById("container-input-token-email");
+            containerForInputEmail.style.display = "none";
+            let containerForPassword = document.getElementById("container-input-password");
+            containerForPassword.style.visibility = "visible";
+            let warning = document.getElementById("warning-incorrect");
+            warning.style.display = "none";
+
+        } else {
+            let warning = document.getElementById("warning-incorrect");
+            warning.style.display = "block";
+        }
+    }
+
+    function passwordSuccess(xhttp) {
+        if (xhttp.responseText === "success") {
+            window.location.assign("login");
+        } else {
+            console.log("failure");
+        }
+    }
+</script>
+
+</html>

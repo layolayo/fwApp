@@ -9,7 +9,7 @@
 
     class QuestionSet {
         private $conn;
-        private $table = "question_set";
+    
 
         public $id;
         public $email;
@@ -22,67 +22,207 @@
 
         }
 
-        public function read($phase_title) {
-            // This would returns a list of questions
-            // based on a phase
-            $phase = new Phase($this->conn);
-            $list_qs = $phase->list_qs($phase_title);
-            
-            $query = "SELECT * FROM " .$this->table. " WHERE ID in " . $list_qs;
-            return $this->conn->query($query);
+        /**
+         * question_sets | This is used for selecting every questions sets from
+         * the database
+         * @param none
+         * @return mysqli_result | bool
+         */
+        public function question_sets() {
+            $stmt = $this->conn->prepare("SELECT ID, title FROM question_set");
+            $stmt->execute();
+            return $stmt->get_result();
         }
 
-        public function read_categoried_question($phase_title) {
-            // This will return a list of question set which are categoried
-            $category = new Category($this->conn);
-            $questionID = $category->questionID($phase_title);
-            $query = "SELECT * FROM " .$this->table. " WHERE ID in " . $questionID;
-
-            return $this->conn->query($query);
+         /**
+         * question_set | This will be used for selecting a one question set
+         * based on the id from the database
+         * @param id: The id of the question set
+         * @return mysqli_result:   The results sql result query
+         * @return bool:    Returns false when an error occurs in the query. 
+         */
+        public function a_question_set($id) {
+            $stmt = $this->conn->prepare("SELECT * FROM question_set WHERE id = ?");
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            return $stmt->get_result();
         }
 
-        public function read_uncategoried_question($phase_title) {
-            // This will return a list of question set which not categoried
-            $category = new Category($this->conn);
-            $questionID = $category->questionID($phase_title);
-            $query = "SELECT * FROM " .$this->table. " WHERE ID not in " . $questionID;
+        /**
+         * question_set_phase | This is used for collecting questions set in the database
+         * depending on the phase
+         * @param string $phase_title : The name of the phase.
+         * @return string : Will return a string of the phase
+         */
+        public function question_set_phase($phase_title) {
+            // Select a question based on phase
+            // 1. gather question set from a particular phase
+            $stmt = $this->conn->prepare("SELECT questionSetID FROM phase WHERE title = ?"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
 
-            return $this->conn->query($query);
-        }
+            // 2. select all the questions set which are not in a category 
 
-        public function questions($question_set_title) {
-            // This will return an array of questions relating to a question set
-            $question_set_title = "'$question_set_title'";
-
-            $query = "SELECT * FROM ask WHERE questionSet = " .$question_set_title; // select question in ask
-            $result = $this->conn->query($query);
+            $result = $stmt->get_result();
+            $question_set_IDS = array();
             if ($result) {
-                $questions = array();
+                // 2.A a while loop to graps all the questionSetIDs from the query.
                 while ($row = $result->fetch_assoc()) {
-                    array_push($questions, $row["question"]);
+                    $ID = $row['questionSetID'];
+                    array_push($question_set_IDS, "'$ID'");
                 }
             }
-            return $questions; // list of question search
+            return $question_set_IDS = implode("," , $question_set_IDS);
         }
 
-        public function list_qs_titles($title) {
-            /**
-             * This will return an array of titles
-             * within a question set
-             */
+        /**
+         * uncategorised_question_set | This is used for collecting questions sets
+         * within a phase which are not categorised.
+         * @param string name:  The name of the phase
+         * @return mysqli_result:   The results sql result query
+         * @return bool:    Returns false when an error occurs in the query. 
+         */
+        public function uncategorised_question_set($phase_title) {
+            // This selects a list of all uncategories question sets
+            //$question_set_IDS = $this->question_set_phase($phase_title);
 
-            $phase = new Phase($this->conn);
-            $result = $phase->read($title);
-            if ($result) {
-                // used for selecting the questions set
-                // corresponding to a phase.
-                $titles = array();
-                while($row = $result->fetch_assoc()) {
-                    array_push($titles,$row["title"]);
-    
-                }
-            }
-            return $titles;
+            $stmt = $this->conn->prepare("SELECT *, p.title as 'phase', q.title as 'questionSetName' FROM phase p,
+            question_set q, type t
+            WHERE p.title = ? AND p.questionSetID = q.ID
+            AND q.type = t.title AND 
+            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
+
+
+            // select question set from ID. 
+            return $stmt->get_result();
+
+        }
+
+        /**
+         * categorised_question_set : This is used for collecting questions sets
+         * within a phase which are categorised.
+         * @param string name:  The name of the phase
+         * @return mysqli_result:   The results sql result query
+         * @return bool :   Returns false when an error occurs in the query.
+         */
+        public function categorised_question_set($phase_title) {
+            
+            $stmt = $this->conn->prepare("SELECT *, p.title as 'phase', q.ID as questionSetID , q.title as 'questionSetName'
+            FROM phase p, category c,
+            question_set q, type t
+            WHERE p.title = ? AND p.questionSetID = q.ID
+            AND q.type = t.title AND c.questionSetID = q.ID AND
+            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
+
+            return $stmt->get_result();
+        }
+        /**
+         * question | This will collect questions within a question set based
+         * on the question set id
+         * @param string id:    This will return the id of the question
+         * @return mysqli_result:   The results sql result query
+         * @return bool :   Returns false when an error occurs in the query.
+         */
+        public function questions($id) {
+            $stmt = $this->conn->prepare("SELECT * FROM ask, question WHERE ask.question = question.ID and questionSet = ? ORDER BY qOrder ASC"); 
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+
+            return $stmt->get_result();
+        }
+
+        /**
+         * question_set_specilism_uncategorised | This will collect a list of uncategorised questions set 
+         * based on the phase and the specilism
+         * @param string phase_title:   The name of the phase
+         * @param string specialism:    The name of the specialism
+         * @return mysqli_result:   The results sql result query
+         * @return bool :   Returns false when an error occurs in the query.
+         */
+        public function question_set_specilism_uncategorised($phase_title, $specialism) {
+            // This will return an array of questions relating to a question set
+            $stmt = $this->conn->prepare("SELECT * , q.title as 'questionSetName' FROM phase p, 
+            question_set q, type t
+            WHERE p.title = ? AND 
+            q.specialism IN ($specialism) AND p.questionSetID = q.ID
+            AND q.type = t.title AND 
+            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
+
+            return $stmt->get_result();
+
+        }
+
+        /**
+         * question_set_specilism_categorised | This will collect a list of categorised questions set 
+         * based on the phase and the specilism
+         * @param string phase_title:   The name of the phase
+         * @param string specialism:    The name of the specialism
+         * @return mysqli_result:   The results sql result query
+         * @return bool :   Returns false when an error occurs in the query.
+         */
+        public function question_set_specilism_categorised($phase_title, $specialism) {
+            // This will return an array of questions relating to a question set
+            $stmt = $this->conn->prepare("SELECT * , q.title as 'questionSetName' FROM phase p,
+            question_set q, type t
+            WHERE p.title = ? AND 
+            q.specialism IN ($specialism) AND p.questionSetID = q.ID
+            AND q.type = t.title AND 
+            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
+
+            return $stmt->get_result();
+        }
+
+         /**
+         * question_set_type_uncategorised | This will collect a list of uncategorised questions set 
+         * based on the phase and the type
+         * @param string phase_title:   The name of the phase
+         * @param string type:    The name of the type
+         * @return mysqli_result:   The results sql result query
+         * @return bool :   Returns false when an error occurs in the query.
+         */
+        public function question_set_type_uncategorised($phase_title, $type) {
+            // This will return an array of questions relating to a question set
+            $stmt = $this->conn->prepare("SELECT * , q.title as 'questionSetName' FROM phase p,
+            question_set q, type t
+            WHERE p.title = ? AND 
+            q.type IN ($type) AND p.questionSetID = q.ID
+            AND q.type = t.title AND 
+            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
+
+            return $stmt->get_result();
+
+        }
+
+        /**
+         * question_set_type_categorised | This will collect a list of categorised questions set 
+         * based on the phase and the type
+         * @param string phase_title:   The name of the phase
+         * @param string type:    The name of the type
+         * @return mysqli_result:   The results sql result query
+         * @return bool :   Returns false when an error occurs in the query.
+         */
+        public function question_set_type_categorised($phase_title, $type) {
+            // This will return an array of questions relating to a question set
+            $stmt = $this->conn->prepare("SELECT * , q.title as 'questionSetName' FROM phase p,
+            question_set q, type t
+            WHERE p.title = ? AND 
+            q.type IN ($type) AND p.questionSetID = q.ID
+            AND q.type = t.title AND 
+            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            $stmt->bind_param("s", $phase_title);
+            $stmt->execute();
+
+            return $stmt->get_result();
         }
 
 
