@@ -41,7 +41,12 @@ function isTokenDeleted($id) {
 }
 
 if (isTokenAccepted($id) && isRegisterSuccess($email, $password) && isTokenDeleted($id)) {
-    echo "success";
+    header("Location: ../html/phase.php/");
+} else {
+    echo "<script>
+        alert('Something went wrong, please try again')
+        window.location.href = '../html/register';
+        </script>";
 }
-    
+
 ?>
