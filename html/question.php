@@ -176,17 +176,35 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
             ?>
         </div>
     </div>
+    <div class="d-flex justify-content-center">
+      <button type="button" onclick='update_frequency()' class="m-5 btn btn-success">Done</button>
+    </div>
     <br>
-    
 
     <footer class="pagination navbar navbar-dark bg-dark footer mt-auto py-3" style="position: -webkit-sticky;">
-            <div class="container">
-            <a class="btn btn-outline-secondary text-white" id="back-btn" onclick="back()"> <i class="bi-arrow-up"></i> </a>
-            <a class="btn btn-outline-secondary text-white" id="next-btn" onclick="next()"> <i class="bi-arrow-down"></i> </a>
-            </div>
+      <div class="container">
+        <a class="btn btn-outline-secondary text-white" id="back-btn" onclick="back()"> <i class="bi-arrow-up"></i> </a>
+        <a class="btn btn-outline-secondary text-white" id="next-btn" onclick="next()"> <i class="bi-arrow-down"></i> </a>
+      </div>
     </footer>
     <script src="../../js/pagination.js"></script>
+    <script src="../../js/search.js"> </script>
 
+    <script>
+        function update_frequency() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if(xhttp.readyState === XMLHttpRequest.DONE) {
+                    alert("Completed!");
+                }
+            };
+            window.$_GET = new URLSearchParams(location.search);
+            const id = $_GET.get('id');
+            xhttp.open("GET", "http://uniquechange.com/fwApp/api/Request.php/frequency/?id="+id);
+            xhttp.send();
+            document.location = "/fwApp/html/phase.php";
+        }
+    </script>
     
 </body>
 </html>
