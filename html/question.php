@@ -19,9 +19,9 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <script src="../../js/bootstrap/bootstrap.min.js"></script>
-    <link href="../../css/nav.css" rel="stylesheet">
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/bootstrap/bootstrap.min.js"></script>
+    <link href="../css/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
@@ -195,14 +195,13 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
             const xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if(xhttp.readyState === XMLHttpRequest.DONE) {
-                    alert("Completed!");
+                    document.location = "/fwApp/html/phase.php/";
                 }
             };
             window.$_GET = new URLSearchParams(location.search);
             const id = $_GET.get('id');
             xhttp.open("GET", "http://uniquechange.com/fwApp/api/Request.php/frequency/?id="+id);
             xhttp.send();
-            document.location = "/fwApp/html/phase.php";
         }
     </script>
     
