@@ -17,6 +17,7 @@ function back() {
         targetLi.style.backgroundColor = "yellow";
         document.getElementById("back-btn").setAttribute("href", "#myInput" + current)
     }
+    window.location.href = "#myInput" + current;
 }
 
 /**
@@ -45,6 +46,7 @@ function next() {
         targetLi.style.backgroundColor = "yellow";
         document.getElementById("next-btn").setAttribute("href", "#myInput" + current)
     }
+    window.location.href = "#myInput" + current;
 }
 
 function copy(copyText) {
@@ -98,6 +100,4 @@ function checkKey(e) {
         // right arrow
         next()
     }
-    window.location.href = "#myInput" + current;
-
 }

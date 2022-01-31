@@ -78,7 +78,7 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
                     echo "<a class='btn' data-toggle='collapse' href='#background' role='button' aria-expanded='false' aria-controls='background'>
                             ❯ Background 
                           </a>";
-                    echo "<div class='collapse'id='background'>";
+                    echo "<div class='collapse' id='background'>";
                     echo "<p class='lead'> $background </p>";
                     echo "</div>";
                 } 
@@ -167,7 +167,7 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
                     }
                     echo "<br>";
                     if (!empty(trim($scaffhold ?? "")) || $scaffhold ) {
-                        echo "<textarea onmouseout='oldText()' onclick='copy(this)' >" .$scaffhold. "</textarea>";
+                        echo "<textarea onmouseout='oldText()' onclick='copy(this)' ></textarea>";
                         array_push($scaffholdArray, $scaffhold);
                     }
                     echo "</li>";
