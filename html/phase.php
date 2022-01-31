@@ -374,7 +374,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
         html += "</div>";
 
         html += "<div class='modal-footer'>"
-        html += "<form action='/fwapp/html/question.php/ method='get''>";
+        html += "<form action='/fwApp/html/question.php' method='get'/>";
         html += "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>";
         html += "<button class='btn btn-primary' name = 'id' value= '" + question_set_id + "'> Use this question set! </button>";
         html += "</form>";
@@ -410,7 +410,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     }
 
     function question(id) {
-       var url = "/fwApp/api/Request.php/questions/?id=" + id + " ";
+       var url = "http://www.uniquechange.com/fwApp/api/Request.php/questions/?id=" + id + " ";
        question_set_id  = id;
        loadDoc(url, questionList);
     }

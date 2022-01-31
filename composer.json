@@ -1,0 +1,7 @@
+{
+    "require": {
+        "vlucas/phpdotenv": "^5.4",
+      "ext-mysqli": "*",
+        "robmorgan/phinx": "^0.12.9"
+    }
+}

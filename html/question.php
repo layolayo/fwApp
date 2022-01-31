@@ -3,8 +3,8 @@
 session_start();
 
 // Echo session variables that were set on previous page
-if ($_SESSION["authenticated"] !==  "authenticated") {
-    header("Location: login");
+if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] !==  "authenticated") {
+    header("Location: login.html");
 }
 ?>
 
@@ -19,9 +19,10 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <script src="../../js/bootstrap/bootstrap.min.js"></script>
-    <link href="../../css/nav.css" rel="stylesheet">
+    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/bootstrap/bootstrap.min.js"></script>
+    <link href="../css/nav.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
 </head>
 <body>
   
@@ -56,7 +57,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                 $content = file_get_contents($file);
                 $data = json_decode($content, true);
                 $name = $data[0]['title'];
-                $scaffhold = array();
+                $scaffold = array();
 
                 if ($content) {
                     foreach($data as $qs) {
@@ -71,7 +72,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                 echo "<div class= 'text-center'>";
                 echo "<br>";
                 echo "<h1> $id | $name </h1>";
-                if (!empty(str_replace(' ', '', $background))) {
+                if (!empty(str_replace(' ', '', $background ?? ""))) {
                     echo "<a class='btn' data-toggle='collapse' href='#background' role='button' aria-expanded='false' aria-controls='background'>
                             ❯ Background 
                           </a>";
@@ -80,7 +81,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                     echo "</div>";
                 } 
 
-                if (!empty(str_replace(' ', '', $acknowledgements))) {
+                if (!empty(str_replace(' ', '', $acknowledgements ?? ""))) {
                     echo "<a class='btn' data-toggle='collapse' href='#acknowledgement' role='button' aria-expanded='false' aria-controls='acknowledgement'>
                              ❯ Acknowledgements 
                           </a>";
@@ -89,7 +90,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                     echo "</div>";
                 }
                 
-                if (!empty(str_replace(' ', '', $academicSupport))) {
+                if (!empty(str_replace(' ', '', $academicSupport ?? ""))) {
                     echo "<a class='btn' data-toggle='collapse' href='#academicSupport' role='button' aria-expanded='false' aria-controls='academicSupport'> 
                             ❯ Academic Support
                           </a>";
@@ -121,16 +122,16 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                             $details = $title["details"];
                             $question = $title["question"];
                             $repeat = $title["repeats"];
-                            $scaffhold = $title["scaffold"];
+                            $scaffold = $title["scaffold"];
                             
                             if ($repeat || $repeat > 0) {
                                 for ($x = 0; $x <= $repeat; $x++) {
-                                    $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffhold, $max));
+                                    $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffold, $max));
                                     $max += 1;
                                 }
 
                             } else {
-                                $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffhold, $max));
+                                $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffold, $max));
                                 $max += 1;
                                 }
                         }
@@ -152,7 +153,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                     $scaffholdArray = [];
                     echo "<li class='list-group-item' onclick=selectLi($max) 'id='$max' > $id. $question";
                     echo "<br>";
-                    if (!empty(trim($details)) || $details ) {
+                    if (!empty(trim($details ?? "")) || $details ) {
                         echo "<br>";
                         echo "<button  style='font-size:0.5rem;' class='btn btn-outline-secondary' data-toggle='collapse' data-target='#myInput$max' role='button' aria-expanded='false' aria-controls='myInput$max'>
                                 ❯ </button>";
@@ -163,7 +164,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                         echo "</p>";
                     }
                     echo "<br>";
-                    if (!empty(trim($scaffhold)) || $scaffhold ) {
+                    if (!empty(trim($scaffhold ?? "")) || $scaffhold ) {
                         echo "<textarea onmouseout='oldText()' onclick='copy(this)' >" .$scaffhold. "</textarea>";
                         array_push($scaffholdArray, $scaffhold);
                     }
@@ -175,17 +176,34 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
             ?>
         </div>
     </div>
+    <div class="d-flex justify-content-center">
+      <button type="button" onclick='update_frequency()' class="m-5 btn btn-success">Done</button>
+    </div>
     <br>
-    
 
     <footer class="pagination navbar navbar-dark bg-dark footer mt-auto py-3" style="position: -webkit-sticky;">
-            <div class="container">
-            <a class="btn btn-outline-secondary text-white" id ="back-btn" onclick ="back()"> ❮ </a>
-            <a class="btn btn-outline-secondary text-white" id="next-btn" onclick="next()"> ❯ </a>
-            </div>
+      <div class="container">
+        <a class="btn btn-outline-secondary text-white" id="back-btn" onclick="back()"> <i class="bi-arrow-up"></i> </a>
+        <a class="btn btn-outline-secondary text-white" id="next-btn" onclick="next()"> <i class="bi-arrow-down"></i> </a>
+      </div>
     </footer>
     <script src="../../js/pagination.js"></script>
+    <script src="../../js/search.js"> </script>
 
+    <script>
+        function update_frequency() {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if(xhttp.readyState === XMLHttpRequest.DONE) {
+                    document.location = "/fwApp/html/phase.php/";
+                }
+            };
+            window.$_GET = new URLSearchParams(location.search);
+            const id = $_GET.get('id');
+            xhttp.open("GET", "http://uniquechange.com/fwApp/api/Request.php/frequency/?id="+id);
+            xhttp.send();
+        }
+    </script>
     
 </body>
 </html>
