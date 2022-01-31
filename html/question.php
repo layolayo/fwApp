@@ -23,6 +23,8 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
     <script src="../js/bootstrap/bootstrap.min.js"></script>
     <link href="../css/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+    <script src="/fwApp/js/pagination.js"></script>
+    <script src="/fwApp/js/search.js"></script>
 </head>
 <body>
   
@@ -187,8 +189,6 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
         <a class="btn btn-outline-secondary text-white" id="next-btn" onclick="next()"> <i class="bi-arrow-down"></i> </a>
       </div>
     </footer>
-    <script src="../../js/pagination.js"></script>
-    <script src="../../js/search.js"> </script>
 
     <script>
         function update_frequency() {

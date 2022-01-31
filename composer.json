@@ -1,7 +1,13 @@
 {
+  "config": {
+    "platform": {
+      "php": "7.4.25"
+    },
+    "platform-check": false
+  },
     "require": {
+        "ext-mysqli": "*",
         "vlucas/phpdotenv": "^5.4",
-      "ext-mysqli": "*",
-        "robmorgan/phinx": "^0.12.9"
+        "robmorgan/phinx": "^0.12.10"
     }
 }

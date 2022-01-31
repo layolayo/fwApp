@@ -32,6 +32,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
     <script src="../../js/bootstrap/bootstrap.min.js"></script>
     <link href="../../css/nav.css" rel="stylesheet">
+    <script src="/fwApp/js/search.js"></script>
 </head>
 
 <body>
@@ -416,31 +417,4 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     }
 </script>
 
-<script>
-    $(document).ready(function(){
-        $.ajaxSetup({ cache: false });
-        var searchField = $('#search').val();
-        $('#search').keyup(function(){
-            $.getJSON('http://www.uniquechange.com/fwApp/api/Request.php/search/', function(data) {
-                if ($('#search').val().length > 0) {
-                    var expression = new RegExp($('#search').val(), "i");
-                    $("#result").addClass("show");
-                    $.each(data, function(key, value){
-                        if (value.ID.search(expression) != -1 || value.title.search(expression) != -1)
-                            {
-                            $('#result').html('<li> <a href= "http://uniquechange.com/fwApp/html/question.php/?id=' + value.ID + '" class="text-muted dropdown-item">'+ value.ID + ' | ' + value.title+'</a></li>');
-                            }
-                        });
-                    }
-                });
-        
-            if ($('#search').val().length == 0) {
-                $("#result").html(" ");
-                $("#result").removeClass("show");
-            }
-            });
-    
-
-        });
-</script>
 </html>
