@@ -251,8 +251,8 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
 
     function loadQuestionSets(checkboxesType, checkboxesSpecialism) {
         var phase = getPhase();
-        var categoriedURL = new URL("/fwApp/api/Request.php/categoried/");
-        var uncategoriedURL = new URL("/fwApp/api/Request.php/uncategoried/");
+        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/categoried/");
+        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/uncategoried/");
 
         console.log(phase);
         if (checkboxesType.length != 0) {
