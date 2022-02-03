@@ -153,7 +153,7 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
                 
                 function questions($id, $details, $question, $scaffhold, $max) {
                     $scaffholdArray = [];
-                    echo "<li class='list-group-item' onclick=selectLi($max) 'id='$max' > $id. $question";
+                    echo "<li class='list-group-item' onclick=selectLi($max) id='$max'>". $question;
                     echo "<br>";
                     if (!empty(trim($details ?? "")) || $details ) {
                         echo "<br>";

@@ -1,9 +1,18 @@
-var current = 0;
-var MIN = 0;
-var MAX = document.getElementById("hidden-input").getAttribute("value");
-console.log(MAX - 1);
-document.getElementById("questions").getElementsByTagName("li")[current].style.backgroundColor = "yellow";
-document.onkeydown = checkKey;
+let current = 0;
+let MIN = 0;
+let MAX = 0;
+
+$(document).ready(init);
+
+/**
+ * Setup initial state on load
+ */
+function init() {
+    MAX = document.getElementById("hidden-input").getAttribute("value");
+    document.getElementById("questions").getElementsByTagName("li")[current].style.backgroundColor = "yellow";
+    document.onkeydown = checkKey;
+}
+
 /**
  * back():
  *  This is used for going back through a question set.
