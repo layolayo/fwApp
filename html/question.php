@@ -208,7 +208,7 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
             };
             window.$_GET = new URLSearchParams(location.search);
             const id = $_GET.get('id');
-            xhttp.open("GET", "http://uniquechange.com/fwApp/api/Request.php/frequency/?id="+id);
+            xhttp.open("GET", "/fwApp/api/frequency.php?id="+id);
             xhttp.send();
         }
     </script>
