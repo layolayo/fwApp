@@ -1,9 +1,9 @@
-put -R ./css/* ./css/
-put -R ./js/* ./js/
 put -R ./html/* ./html/
-put -R ./model/* ./model/
 put -R ./api/* ./api/
-
+put -R ./js/* ./js/
+put -R ./css/* ./css/
+put -R ./model/* ./model/
+put -R ./audio-store/ ./audio-store/
 put -R ./config/config.php ./config/config.php
 put -R ./config/Database.php ./config/Database.php
 put -R ./config/.env ./config/.env

@@ -125,15 +125,16 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
                             $question = $title["question"];
                             $repeat = $title["repeats"];
                             $scaffold = $title["scaffold"];
+                            $audio = $title["audio"];
                             
                             if ($repeat || $repeat > 0) {
                                 for ($x = 0; $x <= $repeat; $x++) {
-                                    $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffold, $max));
+                                    $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffold, $max, $audio));
                                     $max += 1;
                                 }
 
                             } else {
-                                $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffold, $max));
+                                $fullScaffhold = array_merge($fullScaffhold, questions($id, $details, $question, $scaffold, $max, $audio));
                                 $max += 1;
                                 }
                         }
@@ -151,8 +152,8 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
 
                 echo "</div>";
                 
-                function questions($id, $details, $question, $scaffhold, $max) {
-                    $scaffholdArray = [];
+                function questions($id, $details, $question, $scaffhold, $max, $audio) {
+                    $scaffoldArray = [];
                     echo "<li class='list-group-item' onclick=selectLi($max) id='$max'>". $question;
                     echo "<br>";
                     if (!empty(trim($details ?? "")) || $details ) {
@@ -166,13 +167,20 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
                         echo "</p>";
                     }
                     echo "<br>";
+                    if(!empty($audio ?? "")) {
+                        echo "<audio controls>";
+                        $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
+                        echo "<source src='" . $audio_path . "' type='audio/mpeg'/>";
+                        echo "</audio>";
+                    }
+                    echo "<br/>";
                     if (!empty(trim($scaffhold ?? "")) || $scaffhold ) {
                         echo "<textarea onmouseout='oldText()' onclick='copy(this)' ></textarea>";
-                        array_push($scaffholdArray, $scaffhold);
+                        $scaffoldArray[] = $scaffhold;
                     }
                     echo "</li>";
 
-                    return $scaffholdArray;
+                    return $scaffoldArray;
                 }
 
             ?>
