@@ -2,9 +2,9 @@
 // Start the session
 session_start();
 
-// Echo session variables that were set on previous page
-if ($_SESSION["authenticated"] !==  "authenticated") {
-    header("Location: login");
+// Ensure that the user is logged in
+if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] !==  "authenticated") {
+    header("Location: /fwApp/html/login.html");
 }
 ?>
 
@@ -29,9 +29,9 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <script src="../../js/bootstrap/bootstrap.min.js"></script>
-    <link href="../../css/nav.css" rel="stylesheet">
+    <link href="/fwApp/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="/fwApp/js/bootstrap/bootstrap.min.js"></script>
+    <link href="/fwApp/css/nav.css" rel="stylesheet">
     <script src="/fwApp/js/search.js"></script>
 </head>
 
@@ -251,8 +251,8 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
 
     function loadQuestionSets(checkboxesType, checkboxesSpecialism) {
         var phase = getPhase();
-        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/categoried/");
-        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/uncategoried/");
+        var categoriedURL = new URL("/fwApp/api/Request.php/categoried/");
+        var uncategoriedURL = new URL("/fwApp/api/Request.php/uncategoried/");
 
         console.log(phase);
         if (checkboxesType.length != 0) {
@@ -411,7 +411,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     }
 
     function question(id) {
-       var url = "http://www.uniquechange.com/fwApp/api/Request.php/questions/?id=" + id + " ";
+       var url = "/fwApp/api/Request.php/questions?id=" + id + " ";
        question_set_id  = id;
        loadDoc(url, questionList);
     }

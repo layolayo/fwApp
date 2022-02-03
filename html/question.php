@@ -2,9 +2,9 @@
 // Start the session
 session_start();
 
-// Echo session variables that were set on previous page
+// Ensure that the user is logged in
 if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] !==  "authenticated") {
-    header("Location: login.html");
+    header("Location: /fwApp/html/login.html");
 }
 ?>
 
@@ -19,9 +19,9 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <script src="../js/bootstrap/bootstrap.min.js"></script>
-    <link href="../css/nav.css" rel="stylesheet">
+    <link href="/fwApp/css/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="/fwApp/js/bootstrap/bootstrap.min.js"></script>
+    <link href="/fwApp/css/nav.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
     <script src="/fwApp/js/pagination.js"></script>
     <script src="/fwApp/js/search.js"></script>
@@ -32,13 +32,13 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="../phase/">Phase <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/fwApp/html/phase.php">Phase <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../about/">About</a>
+                    <a class="nav-link" href="/fwApp/html/about.php">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../account/">Account</a>
+                    <a class="nav-link" href="fwApp/html/account.php">Account</a>
                 </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0 dropdown">
