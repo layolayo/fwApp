@@ -95,18 +95,20 @@ function checkKey(e) {
 
     e = e || window.event;
 
+    // up arrow
     if (e.keyCode == '38') {
-        // up arrow
-        back()
-
+        back();
+    // down arrow
     } else if (e.keyCode == '40') {
-        // down arrow
-        next()
+        next();
+    // left arrow
     } else if (e.keyCode == '37') {
-        // left arrow
-        back()
+        back();
+    // right arrow
     } else if (e.keyCode == '39') {
-        // right arrow
-        next()
+        next();
+    // Tab
+    } else if (e.keyCode == '9') {
+        next();
     }
 }

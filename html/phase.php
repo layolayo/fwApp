@@ -411,9 +411,9 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
     }
 
     function question(id) {
-       var url = "/fwApp/api/Request.php/questions?id=" + id + " ";
-       question_set_id  = id;
-       loadDoc(url, questionList);
+        const url = "/fwApp/api/questions.php?id=" + id;
+        question_set_id  = id;
+        loadDoc(url, questionList);
     }
 </script>
 
