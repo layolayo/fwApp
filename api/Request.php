@@ -206,10 +206,6 @@ if ($url[4] == "categoried") {
     echo $requests->read_categoried_question();
 } else if ($url[4] == "uncategoried") {
     echo $requests->read_uncategoried_question();
-} else if ($url[4] == "questions") {
-    echo $requests->read_questions();
-}else if ($url[4] == "search") {
-    echo $requests->read_question_sets();
 }else if ($url[4] == "question") {
     echo $requests->read_a_question_set();
 } else if ($url[4] == "type") {
@@ -220,8 +216,6 @@ if ($url[4] == "categoried") {
     echo $requests->forgot_success();
 }else if ($url[4] == "newpsw") {
     echo $requests->new_password();
-} else if ($url[4] == "userqs") {
-    echo $requests->read_user_qs();
 }
 else {
     echo $requests->read_titles_phases();

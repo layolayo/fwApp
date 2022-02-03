@@ -5,5 +5,4 @@ session_unset();
 
 // destroy the session
 session_destroy();
-header("Location: ../login");
-?>
+header("Location: /fwApp/html/login.html");
