@@ -56,6 +56,15 @@ include_once '../model/Phase.php';
         <li class="nav-item">
           <a class="nav-link" href="/fwApp/html/account.php">Account</a>
         </li>
+          <?php
+          if (!array_key_exists("admin", $_SESSION) || $_SESSION["admin"] === "admin") {
+          ?>
+          <li class="nav-item">
+            <a class="nav-link" href="/fwApp/html/admin/question_sets.php">ADMIN</a>
+          </li>
+          <?php
+          }
+          ?>
       </ul>
       <form class="nav-item my-2 my-lg-0 dropdown">
         <input class="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search">
