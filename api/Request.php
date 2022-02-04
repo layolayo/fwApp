@@ -217,7 +217,4 @@ if ($url[4] == "categoried") {
 }else if ($url[4] == "newpsw") {
     echo $requests->new_password();
 }
-else {
-    echo $requests->read_titles_phases();
-}
 ?>

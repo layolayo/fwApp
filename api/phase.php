@@ -1,33 +1,32 @@
 <?php
+/// Handler for retrieving a list of all phases
 
-// headers
-header('Access-Control-Allow-Origin: *');
-header('Content-Type: application/json');
 include_once '../config/Database.php';
-include_once '../model/QuestionSet.php';
+include_once '../model/Phase.php';
 
-$database = new Database();
-$conn = $database->connect();
-// one main read file depending it send back multiple
+session_start();
 
-$url = $_SERVER['REQUEST_URI'];
-$url = explode("/", $url);
-echo $url[4];
-echo print_r(array_values($url));
+// Set cors header
+header('Access-Control-Allow-Origin: *');
 
-$phase = $_GET["phase"];
-if (isset($phase)) {
-    $question = new QuestionSet($conn);
-    echo $phase;
-    $results = $question->read_categoried_question($phase);
-    if ($results) {
-        $output[] = array();
-        while ($row = $results->fetch_assoc()) {
-            $output[] = $row;
-        }
-        echo json_encode($output);
-    } else {
-        die("error: " . mysqli_error($conn));
-    }
+// Ensure that the requester is actually authenticated
+if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authenticated"] !==  "authenticated") {
+    die("Not authenticated");
 }
-?>
+
+// Connect to db
+$phase = new Phase();
+$results = $phase->read();
+
+if(!$results) {
+    die("Failed to get phases");
+}
+
+// Set content type
+header('Content-Type: application/json');
+
+$output = array();
+while ($row = $results->fetch_assoc()) {
+    $output[] = $row;
+}
+echo json_encode($output);

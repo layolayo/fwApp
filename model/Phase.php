@@ -12,8 +12,12 @@
         public $disable;
         public $superuser;
 
-        public function __construct($db) {
+        public function __construct($db = null) {
             $this->conn = $db;
+            if($db == null) {
+                $database = new Database();
+                $this->conn = $database->connect();
+            }
         }
 
         public function read() {
