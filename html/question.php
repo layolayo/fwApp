@@ -140,6 +140,7 @@ include_once '../model/QuestionSet.php';
           <ul class='col-md-8 order-md-1'>
             <p class='lead'> Questions </p>
               <?php
+              $all_questions = Array();
               $fullScaffold = Array();
               $max = 0;
               $index = 0;
@@ -161,9 +162,12 @@ include_once '../model/QuestionSet.php';
                   }
                   $max += $count;
 
+                  $all_questions[] = $question;
+
                   for($i = 0; $i < $count; $i++) {
                     ?>
                     <li class='list-group-item' onclick=selectLi(<?php echo $index; ?>) id='<?php echo $index; ?>'> <?php echo $question; ?>
+                      <button class="btn btn-secondary " onclick="copy2('<?php echo $question; ?>');"><i class="bi-clipboard"></i></button>
                     <br/>
                     <?php
                     if (!empty(trim($details ?? "")) || $details ) {
@@ -206,6 +210,8 @@ include_once '../model/QuestionSet.php';
           <div class='col-md-4 order-md-2 mb-4'>
             <p class='lead'> Full  Scaffold </p>
             <textarea onclick='copy(this)' onmouseout='oldText()'><?php echo implode("\n", $fullScaffold);?></textarea>
+            <br/>
+            <button class="btn btn-secondary" onclick="copy2('<?php echo implode("\\n\\n", $all_questions); ?>');"><i class="bi-clipboard"></i> Copy All Questions</button>
           </div>
           <input id = 'hidden-input' type='hidden' value="<?php echo $max; ?>">
         </div>

@@ -58,6 +58,21 @@ function next() {
     window.location.href = "#myInput" + current;
 }
 
+function copy2(text) {
+    var input = document.createElement('textarea');
+    input.innerHTML = text;
+    document.body.appendChild(input);
+    input.select();
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+
+    var tooltip = document.getElementById("alert");
+    tooltip.style.visibility = "visible";
+    tooltip.innerHTML = "Copied: " + text;
+
+    return result;
+}
+
 function copy(copyText) {
     copyText.select();
     copyText.setSelectionRange(0, 99999)
