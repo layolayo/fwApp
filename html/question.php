@@ -142,6 +142,7 @@ include_once '../model/QuestionSet.php';
               <?php
               $fullScaffold = Array();
               $max = 0;
+              $index = 0;
               foreach ($output as $q) {
                   $id = $q["ID"];
                   $details = $q["details"];
@@ -149,6 +150,7 @@ include_once '../model/QuestionSet.php';
                   $repeat = $q["repeats"];
                   $scaffold = $q["scaffold"];
                   $audio = $q["audio"];
+                  $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
 
                   if(!empty($scaffold)) {
                       $fullScaffold[] = $scaffold;
@@ -160,7 +162,43 @@ include_once '../model/QuestionSet.php';
                   $max += $count;
 
                   for($i = 0; $i < $count; $i++) {
-                      questions($id, $details, $question, $scaffold, $max, $audio);
+                    ?>
+                    <li class='list-group-item' onclick=selectLi(<?php echo $index; ?>) id='<?php echo $index; ?>'> <?php echo $question; ?>
+                    <br/>
+                    <?php
+                    if (!empty(trim($details ?? "")) || $details ) {
+                    ?>
+                      <br/>
+                      <button style="font-size:0.5rem;" class="btn btn-outline-secondary" data-bs-toggle="collapse" href="#details-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="details-<?php echo $index; ?>">❯</button>
+                      <br/>
+                      <div class="collapse" id="details-<?php echo $index; ?>">
+                        <br/>
+                        <span class="card card-body bg-light" style="font-size:0.7rem;"><?php echo $details; ?></span>
+                      </div>
+                    <?php
+                    }
+                    ?>
+                    <br/>
+                    <?php
+                    if(!empty($audio ?? "")) {
+                    ?>
+                      <audio controls>
+                        <source src="<?php echo $audio_path; ?>" type="audio/mpeg"/>
+                      </audio>
+                    <?php
+                    }
+                    ?>
+                    <br/>
+                    <?php
+                    if (!empty(trim($scaffhold ?? "")) || $scaffold ) {
+                    ?>
+                      <textarea onmouseout='oldText()' onclick='copy(this)' ></textarea>
+                    <?php
+                    }
+                    ?>
+                    </li>
+                    <?php
+                      $index += 1;
                   }
               }
               ?>
@@ -171,34 +209,6 @@ include_once '../model/QuestionSet.php';
           </div>
           <input id = 'hidden-input' type='hidden' value="<?php echo $max; ?>">
         </div>
-        <?php
-            function questions($id, $details, $question, $scaffhold, $max, $audio) {
-                echo "<li class='list-group-item' onclick=selectLi($max) id='$max'>". $question;
-                echo "<br>";
-                if (!empty(trim($details ?? "")) || $details ) {
-                    echo "<br>";
-                    echo "<button  style='font-size:0.5rem;' class='btn btn-outline-secondary' data-toggle='collapse' data-target='#myInput$max' role='button' aria-expanded='false' aria-controls='myInput$max'>
-                            ❯ </button>";
-                    echo "<br>";
-                    echo "<p class='collapse' id = 'myInput$max'>";
-                    echo "<br>";
-                    echo "<span class='card card-body bg-light' style='font-size:0.7rem;'> $details </span>";
-                    echo "</p>";
-                }
-                echo "<br>";
-                if(!empty($audio ?? "")) {
-                    echo "<audio controls>";
-                    $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
-                    echo "<source src='" . $audio_path . "' type='audio/mpeg'/>";
-                    echo "</audio>";
-                }
-                echo "<br/>";
-                if (!empty(trim($scaffhold ?? "")) || $scaffhold ) {
-                    echo "<textarea onmouseout='oldText()' onclick='copy(this)' ></textarea>";
-                }
-                echo "</li>";
-            }
-        ?>
         </div>
       <div class="d-flex justify-content-center">
         <button type="button" onclick='update_frequency()' class="m-5 btn btn-success">Done</button>
