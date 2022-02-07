@@ -167,7 +167,7 @@ include_once '../model/QuestionSet.php';
                   for($i = 0; $i < $count; $i++) {
                     ?>
                     <li class='list-group-item' onclick=selectLi(<?php echo $index; ?>) id='<?php echo $index; ?>'> <?php echo $question; ?>
-                      <button class="btn btn-secondary " onclick="copy2('<?php echo $question; ?>');"><i class="bi-clipboard"></i></button>
+                      <button class="btn btn-secondary " onclick="copy2('<?php echo str_replace("'", "\'", $question); ?>');"><i class="bi-clipboard"></i></button>
                     <br/>
                     <?php
                     if (!empty(trim($details ?? "")) || $details ) {
@@ -211,7 +211,7 @@ include_once '../model/QuestionSet.php';
             <p class='lead'> Full  Scaffold </p>
             <textarea onclick='copy(this)' onmouseout='oldText()'><?php echo implode("\n", $fullScaffold);?></textarea>
             <br/>
-            <button class="btn btn-secondary" onclick="copy2('<?php echo implode("\\n\\n", $all_questions); ?>');"><i class="bi-clipboard"></i> Copy All Questions</button>
+            <button class="btn btn-secondary" onclick="copy2('<?php echo str_replace("'", "\'", implode("\\n\\n", $all_questions)); ?>');"><i class="bi-clipboard"></i> Copy All Questions</button>
           </div>
           <input id = 'hidden-input' type='hidden' value="<?php echo $max; ?>">
         </div>
