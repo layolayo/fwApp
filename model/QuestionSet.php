@@ -17,9 +17,12 @@
         public $disable;
         public $superuser;
 
-        public function __construct($db) {
+        public function __construct($db = null) {
             $this->conn = $db;
-
+            if($db == null) {
+                $database = new Database();
+                $this->conn = $database->connect();
+            }
         }
 
         /**
@@ -225,10 +228,15 @@
             return $stmt->get_result();
         }
 
-
-
+        /**
+         * Increment the frequency of the given question set
+         * @param $id The id of the question set
+         * @return bool True if the frequency was increased, false otherwise
+         */
+        public function increment_frequency($id): bool
+        {
+            $stmt = $this->conn->prepare("UPDATE question_set SET frequency = frequency + 1 WHERE id = ?");
+            $stmt->bind_param("s", $id);
+            return $stmt->execute();
+        }
     }
-
-
-
-?>

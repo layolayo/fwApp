@@ -2,79 +2,72 @@
 // Start the session
 session_start();
 
-// Echo session variables that were set on previous page
-if ($_SESSION["authenticated"] !==  "authenticated") {
-    header("Location: login");
+// Ensure that the user is logged in
+if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] !==  "authenticated") {
+    header("Location: /fwApp/html/login.html");
 }
+
+include_once '../config/Database.php';
+include_once '../model/Facilitator.php';
 ?>
 
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <meta charset="utf-8">
     <title>User</title>
     <meta name="description" content="home page">
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <script src="../../js/bootstrap/bootstrap.min.js"></script>
-    <link href="../../css/nav.css" rel="stylesheet">
-</head>
-
-<body>
+    <script src="/fwApp/js/jquery/jquery.min.js"></script>
+    <link href="/fwApp/css/bootstrap-5.1/bootstrap.min.css" rel="stylesheet">
+    <script src="/fwApp/js/bootstrap-5.1/bootstrap.bundle.min.js"></script>
+    <link href="/fwApp/css/nav.css" rel="stylesheet">
+    <script src="/fwApp/js/search.js"></script>
+  </head>
+  <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="../phase/">Phase <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../about/">About</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="">Account</a>
-                </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0 dropdown">
-                    <input class="form-control mr-sm-2 " type="search" id="search" placeholder="Search" aria-label="Search">
-                    <ul class="dropdown-menu" id="result">
-                    </ul>
-                </form>
-            </div>
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/fwApp/html/phase.php">Phase</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/fwApp/html/about.php">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="/fwApp/html/account.php">Account</a>
+            </li>
+          </ul>
+          <form class="nav-item my-2 my-lg-0 dropdown">
+            <input class="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search">
+            <ul class="dropdown-menu" id="result">
+            </ul>
+          </form>
+        </div>
+      </div>
     </nav>
 
     <div class="container p-2">
+      <h1>Welcome <?php echo $_SESSION["email"] ?></h1>
+      <a class="btn btn-secondary m-2" href="/fwApp/html/logout.php">Logout</a>
+      <ul class="list-group m-2">
         <?php
-        // Echo session variables that were set on previous page
-        if ($_SESSION["authenticated"] ===  "authenticated") {
-            echo "<h1> Welcome " .$_SESSION["email"]. " </h1>";
+        $question = new Facilitator();
+        $results = $question->getUserQs($_SESSION["email"]);
+        while ($row = $results->fetch_assoc()) {
+            $id = $row["ID"];
+            $title = $row["title"];
+        ?>
+          <li class="list-group-item"><a href="/fwApp/html/question.php?id=<?php echo $id; ?>"><?php echo $id; ?>) <?php echo $title; ?> </a></li>
+        <?php
         }
         ?>
-        <a class="btn btn-secondary m-2" href="../logout/"> Logout </a>
-
-        <ul class="list-group m-2">
-            <?php
-            //../../api/Request.php/userqs/?email=$email
-            $email = $_SESSION["email"];
-            $file = "http://www.uniquechange.com/fwApp/api/Request.php/userqs/?email=$email";
-            $content = file_get_contents($file);
-            $data = json_decode($content, true);
-            if ($content) {
-                foreach($data as $qs) {
-                    $id = $qs["ID"];
-                    $title = $qs["title"];
-                    echo "<li class='list-group-item'><a href='../question/?id=$id'>$id) $title </a></li>";
-                }
-            }
-            ?>
-        </ul>
-
+      </ul>
     </div>
-
-
-
-
-</body>
+  </body>
 </html>

@@ -1,8 +1,8 @@
 <?php
-/// Handler for retrieving a list of all phases
+/// Handler for incrementing the frequency of a given question set id
 
 include_once '../config/Database.php';
-include_once '../model/Phase.php';
+include_once '../model/QuestionSet.php';
 
 session_start();
 
@@ -14,19 +14,12 @@ if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authentica
     die("Not authenticated");
 }
 
-// Connect to db
-$phase = new Phase();
-$results = $phase->read();
+$id = $_GET["id"] ?? die("Missing id");
 
-if(!$results) {
-    die("Failed to get phases");
-}
+// Connect to db
+$question = new QuestionSet();
+$sets = $question->increment_frequency($id);
 
 // Set content type
 header('Content-Type: application/json');
-
-$output = array();
-while ($row = $results->fetch_assoc()) {
-    $output[] = $row;
-}
-echo json_encode($output);
+echo "{}";

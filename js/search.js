@@ -1,16 +1,17 @@
 $(document).ready(function() {
     $.ajaxSetup({ cache: false });
-    var searchField = $('#search').val();
-    $('#search').keyup(function() {
-        $.getJSON('../../api/Request.php/search/', function(data) {
+
+    $('#search').keyup(function(){
+        $.getJSON('/fwApp/api/search.php?l=5&q='+$('#search').val(), function(data) {
             if ($('#search').val().length > 0) {
-                var expression = new RegExp($('#search').val(), "i");
+                $("#result").html(" ");
+
                 $("#result").addClass("show");
-                $.each(data, function(key, value) {
-                    if (value.ID.search(expression) != -1 || value.title.search(expression) != -1) {
-                        $('#result').html('<li class="p-1"> <a href= "../question.php/?id=' + value.ID + '" class="text-muted">' + value.ID + ' | ' + value.title + '</a></li>');
-                    }
+                let overall = "";
+                $.each(data, function(key, value){
+                    overall += '<li> <a href= "/fwApp/html/question.php?id=' + value.ID + '" class="text-muted dropdown-item">'+ value.ID + ' | ' + value.title+'</a></li>';
                 });
+                $('#result').html(overall);
             }
         });
 
@@ -19,6 +20,4 @@ $(document).ready(function() {
             $("#result").removeClass("show");
         }
     });
-
-
 });

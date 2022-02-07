@@ -1,8 +1,8 @@
 <?php
-/// Handler for retrieving a list of all phases
+/// Handler for retrieving a list of all questions in a given question set
 
 include_once '../config/Database.php';
-include_once '../model/Phase.php';
+include_once '../model/QuestionSet.php';
 
 session_start();
 
@@ -14,12 +14,14 @@ if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authentica
     die("Not authenticated");
 }
 
+$id = $_GET["id"] ?? die("Missing id");
+
 // Connect to db
-$phase = new Phase();
-$results = $phase->read();
+$question = new QuestionSet();
+$results = $question->questions($id);
 
 if(!$results) {
-    die("Failed to get phases");
+    die("Failed to get questions");
 }
 
 // Set content type

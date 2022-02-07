@@ -1,8 +1,8 @@
 <?php
-/// Handler for retrieving a list of all phases
+/// Handler for retrieving a list of all user specific question sets
 
 include_once '../config/Database.php';
-include_once '../model/Phase.php';
+include_once '../model/Facilitator.php';
 
 session_start();
 
@@ -14,12 +14,14 @@ if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authentica
     die("Not authenticated");
 }
 
+$email = $_GET["email"] ?? die("Missing email");
+
 // Connect to db
-$phase = new Phase();
-$results = $phase->read();
+$question = new Facilitator();
+$results = $question->getUserQs($email);
 
 if(!$results) {
-    die("Failed to get phases");
+    die("Failed to get user questions");
 }
 
 // Set content type

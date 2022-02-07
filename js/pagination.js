@@ -1,9 +1,18 @@
-var current = 0;
-var MIN = 0;
-var MAX = document.getElementById("hidden-input").getAttribute("value");
-console.log(MAX - 1);
-document.getElementById("questions").getElementsByTagName("li")[current].style.backgroundColor = "yellow";
-document.onkeydown = checkKey;
+let current = 0;
+let MIN = 0;
+let MAX = 0;
+
+$(document).ready(init);
+
+/**
+ * Setup initial state on load
+ */
+function init() {
+    MAX = document.getElementById("hidden-input").getAttribute("value");
+    document.getElementById("questions").getElementsByTagName("li")[current].style.backgroundColor = "yellow";
+    document.onkeydown = checkKey;
+}
+
 /**
  * back():
  *  This is used for going back through a question set.
@@ -17,6 +26,7 @@ function back() {
         targetLi.style.backgroundColor = "yellow";
         document.getElementById("back-btn").setAttribute("href", "#myInput" + current)
     }
+    window.location.href = "#myInput" + current;
 }
 
 /**
@@ -45,6 +55,22 @@ function next() {
         targetLi.style.backgroundColor = "yellow";
         document.getElementById("next-btn").setAttribute("href", "#myInput" + current)
     }
+    window.location.href = "#myInput" + current;
+}
+
+function copy2(text) {
+    var input = document.createElement('textarea');
+    input.innerHTML = text;
+    document.body.appendChild(input);
+    input.select();
+    var result = document.execCommand('copy');
+    document.body.removeChild(input);
+
+    var tooltip = document.getElementById("alert");
+    tooltip.style.visibility = "visible";
+    tooltip.innerHTML = "Copied: " + text;
+
+    return result;
 }
 
 function copy(copyText) {
@@ -84,20 +110,20 @@ function checkKey(e) {
 
     e = e || window.event;
 
+    // up arrow
     if (e.keyCode == '38') {
-        // up arrow
-        back()
-
+        back();
+    // down arrow
     } else if (e.keyCode == '40') {
-        // down arrow
-        next()
+        next();
+    // left arrow
     } else if (e.keyCode == '37') {
-        // left arrow
-        back()
+        back();
+    // right arrow
     } else if (e.keyCode == '39') {
-        // right arrow
-        next()
+        next();
+    // Tab
+    } else if (e.keyCode == '9') {
+        next();
     }
-    window.location.href = "#myInput" + current;
-
 }

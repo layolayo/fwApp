@@ -2,14 +2,17 @@
 // Start the session
 session_start();
 
-// Echo session variables that were set on previous page
-if ($_SESSION["authenticated"] !==  "authenticated") {
-    header("Location: login");
+// Ensure that the user is logged in
+if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] !==  "authenticated") {
+    header("Location: /fwApp/html/login.html");
 }
+
+include_once '../config/Database.php';
+include_once '../model/Phase.php';
 ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-100">
 
 <head>
   <meta charset="utf-8">
@@ -28,50 +31,60 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     <meta name="description" content="home page">
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <link href="../../css/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <script src="../../js/bootstrap/bootstrap.min.js"></script>
-    <link href="../../css/nav.css" rel="stylesheet">
+    <script src="/fwApp/js/jquery/jquery.min.js"></script>
+    <link href="/fwApp/css/bootstrap-5.1/bootstrap.min.css" rel="stylesheet">
+    <script src="/fwApp/js/bootstrap-5.1/bootstrap.bundle.min.js"></script>
+    <link href="/fwApp/css/nav.css" rel="stylesheet">
+    <script src="/fwApp/js/search.js"></script>
 </head>
 
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="phase">Phase <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../about/">About</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="../account/">Account</a>
-            </li>
-            </ul>
-            <form class="form-inline my-2 my-lg-0 dropdown">
-                <input class="form-control mr-sm-2 " type="search" id="search" placeholder="Search" aria-label="Search">
-                <ul class="dropdown-menu" id="result">
-                </ul>
-            </form>
-        </div>
-    </nav>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Phase</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/fwApp/html/about.php">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/fwApp/html/account.php">Account</a>
+        </li>
+          <?php
+          if (!array_key_exists("admin", $_SESSION) || $_SESSION["admin"] === "admin") {
+          ?>
+          <li class="nav-item">
+            <a class="nav-link" href="/fwApp/html/admin/question_sets.php">ADMIN</a>
+          </li>
+          <?php
+          }
+          ?>
+      </ul>
+      <form class="nav-item my-2 my-lg-0 dropdown">
+        <input class="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search">
+        <ul class="dropdown-menu" id="result">
+        </ul>
+      </form>
+    </div>
+  </div>
+</nav>
+
     
     <div>
         <div class="navbar mynav navbar-expand-lg navbar-light bg-light">
             <ul class="navbar-nav"  id = "my-nav">
-                <?php 
-                $file = "http://uniquechange.com/fwApp/api/Request.php/phase/";
-                $content = file_get_contents($file);
-                $data = json_decode($content, true);
-                if ($content) {
-                    foreach($data as $title) {
-                        $href = "/fwApp/api/Request.php/categoried/?phase=" .$title["title"]. " ";
-                        echo "<li class='phase-links' id='" .$title["title"]. "' onclick='qs(`" .$title["title"]. "`)'> <a  class='nav-link' href='#phase=". $title["title"] ."'>" . $title["title"] . "</a> </li>";
-                    }
+                <?php
+                $phase = new Phase();
+                $results = $phase->read();
+                while ($title = $results->fetch_assoc()) {
+                    $href = "/fwApp/api/Request.php/categoried/?phase=" . $title["title"] . " ";
+                    echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
                 }
                 ?>
                 
@@ -88,10 +101,10 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
         </div>
     </div>
         
-    <section id="qsets" style="display: none";>
-        <div class="d-flex bd-highlight mb-3">
+    <section id="qsets" style="display: none" class="h-100">
+        <div class="d-flex bd-highlight">
             <div class="p-2 bd-highlight shadow-lg" style="min-width: 320px;"> 
-            <form class='form-check form-switch'>
+            <form class='form-check'>
                 <?php 
                     $file = "http://uniquechange.com/fwApp/api/Request.php/type/";
                     $content = file_get_contents($file);
@@ -102,11 +115,11 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                     echo "<div>";
 
                     echo "<hr/>";
-                    echo "<a class='btn' data-toggle='collapse' href='#type' role='button' aria-expanded='false' aria-controls='type'>
-                    <p> ❯ Filter by type  </p> </a>";
+                    echo "<a class='btn' data-bs-toggle='collapse' href='#type' role='button' aria-expanded='false' aria-controls='type'>
+                    <p class='link-primary'> ❯ Filter by type  </p> </a>";
 
                     echo "<div class='collapse' id='type'>";
-                    echo "<ul>";
+                    echo "<ul style='list-style-type: none;'>";
                     if ($content) {
                         foreach($data as $title) {
                             $id = $title["title"];
@@ -129,11 +142,11 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
 
                     echo "<div>";
 
-                    echo "<a class='btn' data-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
-                    <p>❯ Filter by specialism </p> </a>";
+                    echo "<a class='btn' data-bs-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
+                    <p class='link-primary'>❯ Filter by specialism </p> </a>";
                     
                     echo "<div class='collapse' id='specialism'>";
-                    echo "<ul>";
+                    echo "<ul style='list-style-type: none;'>";
                     if ($content) {
                         foreach($data as $title) {
                             $id = $title["title"];
@@ -155,7 +168,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
             </form>
             </div>
             
-            <div class="p-2 bd-highlight">
+            <div class="bd-highlight">
              
                 <div  class="row">
 
@@ -166,7 +179,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                             <p class="lead" id="title-categorised"></p>
                         </div>
                         <div class="box-shadow mx-auto" style=" width: 80%; border-radius: 21px 21px 0 0;">
-                            <ul class="", id = "qsCategoried">
+                            <ul class="" id = "qsCategoried">
                             </ul>
                         </div>
                     </div>
@@ -179,7 +192,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
                             <p class="lead " id="title-uncategorised"></p>
                         </div>
                         <div class="box-shadow mx-auto" style="width: 80%; border-radius: 21px 21px 0 0;">
-                            <ol class="", id = "qsUnCategoried">
+                            <ol class="" id = "qsUnCategoried">
                             </ol>
                         </div>
                     </div>
@@ -197,9 +210,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
         <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Questions</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <div id = "questionList">
 
@@ -292,7 +303,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
         for (var data_qs in data) {
             var qs = data[data_qs];
             if (qs.length != 0 ) {
-                html += "<li onclick='question(`" + qs.ID + "`)' class='list-unstyled m-1 bg-dark text-white rounded zoom p-2' data-toggle='modal' data-target='#exampleModal'>";
+                html += "<li onclick='question(`" + qs.ID + "`)' class='list-unstyled m-1 bg-dark text-white rounded zoom p-2' data-bs-toggle='modal' data-bs-target='#exampleModal'>";
                 html += "<span>" + qs.ID + ": </span> ";
                 html += "<span>" + qs.questionSetName + "</span>";
                 html += "</li>";
@@ -300,6 +311,10 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
         }
         document.getElementById("qsUnCategoried").innerHTML = html;
     }
+    //
+    // <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    //     Launch demo modal
+    // </button>
 
     function titleCategory(data, id) {
         if (data.length == 0) {
@@ -335,13 +350,13 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
             var category = categories[int];
             console.log(category);
             html += "<li class='list-unstyled'>";
-            html += "<button class='btn btn-link rounded m-1 bg-light' data-toggle='collapse' data-target='#collapse" + category_id + "' aria-expanded='true' aria-controls='collapse" + category_id + "' > <small>❯ " + category + "</small></button>"
+            html += "<button class='btn link-primary rounded m-1 bg-light' data-bs-toggle='collapse' href='#collapse" + category_id + "' aria-expanded='true' aria-controls='collapse" + category_id + "' > <small>❯ " + category + "</small></button>"
             html += "<ul class='collapse show'  id='collapse" + category_id + "'>";
             for (var idx in data) {
                 var qs = data[idx];
                 if (qs.length != 0) {
                     if (qs.category == category) {
-                        html += "<li onclick='question(`" + qs.questionSetID + "`)' class='list-unstyled bg-light m-1 rounded zoom p-2' data-toggle='modal' data-target='#exampleModal'>";
+                        html += "<li onclick='question(`" + qs.questionSetID + "`)' class='list-unstyled bg-light m-1 rounded zoom p-2' data-bs-toggle='modal' data-bs-target='#exampleModal'>";
                         html += "<span>" + qs.questionSetID + ": </span>";
                         html += "<span>" + qs.questionSetName + "</span>";
                         html += "</li>"; 
@@ -358,7 +373,7 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
 
     function questionList(xhttp) {
         var html = "<div id = 'modal-body'>";
-        html += "<ol class='list-group m-5', id = 'questionList'>"
+        html += "<ol class='list-group m-5' id = 'questionList'>"
         var data = JSON.parse(xhttp.responseText);
         console.log(data);
         for (var data_qs in data) {
@@ -375,7 +390,8 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
 
         html += "<div class='modal-footer'>"
         html += "<form action='/fwApp/html/question.php' method='get'/>";
-        html += "<button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>";
+        html += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>";
+        html += "<span> </span>"
         html += "<button class='btn btn-primary' name = 'id' value= '" + question_set_id + "'> Use this question set! </button>";
         html += "</form>";
         html += "</div>"
@@ -410,37 +426,10 @@ if ($_SESSION["authenticated"] !==  "authenticated") {
     }
 
     function question(id) {
-       var url = "http://www.uniquechange.com/fwApp/api/Request.php/questions/?id=" + id + " ";
-       question_set_id  = id;
-       loadDoc(url, questionList);
+        const url = "/fwApp/api/questions.php?id=" + id;
+        question_set_id  = id;
+        loadDoc(url, questionList);
     }
 </script>
 
-<script>
-    $(document).ready(function(){
-        $.ajaxSetup({ cache: false });
-        var searchField = $('#search').val();
-        $('#search').keyup(function(){
-            $.getJSON('http://www.uniquechange.com/fwApp/api/Request.php/search/', function(data) {
-                if ($('#search').val().length > 0) {
-                    var expression = new RegExp($('#search').val(), "i");
-                    $("#result").addClass("show");
-                    $.each(data, function(key, value){
-                        if (value.ID.search(expression) != -1 || value.title.search(expression) != -1)
-                            {
-                            $('#result').html('<li> <a href= "http://uniquechange.com/fwApp/html/question.php/?id=' + value.ID + '" class="text-muted dropdown-item">'+ value.ID + ' | ' + value.title+'</a></li>');
-                            }
-                        });
-                    }
-                });
-        
-            if ($('#search').val().length == 0) {
-                $("#result").html(" ");
-                $("#result").removeClass("show");
-            }
-            });
-    
-
-        });
-</script>
 </html>
