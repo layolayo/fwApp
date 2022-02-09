@@ -4,6 +4,7 @@ import { SearchPage } from "./SearchPage";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {NavigationContainer} from "@react-navigation/native";
 import {QuestionsPage} from "./QuestionsPage";
+import {LoginPage} from "./LoginPage";
 
 const NavigationStack = createNativeStackNavigator();
 
@@ -11,6 +12,7 @@ export default function App() {
   return (
       <NavigationContainer>
         <NavigationStack.Navigator>
+          <NavigationStack.Screen name="login" component={LoginPage}/>
           <NavigationStack.Screen name="search" component={SearchPage}/>
           <NavigationStack.Screen name="questions" component={QuestionsPage}/>
         </NavigationStack.Navigator>
@@ -26,10 +28,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-//TODO:
-// login flow
-// re-enable auth on web api
-// id in search results
-// frequency logs

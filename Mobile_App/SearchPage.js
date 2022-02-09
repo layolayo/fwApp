@@ -14,7 +14,7 @@ export const SearchPage = ({ navigation }) => {
                if(new_text.length === 0) {
                    onChangeResults([]);
                } else {
-                   axios.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q=" + new_text)
+                   axios.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q=" + new_text, { withCredentials: true })
                        .then(response => {
                            onChangeResults(response.data);
                        })
@@ -27,7 +27,7 @@ export const SearchPage = ({ navigation }) => {
            }} value={text}/>
 
            <>
-            { results.map((v) => <ListItem title={v.title} key={v.ID} onPress={() => {
+            { results.map((v) => <ListItem title={v.ID + " | " + v.title} key={v.ID} onPress={() => {
                 navigation.navigate("questions", {questionId: v.ID});
             }}/>)}
            </>

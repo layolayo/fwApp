@@ -27,7 +27,7 @@ export const QuestionsPage = ({ route, navigation }) => {
     React.useEffect(() => {
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return navigation.addListener('focus', () => {
-            axios.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionId)
+            axios.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionId, { withCredentials: true })
                 .then(response => {
                     let data = response.data;
                     data.sortOn("qOrder");
@@ -72,7 +72,17 @@ export const QuestionsPage = ({ route, navigation }) => {
             )
         )}
        </>
-           <Button title={"Done"} onPress={() => navigation.goBack()}/>
+           <Button title={"Done"} onPress={() => {
+               axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionId, { withCredentials: true })
+               .then(response => {
+                   console.log("Frequency updated");
+               })
+               .catch(error => {
+                   console.log(error);
+               }).finally(() => {
+                   navigation.goBack();
+               });
+           }}/>
 
        <View style={{flexDirection: 'row'}}>
            <Icon size={48} type={"font-awesome-5"} name={"caret-square-down"} onPress={() => setPosition(Math.min((position + 1), results.length - 1))}/>
