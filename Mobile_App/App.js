@@ -1,17 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import {SearchPage} from 'SearchPage';
+import { SearchPage } from "./SearchPage";
 
 export default function App() {
   return (
-      <SearchPage/>
+    <SearchPage/>
   );
 }
-
-//<View style={styles.container}>
-//       <Text>Open up App.js to start working on your app!</Text>
-//       <StatusBar style="auto" />
-//     </View>
 
 const styles = StyleSheet.create({
   container: {

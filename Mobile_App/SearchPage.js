@@ -1,40 +1,45 @@
-import {SafeAreaView, TextInput} from "react-native-web";
+import { StyleSheet, Text, View} from 'react-native';
+import {useState} from "react";
 import axios from 'axios';
+import {ListItem, TextInput} from "@react-native-material/core";
 
-const getSearchResults = (query) => {
-    this.setState({
-        fromFetch: false,
-        loading: true,
-
-    })
-    axios.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q="+query)
-        .then(response => {
-            console.log('getting data from axios', response.data);
-            setTimeout(() => {
-                this.setState({
-                    loading: false,
-                    axiosData: response.data
-                })
-            }, 2000)
-        })
-        .catch(error => {
-            console.log(error);
-        });
-}
-
-const SearchPage = () => {
-    const [text, onChangeText] = React.useState("query");
+export const SearchPage = () => {
+    const [text, onChangeText] = useState("query");
+    const [results, onChangeResults] = useState([]);
 
     return (
-      <SafeAreaView>
-          <TextInput onChangeText={(new_text) => {
-              getSearchResults(new_text);
-              onChangeText(new_text);
-          }}
-                     value={text}/>
-          { this.state.axiosData.map((v) => <Text>{v}</Text>)}
-      </SafeAreaView>
+       <View style={styles.container}>
+           <TextInput placeholder="search" variant="standard" onChangeText={(new_text) => {
+
+               if(new_text.length === 0) {
+                   onChangeResults([]);
+               } else {
+                   axios.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q=" + new_text)
+                       .then(response => {
+                           onChangeResults(response.data);
+                       })
+                       .catch(error => {
+                           console.log(error);
+                       });
+               }
+
+               onChangeText(new_text);
+           }} value={text}/>
+
+           <>
+            { results.map((v) => <ListItem title={v.title} key={v.ID}/>)}
+           </>
+       </View>
     );
 };
 
-export default SearchPage;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        marginLeft: 16,
+        marginRight: 16,
+        marginTop: 48,
+        justifyContent: 'flex-start',
+    },
+});
