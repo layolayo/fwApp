@@ -3,7 +3,7 @@ import {useState} from "react";
 import axios from 'axios';
 import {ListItem, TextInput} from "@react-native-material/core";
 
-export const SearchPage = () => {
+export const SearchPage = ({ navigation }) => {
     const [text, onChangeText] = useState("query");
     const [results, onChangeResults] = useState([]);
 
@@ -27,7 +27,9 @@ export const SearchPage = () => {
            }} value={text}/>
 
            <>
-            { results.map((v) => <ListItem title={v.title} key={v.ID}/>)}
+            { results.map((v) => <ListItem title={v.title} key={v.ID} onPress={() => {
+                navigation.navigate("questions", {questionId: v.ID});
+            }}/>)}
            </>
        </View>
     );
