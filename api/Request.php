@@ -43,8 +43,8 @@ class Request {
         if (isset($phase)) {
             $question = new QuestionSet($this->conn);
             $type = $this->typeArray($_GET["type"]);
-            $specialism = $_GET["specialism"];
-            if (empty($type) && empty($specialism ) ) {
+            $specialism = $this->typeArray($_GET["specialism"]);
+            if (empty($type) && empty($specialism)) {
                 $results = $question->categorised_question_set($phase);
                 return $this->JSON($results);
             } else {
@@ -52,22 +52,20 @@ class Request {
                 $output_type = array();
 
                 if (!empty($type)) {
-                $type = "'" . implode ( "', '", $type ) . "'";
-                $results = $question->question_set_type_categorised($phase, $type);
-                while ($row = $results->fetch_assoc()) {
-                    $output_type[] = $row;
-                }
-                
+                    $type = "'" . implode ( "', '", $type ) . "'";
+                    $results = $question->question_set_type_categorised($phase, $type);
+                    while ($row = $results->fetch_assoc()) {
+                        $output_type[] = $row;
+                    }
                 }
                 if (!empty($specialism)) {
-                    $output_specialism[] = array();
                     $specialism = "'" . implode ( "', '", $specialism ) . "'";
                     $results = $question->question_set_specilism_categorised($phase, $specialism);
                     while ($row = $results->fetch_assoc()) {
                         $output_specialism[] = $row;
                     }
                 }
-                return json_encode(array_merge($output_specialism,$output_type ));
+                return json_encode(array_merge($output_specialism, $output_type));
             }
         }
     }
@@ -84,7 +82,7 @@ class Request {
         if (isset($phase)) {
             $question = new QuestionSet($this->conn);
             $type = $this->typeArray($_GET["type"]);
-            $specialism = $_GET["specialism"];            
+            $specialism = $this->typeArray($_GET["specialism"]);
             if (empty($type) && empty($specialism ) ) {
                 $results = $question->uncategorised_question_set($phase);
                 return $this->JSON($results);
@@ -93,17 +91,15 @@ class Request {
                 $output_type = array();
 
                 if (!empty($type)) {
-                $type = "'" . implode ( "', '", $type ) . "'";
-                
-                $results = $question->question_set_type_uncategorised($phase, $type);
-              
-                while ($row = $results->fetch_assoc()) {
-                    $output_type[] = $row;
-                }
-                
+                    $type = "'" . implode ( "', '", $type ) . "'";
+
+                    $results = $question->question_set_type_uncategorised($phase, $type);
+
+                    while ($row = $results->fetch_assoc()) {
+                        $output_type[] = $row;
+                    }
                 }
                 if (!empty($specialism)) {
-                    $output_specialism = array();
                     $specialism = "'" . implode ( "', '", $specialism ) . "'";
                     
                     $results = $question->question_set_specilism_uncategorised($phase, $specialism);
@@ -112,7 +108,7 @@ class Request {
                         $output_specialism[] = $row;
                     }
                 }
-                return json_encode(array_merge($output_specialism,$output_type ));
+                return json_encode(array_merge($output_specialism, $output_type));
             }
         }
     }
@@ -206,8 +202,6 @@ if ($url[4] == "categoried") {
     echo $requests->read_categoried_question();
 } else if ($url[4] == "uncategoried") {
     echo $requests->read_uncategoried_question();
-}else if ($url[4] == "question") {
-    echo $requests->read_a_question_set();
 } else if ($url[4] == "type") {
     echo $requests->read_titles_types();
 } else if ($url[4] == "specialism") {

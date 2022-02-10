@@ -8,6 +8,7 @@ session_start();
 
 // Set cors header
 header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Headers: *');
 
 // Ensure that the requester is actually authenticated
 if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authenticated"] !==  "authenticated") {

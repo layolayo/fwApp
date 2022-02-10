@@ -93,7 +93,8 @@
             question_set q, type t
             WHERE p.title = ? AND p.questionSetID = q.ID
             AND q.type = t.title AND 
-            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID)
+            ORDER BY q.frequency DESC");
             $stmt->bind_param("s", $phase_title);
             $stmt->execute();
 
@@ -117,7 +118,8 @@
             question_set q, type t
             WHERE p.title = ? AND p.questionSetID = q.ID
             AND q.type = t.title AND c.questionSetID = q.ID AND
-            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID)
+            ORDER BY q.frequency DESC");
             $stmt->bind_param("s", $phase_title);
             $stmt->execute();
 
@@ -153,7 +155,8 @@
             WHERE p.title = ? AND 
             q.specialism IN ($specialism) AND p.questionSetID = q.ID
             AND q.type = t.title AND 
-            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID)
+            ORDER BY q.frequency DESC");
             $stmt->bind_param("s", $phase_title);
             $stmt->execute();
 
@@ -176,7 +179,8 @@
             WHERE p.title = ? AND 
             q.specialism IN ($specialism) AND p.questionSetID = q.ID
             AND q.type = t.title AND 
-            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID)
+            ORDER BY q.frequency DESC");
             $stmt->bind_param("s", $phase_title);
             $stmt->execute();
 
@@ -198,7 +202,8 @@
             WHERE p.title = ? AND 
             q.type IN ($type) AND p.questionSetID = q.ID
             AND q.type = t.title AND 
-            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            NOT EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID)
+            ORDER BY q.frequency DESC");
             $stmt->bind_param("s", $phase_title);
             $stmt->execute();
 
@@ -221,7 +226,8 @@
             WHERE p.title = ? AND 
             q.type IN ($type) AND p.questionSetID = q.ID
             AND q.type = t.title AND 
-            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID);"); 
+            EXISTS (SELECT * FROM category c WHERE c.questionSetID = q.ID)
+            ORDER BY q.frequency DESC");
             $stmt->bind_param("s", $phase_title);
             $stmt->execute();
 

@@ -7,9 +7,18 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
     header("Location: /fwApp/html/login.html");
 }
 
-include_once '../config/Database.php';
-include_once '../model/Phase.php';
-?>
+//require_once __DIR__ . '/../vendor/autoload.php';
+require_once '../config/Database.php';
+require_once '../model/Phase.php';
+//
+//use DebugBar\StandardDebugBar;
+//
+//$debugbar = new StandardDebugBar();
+//$debugbarRenderer = $debugbar->getJavascriptRenderer();
+//
+//$debugbar["messages"]->addMessage("hello world!");
+//"maximebf/debugbar": "1.*"
+//?>
 
 <!doctype html>
 <html lang="en" class="h-100">
@@ -36,6 +45,9 @@ include_once '../model/Phase.php';
     <script src="/fwApp/js/bootstrap-5.1/bootstrap.bundle.min.js"></script>
     <link href="/fwApp/css/nav.css" rel="stylesheet">
     <script src="/fwApp/js/search.js"></script>
+    <?php if (!array_key_exists("developer", $_SESSION) || $_SESSION["developer"] !==  "developer") {
+//        echo $debugbarRenderer->renderHead();
+    }?>
 </head>
 
 <body>
@@ -218,6 +230,10 @@ include_once '../model/Phase.php';
         </div>
     </div>
     </div>
+
+    <?php if (!array_key_exists("developer", $_SESSION) || $_SESSION["developer"] !==  "developer") {
+//      echo $debugbarRenderer->render();
+    }?>
     
 </body>
 <script>
@@ -261,7 +277,7 @@ include_once '../model/Phase.php';
 
     function loadQuestionSets(checkboxesType, checkboxesSpecialism) {
         var phase = getPhase();
-        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/categoried/");
+        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/categoried/?title=sf");
         var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/uncategoried/");
 
         console.log(phase);

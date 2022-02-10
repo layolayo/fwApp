@@ -141,7 +141,6 @@ include_once '../model/QuestionSet.php';
             <p class='lead'> Questions </p>
               <?php
               $all_questions = Array();
-              $fullScaffold = Array();
               $max = 0;
               $index = 0;
               foreach ($output as $q) {
@@ -149,13 +148,9 @@ include_once '../model/QuestionSet.php';
                   $details = $q["details"];
                   $question = $q["question"];
                   $repeat = $q["repeats"];
-                  $scaffold = $q["scaffold"];
                   $audio = $q["audio"];
                   $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
 
-                  if(!empty($scaffold)) {
-                      $fullScaffold[] = $scaffold;
-                  }
                   $count = 1;
                   if($repeat || $repeat > 0) {
                       $count = $repeat + 1;
@@ -192,14 +187,6 @@ include_once '../model/QuestionSet.php';
                     <?php
                     }
                     ?>
-                    <br/>
-                    <?php
-                    if (!empty(trim($scaffhold ?? "")) || $scaffold ) {
-                    ?>
-                      <textarea onmouseout='oldText()' onclick='copy(this)' ></textarea>
-                    <?php
-                    }
-                    ?>
                     </li>
                     <?php
                       $index += 1;
@@ -208,9 +195,6 @@ include_once '../model/QuestionSet.php';
               ?>
           </ul>
           <div class='col-md-4 order-md-2 mb-4'>
-            <p class='lead'> Full  Scaffold </p>
-            <textarea onclick='copy(this)' onmouseout='oldText()'><?php echo implode("\n", $fullScaffold);?></textarea>
-            <br/>
             <button class="btn btn-secondary" onclick="copy2('<?php echo str_replace("'", "\'", implode("\\n\\n", $all_questions)); ?>');"><i class="bi-clipboard"></i> Copy All Questions</button>
           </div>
           <input id = 'hidden-input' type='hidden' value="<?php echo $max; ?>">

@@ -24,6 +24,9 @@ if (password_verify($password, $output["userpassword"]) == $password) {
     if($output["admin"] == 1) {
         $_SESSION["admin"] = "admin";
     }
+    if($output["developer"] == 1) {
+        $_SESSION["developer"] = "developer";
+    }
 
     if (isset($_SESSION["email"]) && isset($_SESSION["authenticated"])) {
         header("Location: ../html/phase.php/");
