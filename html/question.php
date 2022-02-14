@@ -194,7 +194,7 @@ include_once '../model/QuestionSet.php';
                     <?php
                     if(!empty($image ?? "")) {
                     ?>
-                    <img src="<?php echo $image_path; ?>" alt="<?php echo $image_alttext; ?>"/>
+                    <img style="width: auto; height: 20em;" src="<?php echo $image_path; ?>" alt="<?php echo $image_alttext; ?>"/>
                     <?php
                     }
                     ?>
