@@ -149,7 +149,10 @@ include_once '../model/QuestionSet.php';
                   $question = $q["question"];
                   $repeat = $q["repeats"];
                   $audio = $q["audio"];
+                  $image = $q["image"];
+                  $image_alttext = $q["image_alttext"];
                   $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
+                  $image_path = "/fwApp/image-store/" . $image . ".png";
 
                   $count = 1;
                   if($repeat || $repeat > 0) {
@@ -184,6 +187,14 @@ include_once '../model/QuestionSet.php';
                       <audio controls>
                         <source src="<?php echo $audio_path; ?>" type="audio/mpeg"/>
                       </audio>
+                    <?php
+                    }
+                    ?>
+                    <br/>
+                    <?php
+                    if(!empty($image ?? "")) {
+                    ?>
+                    <img src="<?php echo $image_path; ?>" alt="<?php echo $image_alttext; ?>"/>
                     <?php
                     }
                     ?>
