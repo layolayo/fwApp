@@ -87,6 +87,16 @@ include_once '../model/QuestionSet.php';
           </a>
           <div class="collapse" id="background">
             <p class="lead"> <?php echo $results["background"]; ?> </p>
+              <?php
+              if(!empty(trim($results["background_audio"] ?? ""))) {
+                  $background_audio_path = "/fwApp/audio-store/" . $results["background_audio"] . ".mp3";
+                  ?>
+                <audio controls>
+                  <source src="<?php echo $background_audio_path; ?>" type="audio/mpeg"/>
+                </audio>
+              <?php
+              }
+              ?>
           </div>
           <?php
           }
@@ -149,9 +159,11 @@ include_once '../model/QuestionSet.php';
                   $question = $q["question"];
                   $repeat = $q["repeats"];
                   $audio = $q["audio"];
+                  $audio_details = $q["audio_details"];
                   $image = $q["image"];
                   $image_alttext = $q["image_alttext"];
                   $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
+                  $audio_details_path = "/fwApp/audio-store/" . $audio_details . ".mp3";
                   $image_path = "/fwApp/image-store/" . $image . ".png";
 
                   $count = 1;
@@ -171,7 +183,7 @@ include_once '../model/QuestionSet.php';
                     if (!empty(trim($details ?? "")) || $details ) {
                     ?>
                       <br/>
-                      <button style="font-size:0.5rem;" class="btn btn-outline-secondary" data-bs-toggle="collapse" href="#details-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="details-<?php echo $index; ?>">❯</button>
+                      <button style="font-size:0.75rem;" class="btn btn-outline-secondary" data-bs-toggle="collapse" href="#details-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="details-<?php echo $index; ?>">Sentence Starters:</button>
                       <br/>
                       <div class="collapse" id="details-<?php echo $index; ?>">
                         <br/>
@@ -184,8 +196,20 @@ include_once '../model/QuestionSet.php';
                     <?php
                     if(!empty($audio ?? "")) {
                     ?>
+                      <p>Hear the question:</p>
                       <audio controls>
                         <source src="<?php echo $audio_path; ?>" type="audio/mpeg"/>
+                      </audio>
+                    <?php
+                    }
+                    ?>
+                    <br/>
+                    <?php
+                    if(!empty($audio_details ?? "")) {
+                    ?>
+                      <p>Extra Details:</p>
+                      <audio controls>
+                        <source src="<?php echo $audio_details_path; ?>" type="audio/mpeg"/>
                       </audio>
                     <?php
                     }

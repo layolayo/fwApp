@@ -1,4 +1,4 @@
-import {StyleSheet, View} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as React from "react";
 import {useState} from "react";
 import axios from 'axios';
@@ -23,6 +23,7 @@ export const QuestionsPage = ({ route, navigation }) => {
     const [results, onChangeResults] = useState([]);
     const [sound, setSound] = React.useState();
     const [position, setPosition] = useState(0);
+    const [questionList, setQuestionList] = useState();
 
     React.useEffect(() => {
         // Return the function to unsubscribe from the event so it gets removed on unmount
@@ -48,48 +49,59 @@ export const QuestionsPage = ({ route, navigation }) => {
             : undefined;
     }, [sound]);
 
+    const renderQuestion = ({ item, index, sep }) => (
+        new Array(item.repeats == null ? 1 : item.repeats).fill(0).map(() =>
+                    <TouchableOpacity onPress={() => {{
+                        setPosition(index);
+                        questionList.scrollToIndex({animated: true, index: index});
+                    }}} key={item.id}>
+                        <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
+                        { item.details != null && <Text>{item.details}</Text> }
+                        { item.audio != null && <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                            const {sound} = await Audio.Sound.createAsync(
+                                {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
+                            );
+
+                            setSound(sound);
+
+                            console.log("Playing sound");
+                            await sound.playAsync();
+                        }}/>}
+                        <Divider/>
+                    </TouchableOpacity>
+                )
+    );
+
     return (
-   <View style={styles.container}>
-       <View style={{marginLeft: 32, marginRight: 32, marginTop: 32}}>
-       <>
-        { results.map((v, index) =>
-            new Array(v.repeats == null ? 1 : v.repeats).fill(0).map(() =>
-                <View key={v.id}>
-                    <Text style={ index === position ? styles.selected : styles.unselected}>{v.question}</Text>
-                    { v.details != null && <Text>{v.details}</Text> }
-                    { v.audio != null && <Icon type={"antdesign"} name={"sound"} onPress={async () => {
-                        const {sound} = await Audio.Sound.createAsync(
-                            {uri: "http://www.uniquechange.com/fwApp/audio-store/" + v.audio + ".mp3" }
-                        );
+   <SafeAreaView style={styles.container}>
+       <FlatList style={{marginLeft: 32, marginRight: 32, marginTop: 32}} data={results} extraData={position} keyExtractor={item => item.id} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
 
-                        setSound(sound);
+       <View style={{flexDirection: 'row', justifyContent: "space-between", marginRight: 32, marginLeft: 32}}>
+           <Icon size={48} type={"font-awesome-5"} name={"caret-square-down"} onPress={() => {
+               let index = Math.min((position + 1), results.length - 1);
+               setPosition(index);
+               questionList.scrollToIndex({animated: true, index: index});
+           }}/>
 
-                        console.log("Playing sound");
-                        await sound.playAsync();
-                    }}/>}
-                    <Divider/>
-                </View>
-            )
-        )}
-       </>
-           <Button title={"Done"} onPress={() => {
+           <Button style={{marginLeft: 32, marginRight: 32, marginBottom: 8, flexGrow: 1}} title={"Done"} onPress={() => {
                axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionId, { withCredentials: true })
-               .then(response => {
-                   console.log("Frequency updated");
-               })
-               .catch(error => {
-                   console.log(error);
-               }).finally(() => {
+                   .then(response => {
+                       console.log("Frequency updated");
+                   })
+                   .catch(error => {
+                       console.log(error);
+                   }).finally(() => {
                    navigation.goBack();
                });
            }}/>
 
-       <View style={{flexDirection: 'row'}}>
-           <Icon size={48} type={"font-awesome-5"} name={"caret-square-down"} onPress={() => setPosition(Math.min((position + 1), results.length - 1))}/>
-           <Icon size={48} type={"font-awesome-5"} name={"caret-square-up"} onPress={() => setPosition(Math.max((position - 1), 0))}/>
+           <Icon size={48} type={"font-awesome-5"} name={"caret-square-up"} onPress={() => {
+               let index = Math.max((position - 1), 0);
+               setPosition(index);
+               questionList.scrollToIndex({animated: true, index: index});
+           }}/>
        </View>
-    </View>
-   </View>
+   </SafeAreaView>
     );
 };
 
