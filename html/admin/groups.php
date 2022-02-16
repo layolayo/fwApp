@@ -51,6 +51,13 @@ if (($_GET["mode"] ?? "") == "add_group") {
     echo $stmt->error;
 }
 
+if (($_GET["mode"] ?? "") == "add_question_set") {
+    $stmt = $conn->prepare("INSERT INTO `group_question_set` (`group_id`, `question_set_id`) VALUES (?, ?)");
+    $stmt->bind_param("ss", $_GET["group"], $_POST["questionSetId"]);
+    $stmt->execute();
+    echo $stmt->error;
+}
+
 
     $stmt = $conn->prepare("SELECT * FROM groups");
     $stmt->execute();
@@ -61,15 +68,35 @@ if (($_GET["mode"] ?? "") == "add_group") {
     <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
+        <th scope="col"></th>
     </tr>
     </thead>
     <tbody>
     <?php
     foreach ($groups as $q) {
+      $stmt = $conn->prepare("SELECT * FROM group_question_set WHERE group_id = ?");
+      $stmt->bind_param("s", $q["id"]);
+      $stmt->execute();
+      $group_question_sets = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     ?>
         <tr>
           <td scope='row'><?php echo $q["id"];?></td>
           <td><?php echo $q["name"];?></td>
+          <td>
+            <p>Add question set</p>
+            <form method="post" action="./groups.php?mode=add_question_set&group=<?php echo $q["id"];?>">
+              <label for="questionSetId">Id:</label><input type="text" id="questionSetId" name="questionSetId">
+              <input type="submit" value="Add" name="submit">
+            </form>
+            <p>Question sets</p>
+            <?php
+            foreach ($group_question_sets as $qs) {
+            ?>
+              <p><?php echo $qs["question_set_id"];?></p>
+            <?php
+            }
+            ?>
+          </td>
         </tr>
     <?php
     }
@@ -77,6 +104,7 @@ if (($_GET["mode"] ?? "") == "add_group") {
     </tbody>
 </table>
 
+  <h3>Add group</h3>
   <form method="post" action="./groups.php?mode=add_group">
     <label for="groupName">Group Name:</label><input type="text" id="groupName" name="groupName">
     <input type="submit" value="Create Group" name="submit">
