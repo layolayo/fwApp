@@ -51,10 +51,10 @@ include_once '../model/QuestionSet.php';
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Phase</a>
+            <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/fwApp/html/about.php">About</a>
+            <a class="nav-link" href="/fwApp/html/help.php">Help</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/fwApp/html/account.php">Account</a>
