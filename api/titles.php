@@ -132,12 +132,6 @@ class Request {
         return $this->JSON($results);
     }
 
-    public function read_question_sets() {
-        $question = new QuestionSet($this->conn);
-        $results = $question->question_sets($id);
-        return $this->JSON($results);
-    }
-
     public function read_a_question_set() {
         $id = $_GET["id"];
         if (isset($id)) {
@@ -145,12 +139,6 @@ class Request {
             $results = $question->a_question_set($id);
             return $this->JSON($results);
         }
-    }
-
-    public function read_titles_types() {
-        $type = new Type($this->conn);
-        $results = $type->read();
-        return $this->JSON($results);
     }
 
     public function forgot_success() {
@@ -170,40 +158,11 @@ class Request {
         return "failure";
     }
 
-    public function new_password() {
-        $facilitator = new Facilitator($this->conn);
-        $userEmail = $_GET["email"];
-        $userPassword = $_GET["password"];
-        if ($facilitator->update($userEmail, password_hash($userPassword, PASSWORD_DEFAULT))) {
-            $results = $facilitator->read($userEmail);
-            $output = $results->fetch_assoc();
-            if (password_verify($userPassword, $output["userpassword"]) == $userPassword) {
-                return "success";
-            }
-        }
-        return "failure";
-    }
-
-    public function read_titles_specialism() {
-        $specialism = new Specialism($this->conn);
-        $results = $specialism->read();
-        return $this->JSON($results);
-    }
-
     public function read_user_qs() {
         $facilitator = new Facilitator($this->conn);
         $userEmail = $_GET["email"];
         $results = $facilitator->getUserQs($userEmail);
         return $this->JSON($results);
-    }
-
-    public function update_frequency_qs() {
-        $questionSet = new QuestionSet($this->conn);
-        $id = $_GET["id"];
-        if ($questionSet->update_frequency($id)) {
-            return "true";
-        }
-        return "false";
     }
 }
 
@@ -216,24 +175,13 @@ if ($url[4] == "categoried") {
     echo $requests->read_uncategoried_question();
 } else if ($url[4] == "questions") {
     echo $requests->read_questions();
-}else if ($url[4] == "search") {
-    echo $requests->read_question_sets();
 }else if ($url[4] == "question") {
     echo $requests->read_a_question_set();
-} else if ($url[4] == "type") {
-    echo $requests->read_titles_types();
-} else if ($url[4] == "specialism") {
-    echo $requests->read_titles_specialism();
 } else if ($url[4] == "forgot") {
     echo $requests->forgot_success();
-}else if ($url[4] == "newpsw") {
-    echo $requests->new_password();
 } else if ($url[4] == "userqs") {
     echo $requests->read_user_qs();
-}else if ($url[4] == "frequency") {
-    echo $requests->update_frequency_qs();
-}
-else {
+} else {
     echo $requests->read_titles_phases();
 }
 ?>

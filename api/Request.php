@@ -196,12 +196,6 @@ class Request {
         }
     }
 
-    public function read_titles_types() {
-        $type = new Type($this->conn);
-        $results = $type->read();
-        return $this->JSON($results);
-    }
-
     public function forgot_success() {
         $token = new Token($this->conn);
         $facilitator = new Facilitator($this->conn);
@@ -219,26 +213,6 @@ class Request {
         return "failure";
     }
 
-    public function new_password() {
-        $facilitator = new Facilitator($this->conn);
-        $userEmail = $_GET["email"];
-        $userPassword = $_GET["password"];
-        if ($facilitator->update($userEmail, password_hash($userPassword, PASSWORD_DEFAULT))) {
-            $results = $facilitator->read($userEmail);
-            $output = $results->fetch_assoc();
-            if (password_verify($userPassword, $output["userpassword"]) == $userPassword) {
-                return "success";
-            }
-        }
-        return "failure";
-    }
-
-    public function read_titles_specialism() {
-        $specialism = new Specialism($this->conn);
-        $results = $specialism->read();
-        return $this->JSON($results);
-    }
-
     public function read_user_qs() {
         $facilitator = new Facilitator($this->conn);
         $userEmail = $_GET["email"];
@@ -254,13 +228,7 @@ if ($url[4] == "categoried") {
     echo $requests->read_categoried_question();
 } else if ($url[4] == "uncategoried") {
     echo $requests->read_uncategoried_question();
-} else if ($url[4] == "type") {
-    echo $requests->read_titles_types();
-} else if ($url[4] == "specialism") {
-    echo $requests->read_titles_specialism();
 } else if ($url[4] == "forgot") {
     echo $requests->forgot_success();
-}else if ($url[4] == "newpsw") {
-    echo $requests->new_password();
 }
 ?>

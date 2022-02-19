@@ -79,7 +79,8 @@
         let inputEmail = document.getElementById('inputEmail').value;
         if (!password || !psword || !(password === "") || !(psword === "")) {
             if (password === psword) {
-                let url = new URL("http://www.uniquechange.com/fwApp/api/Request.php/newpsw/");
+                //TODO: bad, dont send credentials using GET
+                let url = new URL("http://www.uniquechange.com/fwApp/api/new_password.php");
                 url.searchParams.set('password', password);
                 url.searchParams.set('email', inputEmail);
                 console.log(url);

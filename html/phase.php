@@ -10,6 +10,8 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
 //require_once __DIR__ . '/../vendor/autoload.php';
 require_once '../config/Database.php';
 require_once '../model/Phase.php';
+require_once '../model/Type.php';
+require_once '../model/Specialism.php';
 //
 //use DebugBar\StandardDebugBar;
 //
@@ -117,66 +119,54 @@ require_once '../model/Phase.php';
         <div class="d-flex bd-highlight">
             <div class="p-2 bd-highlight shadow-lg" style="min-width: 320px;"> 
             <form class='form-check'>
-                <?php 
-                    $file = "http://uniquechange.com/fwApp/api/Request.php/type/";
-                    $content = file_get_contents($file);
-                    $data = json_decode($content, true);
-
-                    echo "<div>";
-
-                    echo "<div>";
-
-                    echo "<hr/>";
-                    echo "<a class='btn' data-bs-toggle='collapse' href='#type' role='button' aria-expanded='false' aria-controls='type'>
-                    <p class='link-primary'> ❯ Filter by type  </p> </a>";
-
-                    echo "<div class='collapse' id='type'>";
-                    echo "<ul style='list-style-type: none;'>";
-                    if ($content) {
-                        foreach($data as $title) {
-                            $id = $title["title"];
-                            echo "<li>";
-                            echo "<input class='form-check-input filter-checks filter-checks-type'  type='checkbox' id='$id' name='type[]' value='$id'>";
-                            echo "<label class='form-check-label' for='$id'> $id </label><br>";
-                            echo "</li>";
-                        }
+              <div>
+                <div>
+                  <hr/>
+                  <a class='btn' data-bs-toggle='collapse' href='#type' role='button' aria-expanded='false' aria-controls='type'>
+                    <p class='link-primary'> ❯ Filter by type  </p> </a>
+                  <div class='collapse' id='type'>
+                    <ul style='list-style-type: none;'>
+                    <?php
+                    $phase = new Type();
+                    $results = $phase->read();
+                    while ($title = $results->fetch_assoc()) {
+                        $id = $title["title"];
+                    ?>
+                      <li>
+                        <input class='form-check-input filter-checks filter-checks-type'  type='checkbox' id='<?php echo $id; ?>' name='type[]' value='<?php echo $id; ?>'>
+                        <label class='form-check-label' for='<?php echo $id; ?>'> <?php echo $id; ?> </label><br>
+                      </li>
+                    <?php
                     }
-                    echo "</ul>";
-                    echo "</div>";
-                    echo "<hr/>";
-
-                    echo "</div>";
-
-
-                    $file = "http://uniquechange.com/fwApp/api/Request.php/specialism/";
-                    $content = file_get_contents($file);
-                    $data = json_decode($content, true);
-
-                    echo "<div>";
-
-                    echo "<a class='btn' data-bs-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
-                    <p class='link-primary'>❯ Filter by specialism </p> </a>";
-                    
-                    echo "<div class='collapse' id='specialism'>";
-                    echo "<ul style='list-style-type: none;'>";
-                    if ($content) {
-                        foreach($data as $title) {
-                            $id = $title["title"];
-                            echo "<li>";
-                            echo "<input class='form-check-input filter-checks filter-checks-specialism' type='checkbox' id='$id' name='specialism[]' value='$id'>";
-                            echo "<label class='form-check-label' for='$id'>     $id </label><br>";
-                            echo "</li>";
-                        }
-                    }
-                    echo "</ul>";
-                    echo "</div>";
-                    echo "<hr/>";
-
-                    echo "</div>";
-
-                    echo "</div>";
-                    echo "<br>";
-                ?>
+                    ?>
+                    </ul>
+                  </div>
+                  <hr/>
+                </div>
+                <div>
+                  <a class='btn' data-bs-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
+                    <p class='link-primary'>❯ Filter by specialism </p> </a>
+                  <div class='collapse' id='specialism'>
+                    <ul style='list-style-type: none;'>
+                      <?php
+                      $phase = new Specialism();
+                      $results = $phase->read();
+                      while ($title = $results->fetch_assoc()) {
+                          $id = $title["title"];
+                      ?>
+                      <li>
+                        <input class='form-check-input filter-checks filter-checks-specialism' type='checkbox' id='<?php echo $id; ?>' name='specialism[]' value='<?php echo $id; ?>'>
+                        <label class='form-check-label' for='<?php echo $id; ?>'>     <?php echo $id; ?> </label><br>
+                      </li>
+                      <?php
+                      }
+                      ?>
+                    </ul>
+                  </div>
+                      <hr/>
+                  </div>
+                  </div>
+                      <br>
             </form>
             </div>
             
