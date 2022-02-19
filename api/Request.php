@@ -1,5 +1,10 @@
 <?php
-header('Access-Control-Allow-Origin: *');
+session_start();
+
+// Required to be the current hosting domain to allow sending cookies in xhttp requests
+header('Access-Control-Allow-Origin: http://uniquechange.com');
+// Required to be true to allow scripts to read response bodies from requests sent with cookies
+header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
 include_once '../config/Database.php';
@@ -7,6 +12,7 @@ foreach (glob("../model/*.php") as $filename)
 {
     include_once $filename;
 }
+
 
 class Request {
     private $context;
@@ -37,7 +43,8 @@ class Request {
      * read_categoried_question:
      *  This will take in a list of question which are categoried.
      */
-    public function read_categoried_question() {
+    public function read_categoried_question()
+    {
         // http://www.uniquechange.com/fwApp/api/Request.php/phase/?phase=Main%20Course
         $phase = $_GET["phase"];
         if (isset($phase)) {
@@ -46,27 +53,68 @@ class Request {
             $specialism = $this->typeArray($_GET["specialism"]);
             if (empty($type) && empty($specialism)) {
                 $results = $question->categorised_question_set($phase);
-                return $this->JSON($results);
+                $results = $this->filter_results_to_enabled_groups($results);
+                return json_encode($results);
             } else {
                 $output_specialism = array();
                 $output_type = array();
 
                 if (!empty($type)) {
-                    $type = "'" . implode ( "', '", $type ) . "'";
+                    $type = "'" . implode("', '", $type) . "'";
                     $results = $question->question_set_type_categorised($phase, $type);
                     while ($row = $results->fetch_assoc()) {
                         $output_type[] = $row;
                     }
                 }
                 if (!empty($specialism)) {
-                    $specialism = "'" . implode ( "', '", $specialism ) . "'";
+                    $specialism = "'" . implode("', '", $specialism) . "'";
                     $results = $question->question_set_specilism_categorised($phase, $specialism);
                     while ($row = $results->fetch_assoc()) {
                         $output_specialism[] = $row;
                     }
                 }
-                return json_encode(array_merge($output_specialism, $output_type));
+                $results = array_merge($output_specialism, $output_type);
+                $results = $this->filter_results_to_enabled_groups($results);
+                return json_encode($results);
             }
+        }
+    }
+
+    public function filter_results_to_enabled_groups($question_sets)
+    {
+        // Filter results to only contain question sets available in the current group
+
+        // Are you in a group
+        $database = new Database();
+        $this->conn = $database->connect();
+        $stmt = $this->conn->prepare("SELECT * FROM user_groups WHERE user_email = ?");
+        $stmt->bind_param("s", $_GET["email"]);
+        $stmt->execute();
+        $user_groups_count = count($stmt->get_result()->fetch_all());
+        if ($user_groups_count > 0) {
+            // Get the question sets available to your group
+            $stmt = $this->conn->prepare("SELECT * FROM `user_groups` INNER JOIN group_question_set ON group_question_set.group_id = user_groups.group_id WHERE user_email = ? ");
+            $stmt->bind_param("s", $_GET["email"]);
+            $stmt->execute();
+            $groups_result = $stmt->get_result();
+
+            $filtered_results = [];
+
+            // Take only the questions that match the query and are in your available groups
+            while ($row = $groups_result->fetch_assoc()) {
+                foreach ($question_sets as $r) {
+                    if ($row["question_set_id"] == $r["ID"]) {
+                        $filtered_results[] = $r;
+                    }
+                }
+            }
+            return $filtered_results;
+        } else {
+            $unfiltered_results = [];
+            foreach ($question_sets as $r) {
+                $unfiltered_results[] = $r;
+            }
+            return $unfiltered_results;
         }
     }
 
@@ -77,21 +125,23 @@ class Request {
         return explode(",", $type);
     }
 
-    public function read_uncategoried_question() {
+    public function read_uncategoried_question()
+    {
         $phase = $_GET["phase"];
         if (isset($phase)) {
             $question = new QuestionSet($this->conn);
             $type = $this->typeArray($_GET["type"]);
             $specialism = $this->typeArray($_GET["specialism"]);
-            if (empty($type) && empty($specialism ) ) {
+            if (empty($type) && empty($specialism)) {
                 $results = $question->uncategorised_question_set($phase);
-                return $this->JSON($results);
+                $results = $this->filter_results_to_enabled_groups($results);
+                return json_encode($results);
             } else {
                 $output_specialism = array();
                 $output_type = array();
 
                 if (!empty($type)) {
-                    $type = "'" . implode ( "', '", $type ) . "'";
+                    $type = "'" . implode("', '", $type) . "'";
 
                     $results = $question->question_set_type_uncategorised($phase, $type);
 
@@ -100,15 +150,17 @@ class Request {
                     }
                 }
                 if (!empty($specialism)) {
-                    $specialism = "'" . implode ( "', '", $specialism ) . "'";
-                    
+                    $specialism = "'" . implode("', '", $specialism) . "'";
+
                     $results = $question->question_set_specilism_uncategorised($phase, $specialism);
-                    
+
                     while ($row = $results->fetch_assoc()) {
                         $output_specialism[] = $row;
                     }
                 }
-                return json_encode(array_merge($output_specialism, $output_type));
+                $results = array_merge($output_specialism, $output_type);
+                $results = $this->filter_results_to_enabled_groups($results);
+                return json_encode($results);
             }
         }
     }

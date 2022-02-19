@@ -293,7 +293,9 @@ require_once '../model/Phase.php';
         }
 
         categoriedURL.searchParams.append('phase', phase);
+        categoriedURL.searchParams.append('email', "<?php echo $_SESSION["email"]; ?>");
         uncategoriedURL.searchParams.append('phase', phase);
+        uncategoriedURL.searchParams.append('email', "<?php echo $_SESSION["email"]; ?>");
         console.log(categoriedURL.href);
         console.log(uncategoriedURL.href);
         loadDoc(categoriedURL, qsCategoried);
@@ -307,6 +309,7 @@ require_once '../model/Phase.php';
     function loadDoc(url, func) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() { func(this);}
+        xhttp.withCredentials = true;
         xhttp.open("GET", url);
         xhttp.send();  
     }
