@@ -2,8 +2,10 @@ import { StyleSheet, Text, View} from 'react-native';
 import {useState} from "react";
 import axios from 'axios';
 import {ListItem, TextInput} from "@react-native-material/core";
+import {instance} from "./Networking";
 
-export const SearchPage = ({ navigation }) => {
+export const SearchPage = ({ route, navigation }) => {
+    const { token } = route.params;
     const [text, onChangeText] = useState("");
     const [results, onChangeResults] = useState([]);
 
@@ -15,9 +17,13 @@ export const SearchPage = ({ navigation }) => {
                    if(new_text.length === 0) {
                        onChangeResults([]);
                    } else {
-                       axios.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q=" + new_text, { withCredentials: true })
+                       instance.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q=" + new_text, { headers: {"X-Auth-Token": token} })
                            .then(response => {
-                               onChangeResults(response.data);
+                               if(response.data.error != null) {
+                                   console.log("Network error: ", response.data);
+                               } else {
+                                   onChangeResults(response.data);
+                               }
                            })
                            .catch(error => {
                                console.log(error);
@@ -29,7 +35,7 @@ export const SearchPage = ({ navigation }) => {
 
                <>
                 { results.map((v) => <ListItem title={v.ID + " | " + v.title} key={v.ID} onPress={() => {
-                    navigation.navigate("questions", {questionId: v.ID});
+                    navigation.navigate("questions", {token: token, questionId: v.ID});
                 }}/>)}
                </>
            </View>

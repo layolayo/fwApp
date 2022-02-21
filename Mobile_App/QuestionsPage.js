@@ -5,6 +5,7 @@ import axios from 'axios';
 import {Button, Divider, ListItem, Text} from "@react-native-material/core";
 import { Audio } from 'expo-av';
 import {Icon} from "react-native-elements";
+import {instance} from "./Networking";
 
 Array.prototype.sortOn = function(key){
     this.sort(function(a, b){
@@ -18,7 +19,7 @@ Array.prototype.sortOn = function(key){
 }
 
 export const QuestionsPage = ({ route, navigation }) => {
-    const { questionId } = route.params;
+    const { token, questionId } = route.params;
 
     const [results, onChangeResults] = useState([]);
     const [sound, setSound] = React.useState();
@@ -28,7 +29,7 @@ export const QuestionsPage = ({ route, navigation }) => {
     React.useEffect(() => {
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return navigation.addListener('focus', () => {
-            axios.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionId, { withCredentials: true })
+            instance.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionId, { headers: {"X-Auth-Token": token}})
                 .then(response => {
                     let data = response.data;
                     data.sortOn("qOrder");

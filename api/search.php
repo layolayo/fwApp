@@ -9,15 +9,23 @@ include_once '../model/QuestionSet.php';
 
 $SEARCH_LIMIT_MAX = 10;
 
+// If using the token override (mobile app when running in browser)
+if (array_key_exists("HTTP_X_AUTH_TOKEN", $_SERVER ?? [])) {
+    session_id($_SERVER["HTTP_X_AUTH_TOKEN"]);
+}
+
 session_start();
 
 // Set cors header
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: *');
+header("Access-Control-Allow-Origin: " . $_SERVER["HTTP_ORIGIN"]);
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, X-Auth-Token");
+header("Access-Control-Allow-Methods: GET,PUT,POST,DELETE,UPDATE,OPTIONS");
+header('Access-Control-Allow-Credentials: true');
 
 // Ensure that the requester is actually authenticated
 if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authenticated"] !==  "authenticated") {
-    die("Not authenticated");
+    echo json_encode(["success" => false, "error" => "Not authenticated"]);
+    die;
 }
 
 $query = $_GET["q"] ?? die("No query given");

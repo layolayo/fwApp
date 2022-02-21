@@ -3,8 +3,10 @@ include_once '../config/Database.php';
 include_once '../model/Facilitator.php';
 
 // Set cors header
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Headers: *');
+header("Access-Control-Allow-Origin: " . $_SERVER["HTTP_ORIGIN"]);
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, X-Auth-Token");
+header("Access-Control-Allow-Methods: GET,PUT,POST,DELETE,UPDATE,OPTIONS");
+header('Access-Control-Allow-Credentials: true');
 header('Content-Type: application/json');
 
 $email = $_POST["email"];
@@ -29,7 +31,7 @@ if (!isset($email) || !isset($password) ) {
 
         // Set content type
         header('Content-Type: application/json');
-        echo json_encode(["status" => "ok", "token" => $_COOKIE["PHPSESSID"]]);
+        echo json_encode(["status" => "ok", "token" => session_id()]);
     } else {
         echo json_encode(["status" => "failed"]);
     }

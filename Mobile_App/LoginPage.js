@@ -2,6 +2,7 @@ import { StyleSheet, View} from 'react-native';
 import {useState} from "react";
 import axios from 'axios';
 import {Button, ListItem, TextInput} from "@react-native-material/core";
+import {instance} from "./Networking";
 
 export const LoginPage = ({ navigation }) => {
     const [email, onChangeEmail] = useState("");
@@ -29,9 +30,9 @@ export const LoginPage = ({ navigation }) => {
 
                    const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
 
-                   await axios.post('http://www.uniquechange.com/fwApp/api/mobile_auth.php', formBody, config)
+                   await instance.post('http://www.uniquechange.com/fwApp/api/mobile_auth.php', formBody, config)
                        .then(response => {
-                           console.log("Status: ", response.data.status);
+                           console.log("Status: ", response.data);
                            if(response.data.status === "ok") {
                                navigation.replace("search", {token: response.data.token});
                            }
