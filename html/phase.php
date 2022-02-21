@@ -62,10 +62,10 @@ require_once '../model/Specialism.php';
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Phase</a>
+          <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/fwApp/html/about.php">About</a>
+          <a class="nav-link" href="/fwApp/html/help.php">Help</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/fwApp/html/account.php">Account</a>
@@ -88,31 +88,35 @@ require_once '../model/Specialism.php';
     </div>
   </div>
 </nav>
+<nav class="navbar mynav navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-    
-    <div>
-        <div class="navbar mynav navbar-expand-lg navbar-light bg-light">
-            <ul class="navbar-nav"  id = "my-nav">
-                <?php
-                $phase = new Phase();
-                $results = $phase->read();
-                while ($title = $results->fetch_assoc()) {
-                    $href = "/fwApp/api/categorised.php?phase=" . $title["title"] . " ";
-                    echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
-                }
-                ?>
-                
-            </ul>
-        </div>
-        
-        <div class="jumbotron" style="margin: 0">
-            <div class="col container">
-                
-                <h1 class="display-3" id="question-sets-for">Phases</h1>
-                <p class='lead'>1. Choose from any Phase Above</p>
-                <p class='lead'>2. Apply a filter (Optional)</p>
-            </div>
-        </div>
+          <?php
+          $phase = new Phase();
+          $results = $phase->read();
+          while ($title = $results->fetch_assoc()) {
+              $href = "/fwApp/api/Request.php/categorised.php?phase=" . $title["title"] . " ";
+              echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
+          }
+          ?>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="jumbotron" style="margin: 0">
+      <div class="col container">
+
+        <h1 class="display-3" id="question-sets-for">Phases</h1>
+        <p class='lead'>1. Choose from any Phase Above</p>
+        <p class='lead'>2. Apply a filter (Optional)</p>
+      </div>
     </div>
         
     <section id="qsets" style="display: none" class="h-100">
@@ -170,6 +174,16 @@ require_once '../model/Specialism.php';
                       <br>
             </form>
             </div>
+
+          <?php
+          /*<div>
+            <p>Test</p>
+            <div id="test_div"></div>
+          </div>
+          <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+          <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+          <script src="/fwApp/js/test.js" crossorigin></script>*/
+          ?>
             
             <div class="bd-highlight">
              
@@ -419,7 +433,7 @@ require_once '../model/Specialism.php';
         }
 
         var activeNav = document.getElementById(phase);
-        document.getElementById("question-sets-for").innerHTML = phase + ": Questions sets";
+        document.getElementById("question-sets-for").innerHTML = phase;
         activeNav.className = "phase-links active spec-active";
         activeNav.style = "background-color: gray";
     }
