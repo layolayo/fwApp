@@ -1,4 +1,4 @@
-import {FlatList, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, SafeAreaView, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as React from "react";
 import {useState} from "react";
 import axios from 'axios';
@@ -57,16 +57,33 @@ export const QuestionsPage = ({ route, navigation }) => {
                     }}} key={item.id}>
                         <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
                         { item.details != null && <Text>{item.details}</Text> }
-                        { item.audio != null && <Icon type={"antdesign"} name={"sound"} onPress={async () => {
-                            const {sound} = await Audio.Sound.createAsync(
-                                {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
-                            );
+                        { item.audio != null && <View>
+                            <Text>Hear the question:</Text>
+                            <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                                const {sound} = await Audio.Sound.createAsync(
+                                    {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
+                                );
 
-                            setSound(sound);
+                                setSound(sound);
 
-                            console.log("Playing sound");
-                            await sound.playAsync();
-                        }}/>}
+                                console.log("Playing sound");
+                                await sound.playAsync();
+                            }}/>
+                        </View>}
+                        { item.audio_details != null && <View>
+                            <Text>Hear details:</Text>
+                            <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                                const {sound} = await Audio.Sound.createAsync(
+                                    {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
+                                );
+
+                                setSound(sound);
+
+                                console.log("Playing details sound");
+                                await sound.playAsync();
+                            }}/>
+                        </View>}
+                        { (item.audio != null && item.audio_details != null) && <Image style={{marginLeft: "auto", marginRight: "auto"}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.audio_details}/>}
                         <Divider/>
                     </TouchableOpacity>
                 )

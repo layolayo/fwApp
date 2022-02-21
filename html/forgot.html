@@ -64,7 +64,7 @@
         let token = document.getElementById('token').value;
         let inputEmail = document.getElementById('inputEmail').value;
 
-        let url = new URL("http://www.uniquechange.com/fwApp/api/Request.php/forgot/");
+        let url = new URL("http://www.uniquechange.com/fwApp/api/forgot.php");
         console.log(url)
         url.searchParams.set('token', token);
         url.searchParams.set('email', inputEmail);

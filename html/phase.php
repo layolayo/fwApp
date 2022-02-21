@@ -97,7 +97,7 @@ require_once '../model/Specialism.php';
                 $phase = new Phase();
                 $results = $phase->read();
                 while ($title = $results->fetch_assoc()) {
-                    $href = "/fwApp/api/Request.php/categoried/?phase=" . $title["title"] . " ";
+                    $href = "/fwApp/api/categorised.php?phase=" . $title["title"] . " ";
                     echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
                 }
                 ?>
@@ -145,7 +145,8 @@ require_once '../model/Specialism.php';
                 </div>
                 <div>
                   <a class='btn' data-bs-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
-                    <p class='link-primary'>❯ Filter by specialism </p> </a>
+                    <p class='link-primary'>❯ Filter by specialism </p>
+                  </a>
                   <div class='collapse' id='specialism'>
                     <ul style='list-style-type: none;'>
                       <?php
@@ -163,8 +164,8 @@ require_once '../model/Specialism.php';
                       ?>
                     </ul>
                   </div>
-                      <hr/>
-                  </div>
+                  <hr/>
+                </div>
                   </div>
                       <br>
             </form>
@@ -267,8 +268,8 @@ require_once '../model/Specialism.php';
 
     function loadQuestionSets(checkboxesType, checkboxesSpecialism) {
         var phase = getPhase();
-        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/categoried/?title=sf");
-        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/uncategoried/");
+        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/categorised.php?title=sf");
+        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/uncategorised.php");
 
         console.log(phase);
         if (checkboxesType.length != 0) {

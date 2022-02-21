@@ -1,8 +1,8 @@
 <?php
-/// Handler for retrieving a list of all phases
+/// Handler for retrieving a list of all types
 
 include_once '../config/Database.php';
-include_once '../model/Phase.php';
+include_once '../model/Specialism.php';
 
 session_start();
 
@@ -16,7 +16,7 @@ if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authentica
 }
 
 // Connect to db
-$phase = new Phase();
+$phase = new Specialism();
 $results = $phase->read();
 
 if(!$results) {
