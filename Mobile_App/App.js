@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { SearchPage } from "./SearchPage";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
@@ -24,8 +23,6 @@ Sentry.init({
         }),
     ],*/
 });
-
-Sentry.Browser.captureMessage("Test");
 
 export default function App() {
   return (
