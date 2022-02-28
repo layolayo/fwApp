@@ -1,68 +1,47 @@
 import {useState} from "react";
 import axios from "axios";
 import logo from "./logo.svg";
+import { useParams, useNavigate } from "react-router-dom";
 
-export const PhasePage = () => {
-    let [phases, setPhases] = useState([]);
+export const LoginPage = () => {
+    const [email, onChangeEmail] = useState("");
+    const [password, onChangePassword] = useState("");
+    const [passwordInput, onChangePasswordInput] = useState();
 
-    const config = {
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    }
+    let navigate = useNavigate();
 
-    const details = {
-        email: "callumthom11@gmail.com",
-        password: "DYadx3igBs742xG",
-    };
+    return (
+        <div>
+            <input autoCapitalize="none" autoCorrect={false} onSubmit={() => passwordInput.focus()} placeholder="Email" onChange={(v) => onChangeEmail(v.target.value)} value={email}/>
+            <input autoCapitalize="none" autoCorrect={false} ref={(input)=> onChangePasswordInput(input) } placeholder="password" onChange={(v) => onChangePassword(v.target.value)} value={password} secureTextEntry/>
+            <button onClick={async () => {
+                console.log("Logging in");
 
-    const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
+                }
 
-    axios.post('http://www.uniquechange.com/fwApp/api/mobile_auth.php', formBody, config)
-        .then(response => {
-            console.log("Status: ", response.data.status);
-            if(response.data.status === "ok") {
-                axios.get("http://www.uniquechange.com/fwApp/api/phase.php", { withCredentials: true })
+                const details = {
+                    email: email,
+                    password: password,
+                };
+
+                const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+
+                await axios.post('http://www.uniquechange.com/fwApp/api/mobile_auth.php', formBody, config)
                     .then(response => {
-                        if(phases.length === 0) {
-                            let data = response.data;
-                            setPhases(data);
+                        console.log("Status: ", response.data.status);
+                        if(response.data.status === "ok") {
+                            // navigation.replace("search", {token: response.data.token});
+                            navigate("/phase");
                         }
                     })
                     .catch(error => {
                         console.log(error);
                     });
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        });
-
-
-    return (
-        <div>
-            <div>
-                <div className="navbar mynav navbar-expand-lg navbar-light bg-light">
-                    <ul className="navbar-nav" id="my-nav">
-                        { phases.map((phase) => {
-                            return (
-                                <li className='phase-links' id={phase.title} onClick='qs(phase.title)'>
-                                    <a className='nav-link' href={'#phase=' + phase.title}>{phase.title}
-                                    </a>
-                                </li>);
-                        })}
-                    </ul>
-                </div>
-
-                <div className="jumbotron" style={{margin: 0}}>
-                    <div className="col container">
-
-                        <h1 className="display-3" id="question-sets-for">Phases</h1>
-                        <p className='lead'>1. Choose from any Phase Above</p>
-                        <p className='lead'>2. Apply a filter (Optional)</p>
-                    </div>
-                </div>
-            </div>
+            }}>Log In</button>
         </div>
     );
 };
