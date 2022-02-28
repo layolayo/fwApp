@@ -5,6 +5,7 @@ import {useState} from "react";
 import {PhasePage} from "./PhasePage";
 import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
 import {LoginPage} from "./LoginPage";
+import {AdminGroups} from "./AdminGroupsPage";
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
                               <Link className="nav-link" to={"/account"}>Account</Link>
                           </li>
                           <li className="nav-item">
-                              <Link className="nav-link" to={"/admin"}>ADMIN</Link>
+                              <Link className="nav-link" to={"admin/group"}>ADMIN</Link>
                           </li>
                       </ul>
                       <form className="nav-item my-2 my-lg-0 dropdown">
@@ -43,7 +44,8 @@ function App() {
 
           <Routes>
               <Route path="login" element={<LoginPage/>}/>
-              <Route path="phase" element={<PhasePage/>}/>
+              {/*<Route path="phase" element={<PhasePage/>}/>*/}
+              <Route path="admin/group" element={<AdminGroups/>}/>
           </Routes>
       </BrowserRouter>
   );
