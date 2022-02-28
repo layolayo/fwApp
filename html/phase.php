@@ -112,10 +112,7 @@ require_once '../model/Specialism.php';
 
     <div class="jumbotron" style="margin: 0">
       <div class="col container">
-
         <h1 class="display-3" id="question-sets-for">Phases</h1>
-        <p class='lead'>1. Choose from any Phase Above</p>
-        <p class='lead'>2. Apply a filter (Optional)</p>
       </div>
     </div>
         
@@ -192,7 +189,6 @@ require_once '../model/Specialism.php';
                     
                     <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center col" style=" min-width: 400px; min-height: 70vh">
                         <div class="my-3 py-3 text-white ">
-                            <h2 class="display-5">Categorised</h2>
                             <p class="lead" id="title-categorised"></p>
                         </div>
                         <div class="box-shadow mx-auto" style=" width: 80%; border-radius: 21px 21px 0 0;">
@@ -205,7 +201,6 @@ require_once '../model/Specialism.php';
                     
                     <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center col" style=" min-width: 400px; min-height: 70vh">
                         <div class="my-3 p-3">
-                            <h2 class="display-5">Uncategorised</h2>
                             <p class="lead " id="title-uncategorised"></p>
                         </div>
                         <div class="box-shadow mx-auto" style="width: 80%; border-radius: 21px 21px 0 0;">
@@ -323,7 +318,7 @@ require_once '../model/Specialism.php';
         var html = "";
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
-        titleCategory(data, "title-uncategorised")
+        titleCategory(data, "title-uncategorised", "Uncategorised")
         for (var data_qs in data) {
             var qs = data[data_qs];
             if (qs.length != 0 ) {
@@ -340,9 +335,9 @@ require_once '../model/Specialism.php';
     //     Launch demo modal
     // </button>
 
-    function titleCategory(data, id) {
+    function titleCategory(data, id, kind) {
         if (data.length == 0) {
-            document.getElementById(id).innerHTML = "None available"
+            document.getElementById(id).innerHTML = kind + ": None available"
         } else {
             document.getElementById(id).innerHTML = "";
         }
@@ -354,7 +349,7 @@ require_once '../model/Specialism.php';
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
 
-        titleCategory(data, "title-categorised")
+        titleCategory(data, "title-categorised", "Categorised")
 
         var categories = [];
         
