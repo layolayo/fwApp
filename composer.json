@@ -6,8 +6,8 @@
     "platform-check": false
   },
     "require": {
-        "ext-mysqli": "*",
-        "vlucas/phpdotenv": "^5.4",
-        "robmorgan/phinx": "^0.12.10"
+      "ext-mysqli": "*",
+      "vlucas/phpdotenv": "^5.4",
+      "robmorgan/phinx": "^0.12.10"
     }
 }

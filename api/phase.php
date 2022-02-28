@@ -7,11 +7,12 @@ include_once '../model/Phase.php';
 session_start();
 
 // Set cors header
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: http://localhost:3000');
+header('Access-Control-Allow-Credentials: true');
 
 // Ensure that the requester is actually authenticated
 if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authenticated"] !==  "authenticated") {
-    die("Not authenticated");
+//    die("Not authenticated");
 }
 
 // Connect to db

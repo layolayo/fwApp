@@ -7,9 +7,20 @@ if (!array_key_exists("authenticated", $_SESSION) || $_SESSION["authenticated"] 
     header("Location: /fwApp/html/login.html");
 }
 
-include_once '../config/Database.php';
-include_once '../model/Phase.php';
-?>
+//require_once __DIR__ . '/../vendor/autoload.php';
+require_once '../config/Database.php';
+require_once '../model/Phase.php';
+require_once '../model/Type.php';
+require_once '../model/Specialism.php';
+//
+//use DebugBar\StandardDebugBar;
+//
+//$debugbar = new StandardDebugBar();
+//$debugbarRenderer = $debugbar->getJavascriptRenderer();
+//
+//$debugbar["messages"]->addMessage("hello world!");
+//"maximebf/debugbar": "1.*"
+//?>
 
 <!doctype html>
 <html lang="en" class="h-100">
@@ -36,6 +47,9 @@ include_once '../model/Phase.php';
     <script src="/fwApp/js/bootstrap-5.1/bootstrap.bundle.min.js"></script>
     <link href="/fwApp/css/nav.css" rel="stylesheet">
     <script src="/fwApp/js/search.js"></script>
+    <?php if (!array_key_exists("developer", $_SESSION) || $_SESSION["developer"] !==  "developer") {
+//        echo $debugbarRenderer->renderHead();
+    }?>
 </head>
 
 <body>
@@ -48,10 +62,10 @@ include_once '../model/Phase.php';
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Phase</a>
+          <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/fwApp/html/about.php">About</a>
+          <a class="nav-link" href="/fwApp/html/help.php">Help</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/fwApp/html/account.php">Account</a>
@@ -74,99 +88,99 @@ include_once '../model/Phase.php';
     </div>
   </div>
 </nav>
+<nav class="navbar mynav navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent2" aria-controls="navbarSupportedContent2" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-    
-    <div>
-        <div class="navbar mynav navbar-expand-lg navbar-light bg-light">
-            <ul class="navbar-nav"  id = "my-nav">
-                <?php
-                $phase = new Phase();
-                $results = $phase->read();
-                while ($title = $results->fetch_assoc()) {
-                    $href = "/fwApp/api/Request.php/categoried/?phase=" . $title["title"] . " ";
-                    echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
-                }
-                ?>
-                
-            </ul>
-        </div>
-        
-        <div class="jumbotron" style="margin: 0">
-            <div class="col container">
-                
-                <h1 class="display-3" id="question-sets-for">Phases</h1>
-                <p class='lead'>1. Choose from any Phase Above</p>
-                <p class='lead'>2. Apply a filter (Optional)</p>
-            </div>
-        </div>
+          <?php
+          $phase = new Phase();
+          $results = $phase->read();
+          while ($title = $results->fetch_assoc()) {
+              $href = "/fwApp/api/Request.php/categorised.php?phase=" . $title["title"] . " ";
+              echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
+          }
+          ?>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="jumbotron" style="margin: 0">
+      <div class="col container">
+        <h1 class="display-3" id="question-sets-for">Phases</h1>
+      </div>
     </div>
         
     <section id="qsets" style="display: none" class="h-100">
         <div class="d-flex bd-highlight">
             <div class="p-2 bd-highlight shadow-lg" style="min-width: 320px;"> 
             <form class='form-check'>
-                <?php 
-                    $file = "http://uniquechange.com/fwApp/api/Request.php/type/";
-                    $content = file_get_contents($file);
-                    $data = json_decode($content, true);
-
-                    echo "<div>";
-
-                    echo "<div>";
-
-                    echo "<hr/>";
-                    echo "<a class='btn' data-bs-toggle='collapse' href='#type' role='button' aria-expanded='false' aria-controls='type'>
-                    <p class='link-primary'> ❯ Filter by type  </p> </a>";
-
-                    echo "<div class='collapse' id='type'>";
-                    echo "<ul style='list-style-type: none;'>";
-                    if ($content) {
-                        foreach($data as $title) {
-                            $id = $title["title"];
-                            echo "<li>";
-                            echo "<input class='form-check-input filter-checks filter-checks-type'  type='checkbox' id='$id' name='type[]' value='$id'>";
-                            echo "<label class='form-check-label' for='$id'> $id </label><br>";
-                            echo "</li>";
-                        }
+              <div>
+                <div>
+                  <hr/>
+                  <a class='btn' data-bs-toggle='collapse' href='#type' role='button' aria-expanded='false' aria-controls='type'>
+                    <p class='link-primary'> ❯ Filter by type  </p> </a>
+                  <div class='collapse' id='type'>
+                    <ul style='list-style-type: none;'>
+                    <?php
+                    $phase = new Type();
+                    $results = $phase->read();
+                    while ($title = $results->fetch_assoc()) {
+                        $id = $title["title"];
+                    ?>
+                      <li>
+                        <input class='form-check-input filter-checks filter-checks-type'  type='checkbox' id='<?php echo $id; ?>' name='type[]' value='<?php echo $id; ?>'>
+                        <label class='form-check-label' for='<?php echo $id; ?>'> <?php echo $id; ?> </label><br>
+                      </li>
+                    <?php
                     }
-                    echo "</ul>";
-                    echo "</div>";
-                    echo "<hr/>";
-
-                    echo "</div>";
-
-
-                    $file = "http://uniquechange.com/fwApp/api/Request.php/specialism/";
-                    $content = file_get_contents($file);
-                    $data = json_decode($content, true);
-
-                    echo "<div>";
-
-                    echo "<a class='btn' data-bs-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
-                    <p class='link-primary'>❯ Filter by specialism </p> </a>";
-                    
-                    echo "<div class='collapse' id='specialism'>";
-                    echo "<ul style='list-style-type: none;'>";
-                    if ($content) {
-                        foreach($data as $title) {
-                            $id = $title["title"];
-                            echo "<li>";
-                            echo "<input class='form-check-input filter-checks filter-checks-specialism' type='checkbox' id='$id' name='specialism[]' value='$id'>";
-                            echo "<label class='form-check-label' for='$id'>     $id </label><br>";
-                            echo "</li>";
-                        }
-                    }
-                    echo "</ul>";
-                    echo "</div>";
-                    echo "<hr/>";
-
-                    echo "</div>";
-
-                    echo "</div>";
-                    echo "<br>";
-                ?>
+                    ?>
+                    </ul>
+                  </div>
+                  <hr/>
+                </div>
+                <div>
+                  <a class='btn' data-bs-toggle='collapse' href='#specialism' role='button' aria-expanded='false' aria-controls='specialism'>
+                    <p class='link-primary'>❯ Filter by specialism </p>
+                  </a>
+                  <div class='collapse' id='specialism'>
+                    <ul style='list-style-type: none;'>
+                      <?php
+                      $phase = new Specialism();
+                      $results = $phase->read();
+                      while ($title = $results->fetch_assoc()) {
+                          $id = $title["title"];
+                      ?>
+                      <li>
+                        <input class='form-check-input filter-checks filter-checks-specialism' type='checkbox' id='<?php echo $id; ?>' name='specialism[]' value='<?php echo $id; ?>'>
+                        <label class='form-check-label' for='<?php echo $id; ?>'>     <?php echo $id; ?> </label><br>
+                      </li>
+                      <?php
+                      }
+                      ?>
+                    </ul>
+                  </div>
+                  <hr/>
+                </div>
+                  </div>
+                      <br>
             </form>
             </div>
+
+          <?php
+          /*<div>
+            <p>Test</p>
+            <div id="test_div"></div>
+          </div>
+          <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+          <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+          <script src="/fwApp/js/test.js" crossorigin></script>*/
+          ?>
             
             <div class="bd-highlight">
              
@@ -175,7 +189,6 @@ include_once '../model/Phase.php';
                     
                     <div class="bg-dark mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center col" style=" min-width: 400px; min-height: 70vh">
                         <div class="my-3 py-3 text-white ">
-                            <h2 class="display-5">Categorised</h2>
                             <p class="lead" id="title-categorised"></p>
                         </div>
                         <div class="box-shadow mx-auto" style=" width: 80%; border-radius: 21px 21px 0 0;">
@@ -188,7 +201,6 @@ include_once '../model/Phase.php';
                     
                     <div class="bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center col" style=" min-width: 400px; min-height: 70vh">
                         <div class="my-3 p-3">
-                            <h2 class="display-5">Uncategorised</h2>
                             <p class="lead " id="title-uncategorised"></p>
                         </div>
                         <div class="box-shadow mx-auto" style="width: 80%; border-radius: 21px 21px 0 0;">
@@ -218,6 +230,10 @@ include_once '../model/Phase.php';
         </div>
     </div>
     </div>
+
+    <?php if (!array_key_exists("developer", $_SESSION) || $_SESSION["developer"] !==  "developer") {
+//      echo $debugbarRenderer->render();
+    }?>
     
 </body>
 <script>
@@ -261,8 +277,8 @@ include_once '../model/Phase.php';
 
     function loadQuestionSets(checkboxesType, checkboxesSpecialism) {
         var phase = getPhase();
-        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/categoried/");
-        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/Request.php/uncategoried/");
+        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/categorised.php?title=sf");
+        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/uncategorised.php");
 
         console.log(phase);
         if (checkboxesType.length != 0) {
@@ -277,7 +293,9 @@ include_once '../model/Phase.php';
         }
 
         categoriedURL.searchParams.append('phase', phase);
+        categoriedURL.searchParams.append('email', "<?php echo $_SESSION["email"]; ?>");
         uncategoriedURL.searchParams.append('phase', phase);
+        uncategoriedURL.searchParams.append('email', "<?php echo $_SESSION["email"]; ?>");
         console.log(categoriedURL.href);
         console.log(uncategoriedURL.href);
         loadDoc(categoriedURL, qsCategoried);
@@ -291,6 +309,7 @@ include_once '../model/Phase.php';
     function loadDoc(url, func) {
         const xhttp = new XMLHttpRequest();
         xhttp.onload = function() { func(this);}
+        xhttp.withCredentials = true;
         xhttp.open("GET", url);
         xhttp.send();  
     }
@@ -299,7 +318,7 @@ include_once '../model/Phase.php';
         var html = "";
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
-        titleCategory(data, "title-uncategorised")
+        titleCategory(data, "title-uncategorised", "Uncategorised")
         for (var data_qs in data) {
             var qs = data[data_qs];
             if (qs.length != 0 ) {
@@ -316,9 +335,9 @@ include_once '../model/Phase.php';
     //     Launch demo modal
     // </button>
 
-    function titleCategory(data, id) {
+    function titleCategory(data, id, kind) {
         if (data.length == 0) {
-            document.getElementById(id).innerHTML = "None available"
+            document.getElementById(id).innerHTML = kind + ": None available"
         } else {
             document.getElementById(id).innerHTML = "";
         }
@@ -330,7 +349,7 @@ include_once '../model/Phase.php';
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
 
-        titleCategory(data, "title-categorised")
+        titleCategory(data, "title-categorised", "Categorised")
 
         var categories = [];
         
@@ -409,7 +428,7 @@ include_once '../model/Phase.php';
         }
 
         var activeNav = document.getElementById(phase);
-        document.getElementById("question-sets-for").innerHTML = phase + ": Questions sets";
+        document.getElementById("question-sets-for").innerHTML = phase;
         activeNav.className = "phase-links active spec-active";
         activeNav.style = "background-color: gray";
     }

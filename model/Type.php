@@ -2,27 +2,24 @@
     /*
         This is repersents a Type model
     */
-    class Type {
+    class Type
+    {
         private $conn;
 
-        public $email;
-        public $password;
-
-        public function __construct($db) {
+        public function __construct($db = null)
+        {
             $this->conn = $db;
-            $this->email = "'$email'";
-            $this->password = $password; // get email
-
+            if ($db == null) {
+                $database = new Database();
+                $this->conn = $database->connect();
+            }
         }
 
-        public function read() {
-            $stmt = $this->conn->prepare("SELECT * FROM type"); 
+        public function read()
+        {
+            $stmt = $this->conn->prepare("SELECT * FROM type");
             $stmt->execute();
             return $stmt->get_result();
         }
 
     }
-
-
-
-?>

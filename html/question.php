@@ -51,10 +51,10 @@ include_once '../model/QuestionSet.php';
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Phase</a>
+            <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/fwApp/html/about.php">About</a>
+            <a class="nav-link" href="/fwApp/html/help.php">Help</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/fwApp/html/account.php">Account</a>
@@ -87,6 +87,16 @@ include_once '../model/QuestionSet.php';
           </a>
           <div class="collapse" id="background">
             <p class="lead"> <?php echo $results["background"]; ?> </p>
+              <?php
+              if(!empty(trim($results["background_audio"] ?? ""))) {
+                  $background_audio_path = "/fwApp/audio-store/" . $results["background_audio"] . ".mp3";
+                  ?>
+                <audio controls>
+                  <source src="<?php echo $background_audio_path; ?>" type="audio/mpeg"/>
+                </audio>
+              <?php
+              }
+              ?>
           </div>
           <?php
           }
@@ -141,7 +151,6 @@ include_once '../model/QuestionSet.php';
             <p class='lead'> Questions </p>
               <?php
               $all_questions = Array();
-              $fullScaffold = Array();
               $max = 0;
               $index = 0;
               foreach ($output as $q) {
@@ -149,13 +158,14 @@ include_once '../model/QuestionSet.php';
                   $details = $q["details"];
                   $question = $q["question"];
                   $repeat = $q["repeats"];
-                  $scaffold = $q["scaffold"];
                   $audio = $q["audio"];
+                  $audio_details = $q["audio_details"];
+                  $image = $q["image"];
+                  $image_alttext = $q["image_alttext"];
                   $audio_path = "/fwApp/audio-store/" . $audio . ".mp3";
+                  $audio_details_path = "/fwApp/audio-store/" . $audio_details . ".mp3";
+                  $image_path = "/fwApp/image-store/" . $image . ".png";
 
-                  if(!empty($scaffold)) {
-                      $fullScaffold[] = $scaffold;
-                  }
                   $count = 1;
                   if($repeat || $repeat > 0) {
                       $count = $repeat + 1;
@@ -173,7 +183,7 @@ include_once '../model/QuestionSet.php';
                     if (!empty(trim($details ?? "")) || $details ) {
                     ?>
                       <br/>
-                      <button style="font-size:0.5rem;" class="btn btn-outline-secondary" data-bs-toggle="collapse" href="#details-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="details-<?php echo $index; ?>">❯</button>
+                      <button style="font-size:0.75rem;" class="btn btn-outline-secondary" data-bs-toggle="collapse" href="#details-<?php echo $index; ?>" role="button" aria-expanded="false" aria-controls="details-<?php echo $index; ?>">Sentence Starters:</button>
                       <br/>
                       <div class="collapse" id="details-<?php echo $index; ?>">
                         <br/>
@@ -186,6 +196,7 @@ include_once '../model/QuestionSet.php';
                     <?php
                     if(!empty($audio ?? "")) {
                     ?>
+                      <p>Hear the question:</p>
                       <audio controls>
                         <source src="<?php echo $audio_path; ?>" type="audio/mpeg"/>
                       </audio>
@@ -194,9 +205,20 @@ include_once '../model/QuestionSet.php';
                     ?>
                     <br/>
                     <?php
-                    if (!empty(trim($scaffhold ?? "")) || $scaffold ) {
+                    if(!empty($audio_details ?? "")) {
                     ?>
-                      <textarea onmouseout='oldText()' onclick='copy(this)' ></textarea>
+                      <p>Extra Details:</p>
+                      <audio controls>
+                        <source src="<?php echo $audio_details_path; ?>" type="audio/mpeg"/>
+                      </audio>
+                    <?php
+                    }
+                    ?>
+                    <br/>
+                    <?php
+                    if(!empty($image ?? "")) {
+                    ?>
+                    <img style="width: auto; height: 20em;" src="<?php echo $image_path; ?>" alt="<?php echo $image_alttext; ?>"/>
                     <?php
                     }
                     ?>
@@ -208,9 +230,6 @@ include_once '../model/QuestionSet.php';
               ?>
           </ul>
           <div class='col-md-4 order-md-2 mb-4'>
-            <p class='lead'> Full  Scaffold </p>
-            <textarea onclick='copy(this)' onmouseout='oldText()'><?php echo implode("\n", $fullScaffold);?></textarea>
-            <br/>
             <button class="btn btn-secondary" onclick="copy2('<?php echo str_replace("'", "\'", implode("\\n\\n", $all_questions)); ?>');"><i class="bi-clipboard"></i> Copy All Questions</button>
           </div>
           <input id = 'hidden-input' type='hidden' value="<?php echo $max; ?>">
