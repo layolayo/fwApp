@@ -8,6 +8,25 @@ import {LoginPage} from "./LoginPage";
 
 const NavigationStack = createNativeStackNavigator();
 
+import * as Sentry from 'sentry-expo';
+
+Sentry.init({
+    dsn: 'https://2d2c9f5c1dff4988b39f4b7bf11798bf@o1155143.ingest.sentry.io/6235411',
+    enableInExpoDevelopment: true,
+    debug: true,
+    /*integrations: [
+        new Sentry.ReactNativeTracing({
+            // Pass instrumentation to be used as `routingInstrumentation`
+            routingInstrumentation: new Sentry.ReactNativeNavigationInstrumentation(
+                NavigationStack,
+            )
+            // ...
+        }),
+    ],*/
+});
+
+Sentry.Browser.captureMessage("Test");
+
 export default function App() {
   return (
       <NavigationContainer>
