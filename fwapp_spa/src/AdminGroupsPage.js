@@ -1,6 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
-import logo from "./logo.svg";
+import { useSelector, useDispatch } from 'react-redux'
+import { decrement, increment } from './counterSlice'
 
 function deleteGroup(token, id) {
     axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_del.php?gid="+id, { headers: {"X-Auth-Token": token} })
@@ -26,6 +27,7 @@ function fetchGroups(token, setGroups) {
     axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_get.php", { headers: {"X-Auth-Token": token} })
         .then(response => {
             let data = response.data;
+            console.log("Got groups: ", data);
             setGroups(data);
         })
         .catch(error => {
@@ -35,9 +37,10 @@ function fetchGroups(token, setGroups) {
 
 export const AdminGroups = () => {
     let [groups, setGroups] = useState([]);
-    let [groupName, setGroupName] = useState("");
+    let [groupName, setGroupName] = useState("")
 
-    var token = "6aba7069a7c3702fa88098807a301e31";
+    const token = useSelector((state) => state.userDetails.token)
+
 
     if(groups.length === 0) {
         fetchGroups(token, setGroups);
@@ -53,7 +56,7 @@ export const AdminGroups = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    { groups.map((g, ind) =>
+                    { groups != null && groups.map((g, ind) =>
                         <tr>
                             <td>{g.group.id}</td>
                             <td>{g.group.name}</td>
