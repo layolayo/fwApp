@@ -4,8 +4,10 @@ import {BrowserRouter, Link, Redirect, Route, Routes, Navigate} from "react-rout
 import {LoginPage} from "./LoginPage";
 import {AdminGroups} from "./AdminGroupsPage";
 import {useDispatch, useSelector} from "react-redux";
+import {AdminFacilitators} from "./AdminFacilitators";
+import {AdminQuestionSets} from "./AdminQuestionSets";
 
-const BASE_URL = "/fwApp/html/admin"
+export const BASE_URL = "/fwApp/html/admin"
 
 function App() {
     const token = useSelector((state) => state.userDetails.token)
@@ -13,37 +15,6 @@ function App() {
 
   return (
       <BrowserRouter>
-        {/*<div>*/}
-        {/*  <nav className="navbar navbar-expand-lg navbar-dark bg-dark">*/}
-        {/*      <div className="container-fluid">*/}
-        {/*          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">*/}
-        {/*              <span className="navbar-toggler-icon"></span>*/}
-        {/*          </button>*/}
-        {/*          <div className="collapse navbar-collapse" id="navbarSupportedContent">*/}
-        {/*              <ul className="navbar-nav me-auto mb-2 mb-lg-0">*/}
-        {/*                  <li className="nav-item">*/}
-        {/*                      <Link className="nav-link active" to={"phase"}>Phase</Link>*/}
-        {/*                  </li>*/}
-        {/*                  <li className="nav-item">*/}
-        {/*                      <Link className="nav-link" to={"/about"}>About</Link>*/}
-        {/*                  </li>*/}
-        {/*                  <li className="nav-item">*/}
-        {/*                      <Link className="nav-link" to={"/account"}>Account</Link>*/}
-        {/*                  </li>*/}
-        {/*                  <li className="nav-item">*/}
-        {/*                      <Link className="nav-link" to={"admin/group"}>ADMIN</Link>*/}
-        {/*                  </li>*/}
-        {/*              </ul>*/}
-        {/*              <form className="nav-item my-2 my-lg-0 dropdown">*/}
-        {/*                  <input className="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search"></input>*/}
-        {/*                  <ul className="dropdown-menu" id="result">*/}
-        {/*                  </ul>*/}
-        {/*              </form>*/}
-        {/*          </div>*/}
-        {/*      </div>*/}
-        {/*  </nav>*/}
-        {/*</div>*/}
-
           {token == null &&
               <Routes>
                   <Route exact path={ BASE_URL + "/"} element={<Navigate to={BASE_URL+ "/login"}/>}/>
@@ -54,9 +25,11 @@ function App() {
           { token != null &&
               <Routes>
                   <Route exact path={BASE_URL + "/"} element={<Navigate to={BASE_URL + "/admin/groups"}/>}/>
-                  <Route exact path={BASE_URL + "/login"} element={<Navigate to={BASE_URL + "/admin/groups"}/>}/>
+                  <Route exact path={BASE_URL + "/login"} element={<Navigate to={BASE_URL + "/admin/users"}/>}/>
                   {/*<Route path="phase" element={<PhasePage/>}/>*/}
                   <Route exact path={BASE_URL + "/admin/groups"} element={<AdminGroups/>}/>
+                  <Route exact path={BASE_URL + "/admin/users"} element={<AdminFacilitators/>}/>
+                  <Route exact path={BASE_URL + "/admin/question_sets"} element={<AdminQuestionSets/>}/>
               </Routes>
           }
       </BrowserRouter>

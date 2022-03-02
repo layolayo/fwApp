@@ -2,6 +2,9 @@ import {useState} from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from 'react-redux'
 import ReactModal from 'react-modal';
+import {Link} from "react-router-dom";
+import {BASE_URL} from "./App";
+import {AdminNav} from "./AdminNav";
 
 function deleteGroup(token, id) {
     axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_del.php?gid="+id, { headers: {"X-Auth-Token": token} })
@@ -70,12 +73,13 @@ export const AdminGroups = () => {
 
     return (
         <div>
+            <AdminNav/>
             <table className="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th>Name</th>
-                    <th>Details</th>
+                    <th>Edit</th>
                     <th>Delete</th>
                 </tr>
                 </thead>
@@ -87,15 +91,13 @@ export const AdminGroups = () => {
                             <td>
                                 <button className="btn btn-primary" onClick={() => {
                                     setActiveGroupId(g.group.id);
-                                }}>Details
-                                </button>
+                                }}>Edit</button>
                             </td>
                             <td>
                                 <button className="btn btn-danger" onClick={() => {
                                     deleteGroup(token, g.group.id);
                                     fetchGroups(token, setGroups);
-                                }}>Delete
-                                </button>
+                                }}>Delete</button>
                             </td>
                         </tr>
                     )}

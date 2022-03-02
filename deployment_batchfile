@@ -1,6 +1,6 @@
+put -R ./api/* ./api/
 put -R ./fwapp_spa/build/* ./html/admin/
 put -R ./html/* ./html/
-put -R ./api/* ./api/
 put -R ./js/* ./js/
 put -R ./css/* ./css/
 put -R ./model/* ./model/
