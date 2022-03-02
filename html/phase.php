@@ -12,6 +12,8 @@ require_once '../config/Database.php';
 require_once '../model/Phase.php';
 require_once '../model/Type.php';
 require_once '../model/Specialism.php';
+include_once '../model/QuestionSet.php';
+
 //
 //use DebugBar\StandardDebugBar;
 //
@@ -74,7 +76,7 @@ require_once '../model/Specialism.php';
           if (!array_key_exists("admin", $_SESSION) || $_SESSION["admin"] === "admin") {
           ?>
           <li class="nav-item">
-            <a class="nav-link" href="/fwApp/html/admin/question_sets.php">ADMIN</a>
+            <a class="nav-link" href="/fwApp/html/admin/">ADMIN</a>
           </li>
           <?php
           }
@@ -98,9 +100,8 @@ require_once '../model/Specialism.php';
 
           <?php
           $phase = new Phase();
-          $results = $phase->read();
-          while ($title = $results->fetch_assoc()) {
-              $href = "/fwApp/api/Request.php/categorised.php?phase=" . $title["title"] . " ";
+          $results = $phase->read_not_empty($_SESSION["email"]);
+          foreach ($results as $title) {
               echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
           }
           ?>
@@ -440,7 +441,7 @@ require_once '../model/Specialism.php';
 
 
     window.onload = function() {
-        makeNavItemActive("Starters");
+        makeNavItemActive("Main Course");
         loadQuestionSets([], [])
     }
 

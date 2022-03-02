@@ -35,6 +35,8 @@ export const LoginPage = ({ navigation }) => {
                            console.log("Status: ", response.data);
                            if(response.data.status === "ok") {
                                navigation.replace("search", {token: response.data.token});
+                           } else {
+                               alert("Login failed");
                            }
                        })
                        .catch(error => {
