@@ -5,6 +5,7 @@ import {LoginPage} from "./LoginPage";
 import {AdminGroups} from "./AdminGroupsPage";
 import {useDispatch, useSelector} from "react-redux";
 
+const BASE_URL = "/fwApp/html/admin"
 
 function App() {
     const token = useSelector((state) => state.userDetails.token)
@@ -45,17 +46,17 @@ function App() {
 
           {token == null &&
               <Routes>
-                  <Route exact path="/" element={<Navigate to="/login"/>}/>
-                  <Route exact path="/login" element={<LoginPage/>}/>
+                  <Route exact path={ BASE_URL + "/"} element={<Navigate to={BASE_URL+ "/login"}/>}/>
+                  <Route exact path={ BASE_URL + "/login"} element={<LoginPage/>}/>
                   {/*<Route path="phase" element={<PhasePage/>}/>*/}
               </Routes>
           }
           { token != null &&
               <Routes>
-                  <Route exact path="/" element={<Navigate to="/admin/groups"/>}/>
-                  <Route exact path="/login" element={<Navigate to="/admin/groups"/>}/>
+                  <Route exact path={BASE_URL + "/"} element={<Navigate to={BASE_URL + "/admin/groups"}/>}/>
+                  <Route exact path={BASE_URL + "/login"} element={<Navigate to={BASE_URL + "/admin/groups"}/>}/>
                   {/*<Route path="phase" element={<PhasePage/>}/>*/}
-                  <Route exact path="/admin/groups" element={<AdminGroups/>}/>
+                  <Route exact path={BASE_URL + "/admin/groups"} element={<AdminGroups/>}/>
               </Routes>
           }
       </BrowserRouter>
