@@ -197,7 +197,7 @@ include_once '../model/QuestionSet.php';
                     if(!empty($audio ?? "")) {
                     ?>
                       <p>Hear the question:</p>
-                      <audio controls>
+                      <audio controls onplay='selectLi(<?php echo $index; ?>)'>
                         <source src="<?php echo $audio_path; ?>" type="audio/mpeg"/>
                       </audio>
                     <?php
@@ -208,7 +208,7 @@ include_once '../model/QuestionSet.php';
                     if(!empty($audio_details ?? "")) {
                     ?>
                       <p>Extra Details:</p>
-                      <audio controls>
+                      <audio controls onplay='selectLi(<?php echo $index; ?>)'>
                         <source src="<?php echo $audio_details_path; ?>" type="audio/mpeg"/>
                       </audio>
                     <?php
