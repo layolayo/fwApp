@@ -10,7 +10,7 @@ put -R ./config/config.php ./config/config.php
 put -R ./config/Database.php ./config/Database.php
 put -R ./config/.env ./config/.env
 
-put -R ./vendor/autoload.php ./vendor/autoload.php
-put -R ./vendor/composer/* ./vendor/composer/
+#put -R ./vendor/autoload.php ./vendor/autoload.php
+#put -R ./vendor/composer/* ./vendor/composer/
 put -R ./vendor ./vendor
 

@@ -9,6 +9,8 @@
       "ext-mysqli": "*",
       "vlucas/phpdotenv": "^5.4",
       "robmorgan/phinx": "^0.12.10",
-      "ext-json": "*"
+      "ext-json": "*",
+    "sentry/sdk": "^3.1",
+    "php-http/httplug": "^2.3"
     }
 }
