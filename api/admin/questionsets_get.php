@@ -16,7 +16,6 @@ header("Access-Control-Allow-Origin: " . $_SERVER["HTTP_ORIGIN"]);
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, X-HTTP-Method-Override, X-Auth-Token");
 header("Access-Control-Allow-Methods: GET,PUT,POST,DELETE,UPDATE,OPTIONS");
 header('Access-Control-Allow-Credentials: true');
-header('Content-Type: application/json');
 
 
 if($_ENV["AUTH_DISABLE"] !== true) {
@@ -34,24 +33,28 @@ if($_ENV["AUTH_DISABLE"] !== true) {
 // Connect to db
 $database = new Database();
 $conn = $database->connect();
-$stmt = $conn->prepare("SELECT * from question_set ORDER BY ID ASC");
+$stmt = $conn->prepare("SELECT question_set.*, (SELECT phase.title FROM phase WHERE phase.questionSetID=question_set.ID) as phase_title from question_set ORDER BY ID ASC");
 $stmt->execute();
 $results = $stmt->get_result();
 
-// Set content type
-header('Content-Type: application/json');
+$question = new QuestionSet();
 
 $output = array();
 while ($row = $results->fetch_assoc()) {
     $row_output = $row;
-    $question = new QuestionSet();
 
+    // Get questions in question set
     $questions = array();
     foreach ($question->questions($row["ID"]) as $q) {
         $questions[] = $q;
     }
     $row_output["questions"] = $questions;
 
+    // Get phases it's in
+
     $output[] = $row_output;
 }
+
+// Set content type
+header('Content-Type: application/json');
 echo json_encode($output);

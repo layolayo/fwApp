@@ -18,6 +18,9 @@ export const AdminNav = () => {
                               <Link className="nav-link" to={BASE_URL + "/admin/groups"}>Groups</Link>
                           </li>
                           <li className="nav-item">
+                              <Link className="nav-link" to={BASE_URL + "/admin/phases"}>Phases</Link>
+                          </li>
+                          <li className="nav-item">
                               <Link className="nav-link" to={BASE_URL + "/admin/question_sets"}>Question Sets</Link>
                           </li>
                       </ul>

@@ -143,6 +143,7 @@ export const AdminQuestionSets = () => {
     let [questionDetailsAudioFile, setQuestionDetailsAudioFile] = useState(null)
     let [questionImageFile, setQuestionImageFile] = useState(null)
     let [questionImageAltText, setQuestionImageAltText] = useState(null)
+    let [filterUnphased, setFilterUnphased] = useState(false)
 
     const token = useSelector((state) => state.userDetails.token)
 
@@ -153,9 +154,22 @@ export const AdminQuestionSets = () => {
     let activeQuestionSet = questionSets.find((qs) => qs.ID === activeQuestionSetId);
     let activeQuestion = activeQuestionSet?.questions?.find((q) => q.ID === activeQuestionId);
 
+    let filteredQuestionSets = questionSets.filter((qs) => {
+        if(filterUnphased) {
+            return qs.phase_title == null;
+        } else {
+            return true;
+        }
+    })
+
     return (
         <div>
             <AdminNav/>
+            <div>
+                <h4>Filters</h4>
+                <label htmlFor="filterNoPhase">Not in a phase: </label>
+                <input className="form-check-input" id="filterNoPhase" type="checkbox" onChange={(e) => setFilterUnphased(e.target.checked)}/>
+            </div>
             <table className="table table-striped">
                 <thead>
                 <tr>
@@ -166,7 +180,7 @@ export const AdminQuestionSets = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    { questionSets.map((qs) =>
+                    { filteredQuestionSets.map((qs) =>
                         <tr>
                             <td>{qs.ID}</td>
                             <td>{qs.title}</td>
@@ -203,6 +217,7 @@ export const AdminQuestionSets = () => {
                     <p>Preparation: '{questionSets.find((qs) => qs.ID === activeQuestionSetId).preparation}'</p>
                     <p>Random: '{questionSets.find((qs) => qs.ID === activeQuestionSetId).random}'</p>
                     <p>Background: '{questionSets.find((qs) => qs.ID === activeQuestionSetId).background}'</p>
+                    <p>Phase: '{questionSets.find((qs) => qs.ID === activeQuestionSetId).phase_title}'</p>
 
                     <h4>Background Audio</h4>
                     {activeQuestionSet.background_audio &&

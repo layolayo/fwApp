@@ -73,7 +73,7 @@ include_once '../model/QuestionSet.php';
           <a class="nav-link" href="/fwApp/html/account.php">Account</a>
         </li>
           <?php
-          if (!array_key_exists("admin", $_SESSION) || $_SESSION["admin"] === "admin") {
+          if (array_key_exists("admin", $_SESSION) && $_SESSION["admin"] === "admin") {
           ?>
           <li class="nav-item">
             <a class="nav-link" href="/fwApp/html/admin/">ADMIN</a>
@@ -319,7 +319,7 @@ include_once '../model/QuestionSet.php';
         var html = "";
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
-        titleCategory(data, "title-uncategorised", "Uncategorised")
+        titleCategory(data, "title-uncategorised")
         for (var data_qs in data) {
             var qs = data[data_qs];
             if (qs.length != 0 ) {
@@ -336,12 +336,8 @@ include_once '../model/QuestionSet.php';
     //     Launch demo modal
     // </button>
 
-    function titleCategory(data, id, kind) {
-        if (data.length == 0) {
-            document.getElementById(id).innerHTML = kind + ": None available"
-        } else {
-            document.getElementById(id).innerHTML = "";
-        }
+    function titleCategory(data, id) {
+        document.getElementById(id).innerHTML = "";
         console.log(data);
     }
 
@@ -350,7 +346,7 @@ include_once '../model/QuestionSet.php';
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
 
-        titleCategory(data, "title-categorised", "Categorised")
+        titleCategory(data, "title-categorised")
 
         var categories = [];
         

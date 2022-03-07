@@ -6,6 +6,7 @@ import {AdminGroups} from "./AdminGroupsPage";
 import {useDispatch, useSelector} from "react-redux";
 import {AdminFacilitators} from "./AdminFacilitators";
 import {AdminQuestionSets} from "./AdminQuestionSets";
+import {AdminPhases} from "./AdminPhasesPage";
 
 export const BASE_URL = "/fwApp/html/admin"
 
@@ -30,6 +31,7 @@ function App() {
                   <Route exact path={BASE_URL + "/admin/groups"} element={<AdminGroups/>}/>
                   <Route exact path={BASE_URL + "/admin/users"} element={<AdminFacilitators/>}/>
                   <Route exact path={BASE_URL + "/admin/question_sets"} element={<AdminQuestionSets/>}/>
+                  <Route exact path={BASE_URL + "/admin/phases"} element={<AdminPhases/>}/>
               </Routes>
           }
       </BrowserRouter>
