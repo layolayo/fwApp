@@ -57,9 +57,8 @@ export const QuestionsPage = ({ route, navigation }) => {
                         questionList.scrollToIndex({animated: true, index: index});
                     }}} key={item.id}>
                         <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
-                        { item.details != null && <Text>{item.details}</Text> }
+                        {/*{ item.details != null && <Text>{item.details}</Text> }*/}
                         { item.audio != null && <View>
-                            <Text>Hear the question:</Text>
                             <Icon type={"antdesign"} name={"sound"} onPress={async () => {
                                 const {sound} = await Audio.Sound.createAsync(
                                     {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
@@ -72,7 +71,6 @@ export const QuestionsPage = ({ route, navigation }) => {
                             }}/>
                         </View>}
                         { item.audio_details != null && <View>
-                            <Text>Hear details:</Text>
                             <Icon type={"antdesign"} name={"sound"} onPress={async () => {
                                 const {sound} = await Audio.Sound.createAsync(
                                     {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
@@ -83,8 +81,9 @@ export const QuestionsPage = ({ route, navigation }) => {
                                 console.log("Playing details sound");
                                 await sound.playAsync();
                             }}/>
+                            <Text style={{textAlign: "center", fontSize: 12}}>Explanation</Text>
                         </View>}
-                        { (item.audio != null && item.audio_details != null) && <Image style={{marginLeft: "auto", marginRight: "auto"}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.audio_details}/>}
+                        { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto"}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
                         <Divider/>
                     </TouchableOpacity>
                 )
