@@ -20,6 +20,27 @@ include_once '../model/QuestionSet.php';
     <meta name="description" content="home page">
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <script
+            src="https://browser.sentry-cdn.com/6.18.2/bundle.min.js"
+            integrity="sha384-hxcWlK1seT59Ftk+5StsgedF3GKBtJGRKWf6YgKV8FJzYpTJHgVc/IBzleXnfYDI"
+            crossorigin="anonymous"
+    ></script>
+    <script
+            src="https://browser.sentry-cdn.com/6.18.2/bundle.tracing.min.js"
+            integrity="sha384-mAvo+boV/DuDB7oEhXJlhWaxExqvniNXXZxhMk8Mp42k+1J6NbPlCbMHFis/KN2Y"
+            crossorigin="anonymous"
+    ></script>
+    <script>
+        Sentry.init({
+            dsn: "https://c474b8e331584729b06eb608ac43c9b6@o1155143.ingest.sentry.io/6255121",
+            integrations: [new Sentry.BrowserTracing()],
+            // We recommend adjusting this value in production, or using tracesSampler
+            // for finer control
+            tracesSampleRate: 1.0,
+        });
+    </script>
+
     <script src="/fwApp/js/jquery/jquery.min.js"></script>
     <link href="/fwApp/css/bootstrap-5.1/bootstrap.min.css" rel="stylesheet">
     <script src="/fwApp/js/bootstrap-5.1/bootstrap.bundle.min.js"></script>
@@ -61,7 +82,7 @@ include_once '../model/QuestionSet.php';
           </li>
         </ul>
         <form class="nav-item my-2 my-lg-0 dropdown">
-          <input class="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search">
+          <input class="form-control me-5" type="search" id="search" placeholder="Search" aria-label="Search">
           <ul class="dropdown-menu" id="result">
           </ul>
         </form>
