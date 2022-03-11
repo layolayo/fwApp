@@ -52,14 +52,15 @@ export const QuestionsPage = ({ route, navigation }) => {
 
     const renderQuestion = ({ item, index, sep }) => (
         new Array(item.repeats == null ? 1 : item.repeats).fill(0).map(() =>
-                    <TouchableOpacity onPress={() => {{
+                    <TouchableOpacity style={{marginLeft: 32, marginRight: 32}} onPress={() => {{
                         setPosition(index);
                         questionList.scrollToIndex({animated: true, index: index});
                     }}} key={item.id}>
                         <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
                         {/*{ item.details != null && <Text>{item.details}</Text> }*/}
-                        { item.audio != null && <View>
+                        { item.audio != null && <View style={{marginBottom: 16}}>
                             <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                                // Load and play sound
                                 const {sound} = await Audio.Sound.createAsync(
                                     {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
                                 );
@@ -68,10 +69,15 @@ export const QuestionsPage = ({ route, navigation }) => {
 
                                 console.log("Playing sound");
                                 await sound.playAsync();
+
+                                // Update highlight
+                                setPosition(index);
+                                questionList.scrollToIndex({animated: true, index: index});
                             }}/>
                         </View>}
-                        { item.audio_details != null && <View>
+                        { item.audio_details != null && <View style={{marginBottom: 16}}>
                             <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                                // Load and play sound
                                 const {sound} = await Audio.Sound.createAsync(
                                     {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
                                 );
@@ -80,10 +86,14 @@ export const QuestionsPage = ({ route, navigation }) => {
 
                                 console.log("Playing details sound");
                                 await sound.playAsync();
+
+                                // Update highlight
+                                setPosition(index);
+                                questionList.scrollToIndex({animated: true, index: index});
                             }}/>
                             <Text style={{textAlign: "center", fontSize: 12}}>Explanation</Text>
                         </View>}
-                        { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto"}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
+                        { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto", marginBottom: 16}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
                         <Divider/>
                     </TouchableOpacity>
                 )
@@ -91,7 +101,7 @@ export const QuestionsPage = ({ route, navigation }) => {
 
     return (
    <SafeAreaView style={styles.container}>
-       <FlatList style={{marginLeft: 32, marginRight: 32, marginTop: 32}} data={results} extraData={position} keyExtractor={item => item.id} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
+       <FlatList data={results} extraData={position} keyExtractor={item => item.id} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
 
        <View style={{flexDirection: 'row', justifyContent: "space-between", marginRight: 32, marginLeft: 32}}>
            <Icon size={48} type={"font-awesome-5"} name={"caret-square-down"} onPress={() => {
@@ -129,9 +139,15 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     selected: {
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 18,
         backgroundColor: '#ffff00'
     },
     unselected: {
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 18,
         backgroundColor: '#fff'
     },
 });
