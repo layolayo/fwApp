@@ -222,7 +222,6 @@ include_once '../model/QuestionSet.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Questions</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <div id = "questionList">
@@ -389,6 +388,7 @@ include_once '../model/QuestionSet.php';
 
     function questionList(xhttp) {
         var html = "<div id = 'modal-body'>";
+        html += "<button class='btn btn-primary m-5' name = 'id' value= '" + question_set_id + "'> Use these questions </button>";
         html += "<ol class='list-group m-5' id = 'questionList'>"
         var data = JSON.parse(xhttp.responseText);
         console.log(data);
@@ -408,7 +408,7 @@ include_once '../model/QuestionSet.php';
         html += "<form action='/fwApp/html/question.php' method='get'/>";
         html += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>";
         html += "<span> </span>"
-        html += "<button class='btn btn-primary' name = 'id' value= '" + question_set_id + "'> Use this question set! </button>";
+        html += "<button class='btn btn-primary' name = 'id' value= '" + question_set_id + "'> Use these questions </button>";
         html += "</form>";
         html += "</div>"
 
