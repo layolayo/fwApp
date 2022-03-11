@@ -64,13 +64,13 @@ include_once '../model/QuestionSet.php';
     </script>
   </head>
   <body class="d-flex flex-column h-100">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-5 mb-2 mb-lg-0">
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Home</a>
           </li>
@@ -80,16 +80,24 @@ include_once '../model/QuestionSet.php';
           <li class="nav-item">
             <a class="nav-link" href="/fwApp/html/account.php">Account</a>
           </li>
+            <?php
+            if (array_key_exists("admin", $_SESSION) && $_SESSION["admin"] === "admin") {
+                ?>
+              <li class="nav-item">
+                <a class="nav-link" href="/fwApp/html/admin/">ADMIN</a>
+              </li>
+                <?php
+            }
+            ?>
         </ul>
-        <form class="nav-item my-2 my-lg-0 dropdown">
-          <input class="form-control me-5" type="search" id="search" placeholder="Search" aria-label="Search">
-          <ul class="dropdown-menu" id="result">
-          </ul>
-        </form>
       </div>
+      <form class="nav-item my-2 my-lg-0 dropdown" style="width: 33%; margin-right: 33%">
+        <input class="form-control me-5" type="search" id="search" placeholder="Search" aria-label="Search">
+        <ul class="dropdown-menu" style="width: 100%" id="result">
+        </ul>
+      </form>
     </div>
   </nav>
-
   <main class="flex-shrink-0">
     <div class="container">
       <div id='questions' class="list-group mw-100">

@@ -32,7 +32,7 @@ require_once __DIR__ . '/../vendor/erusev/parsedown/Parsedown.php';
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-5 mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="/fwApp/html/phase.php">Home</a>
         </li>
@@ -42,13 +42,22 @@ require_once __DIR__ . '/../vendor/erusev/parsedown/Parsedown.php';
         <li class="nav-item">
           <a class="nav-link" href="/fwApp/html/account.php">Account</a>
         </li>
+          <?php
+          if (array_key_exists("admin", $_SESSION) && $_SESSION["admin"] === "admin") {
+              ?>
+            <li class="nav-item">
+              <a class="nav-link" href="/fwApp/html/admin/">ADMIN</a>
+            </li>
+              <?php
+          }
+          ?>
       </ul>
-      <form class="nav-item my-2 my-lg-0 dropdown">
-        <input class="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search">
-        <ul class="dropdown-menu" id="result">
-        </ul>
-      </form>
     </div>
+    <form class="nav-item my-2 my-lg-0 dropdown" style="width: 33%; margin-right: 33%">
+      <input class="form-control me-5" type="search" id="search" placeholder="Search" aria-label="Search">
+      <ul class="dropdown-menu" style="width: 100%" id="result">
+      </ul>
+    </form>
   </div>
 </nav>
 
