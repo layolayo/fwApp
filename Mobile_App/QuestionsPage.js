@@ -19,7 +19,7 @@ Array.prototype.sortOn = function(key){
 }
 
 export const QuestionsPage = ({ route, navigation }) => {
-    const { token, questionId } = route.params;
+    const { token, questionSetId } = route.params;
 
     const [results, onChangeResults] = useState([]);
     const [sound, setSound] = React.useState();
@@ -29,7 +29,8 @@ export const QuestionsPage = ({ route, navigation }) => {
     React.useEffect(() => {
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return navigation.addListener('focus', () => {
-            instance.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionId, { headers: {"X-Auth-Token": token}})
+            // Load the questions for this question set
+            instance.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionSetId, { headers: {"X-Auth-Token": token}})
                 .then(response => {
                     let data = response.data;
                     data.sortOn("qOrder");
@@ -111,7 +112,7 @@ export const QuestionsPage = ({ route, navigation }) => {
            }}/>
 
            <Button style={{marginLeft: 32, marginRight: 32, marginBottom: 8, flexGrow: 1}} title={"Done"} onPress={() => {
-               axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionId, { withCredentials: true })
+               axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionSetId, { withCredentials: true })
                    .then(response => {
                        console.log("Frequency updated");
                    })

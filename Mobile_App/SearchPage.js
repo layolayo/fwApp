@@ -35,7 +35,7 @@ export const SearchPage = ({ route, navigation }) => {
 
                <>
                 { results.map((v) => <ListItem title={v.ID + " | " + v.title} key={v.ID} onPress={() => {
-                    navigation.navigate("questions", {token: token, questionId: v.ID});
+                    navigation.navigate("questions", {token: token, questionSetId: v.ID});
                 }}/>)}
                </>
            </View>
