@@ -38,7 +38,7 @@
           "file": "sentry-expo/upload-sourcemaps",
           "config": {
             "organization": "facilitatedwriting",
-            "project": "facilitatedwriting",
+            "project": "facilitatedwriting-mobile",
             "authToken": "515753008c154338a14a95e6b590159978a59d4f297c47c491f5545c68709227"
           }
         }

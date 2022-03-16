@@ -35,7 +35,17 @@ export const QuestionsPage = ({ route, navigation }) => {
                     let data = response.data;
                     data.sortOn("qOrder");
                     console.log(data);
-                    onChangeResults(data);
+
+                    let repeatedData = [];
+                    data.forEach((item) => {
+                        const repeats = item.repeats == null ? 1 : item.repeats;
+                        for(let i = 0; i < repeats; i++) {
+                            repeatedData.push(item);
+                        }
+                    });
+                    console.log(repeatedData);
+
+                    onChangeResults(repeatedData);
                 })
                 .catch(error => {
                     console.log(error);
@@ -51,58 +61,56 @@ export const QuestionsPage = ({ route, navigation }) => {
             : undefined;
     }, [sound]);
 
-    const renderQuestion = ({ item, index, sep }) => (
-        new Array(item.repeats == null ? 1 : item.repeats).fill(0).map(() =>
-                    <TouchableOpacity style={{marginLeft: 32, marginRight: 32}} onPress={() => {{
-                        setPosition(index);
-                        questionList.scrollToIndex({animated: true, index: index});
-                    }}} key={item.id}>
-                        <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
-                        {/*{ item.details != null && <Text>{item.details}</Text> }*/}
-                        { item.audio != null && <View style={{marginBottom: 16}}>
-                            <Icon type={"antdesign"} name={"sound"} onPress={async () => {
-                                // Load and play sound
-                                const {sound} = await Audio.Sound.createAsync(
-                                    {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
-                                );
+    const renderQuestion = ({ item, index }) => (
+        <TouchableOpacity style={{marginLeft: 32, marginRight: 32}} onPress={() => {{
+            setPosition(index);
+            questionList.scrollToIndex({animated: true, index: index});
+        }}} key={index}>
+            <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
+            {/*{ item.details != null && <Text>{item.details}</Text> }*/}
+            { item.audio != null && <View style={{marginBottom: 16}}>
+                <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                    // Load and play sound
+                    const {sound} = await Audio.Sound.createAsync(
+                        {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
+                    );
 
-                                setSound(sound);
+                    setSound(sound);
 
-                                console.log("Playing sound");
-                                await sound.playAsync();
+                    console.log("Playing sound");
+                    await sound.playAsync();
 
-                                // Update highlight
-                                setPosition(index);
-                                questionList.scrollToIndex({animated: true, index: index});
-                            }}/>
-                        </View>}
-                        { item.audio_details != null && <View style={{marginBottom: 16}}>
-                            <Icon type={"antdesign"} name={"sound"} onPress={async () => {
-                                // Load and play sound
-                                const {sound} = await Audio.Sound.createAsync(
-                                    {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
-                                );
+                    // Update highlight
+                    setPosition(index);
+                    questionList.scrollToIndex({animated: true, index: index});
+                }}/>
+            </View>}
+            { item.audio_details != null && <View style={{marginBottom: 16}}>
+                <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                    // Load and play sound
+                    const {sound} = await Audio.Sound.createAsync(
+                        {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
+                    );
 
-                                setSound(sound);
+                    setSound(sound);
 
-                                console.log("Playing details sound");
-                                await sound.playAsync();
+                    console.log("Playing details sound");
+                    await sound.playAsync();
 
-                                // Update highlight
-                                setPosition(index);
-                                questionList.scrollToIndex({animated: true, index: index});
-                            }}/>
-                            <Text style={{textAlign: "center", fontSize: 12}}>Explanation</Text>
-                        </View>}
-                        { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto", marginBottom: 16}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
-                        <Divider/>
-                    </TouchableOpacity>
-                )
+                    // Update highlight
+                    setPosition(index);
+                    questionList.scrollToIndex({animated: true, index: index});
+                }}/>
+                <Text style={{textAlign: "center", fontSize: 12}}>Explanation</Text>
+            </View>}
+            { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto", marginBottom: 16}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
+            <Divider/>
+        </TouchableOpacity>
     );
 
     return (
    <SafeAreaView style={styles.container}>
-       <FlatList data={results} extraData={position} keyExtractor={item => item.id} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
+       <FlatList data={results} extraData={position} keyExtractor={(item, index) => index} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
 
        <View style={{flexDirection: 'row', justifyContent: "space-between", marginRight: 32, marginLeft: 32}}>
            <Icon size={48} type={"font-awesome-5"} name={"caret-square-down"} onPress={() => {
