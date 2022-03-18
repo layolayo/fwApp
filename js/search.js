@@ -3,8 +3,8 @@ $(document).ready(function() {
 
     $('#search').keyup(function(keycode){
         // If pressing enter
-        if (e.which === 13) {
-            $("#searchResult-0").click();
+        if (keycode.which === 13) {
+            const sr  = $("#searchResult-0")[0].click();
         }
 
         $.getJSON('/fwApp/api/search.php?l=5&q='+$('#search').val(), function(data) {

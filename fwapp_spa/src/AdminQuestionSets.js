@@ -287,7 +287,7 @@ export const AdminQuestionSets = () => {
                 <p>Details: '{activeQuestion.details}'</p>
 
                 <h4>Audio</h4>
-                {activeQuestion.audio &&
+                {activeQuestion.audio != null &&
                     <>
                         <audio controls>
                             <source src={"http://uniquechange.com/fwApp/audio-store/" + activeQuestion.audio + ".mp3"} type="audio/mpeg"/>

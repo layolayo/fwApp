@@ -8,7 +8,7 @@ $password = $_POST["inputPassword"];
 
 
 if (!isset($email) || !isset($password) ) {
-    header("Location: login.html");
+    header("Location: /fwApp/html/login.html");
 }
 
 $database = new Database();
@@ -35,9 +35,9 @@ if (password_verify($password, $output["userpassword"]) == $password) {
     }
 
     if (isset($_SESSION["email"]) && isset($_SESSION["authenticated"])) {
-        header("Location: ../html/phase.php/");
+        header("Location: /fwApp/html/phase.php");
     }
 } else {
-    header("Location: login.html");
+    header("Location: /fwApp/html/login.html");
 }
 
