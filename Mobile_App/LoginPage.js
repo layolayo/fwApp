@@ -12,7 +12,7 @@ export const LoginPage = ({ navigation }) => {
     return (
        <View style={styles.container}>
            <View style={styles.innerContainer}>
-               <TextInput autoCapitalize="none" autoCorrect={false} onSubmitEditing={() => passwordInput.focus()} keyboardType='email-address' returnKeyType="next" placeholder="Email" variant="standard" onChangeText={onChangeEmail} value={email}/>
+               <TextInput autoCapitalize="none" autoCorrect={false} onSubmitEditing={() => passwordInput.focus()} keyboardType='default' returnKeyType="next" placeholder="Username" variant="standard" onChangeText={onChangeEmail} value={email}/>
                <TextInput autoCapitalize="none" autoCorrect={false} ref={(input)=> onChangePasswordInput(input) } returnKeyType="go" placeholder="password" variant="standard" onChangeText={onChangePassword} value={password} secureTextEntry/>
                <Button title={"Log In"} onPress={async () => {
                    console.log("Logging in");
@@ -35,6 +35,8 @@ export const LoginPage = ({ navigation }) => {
                            console.log("Status: ", response.data);
                            if(response.data.status === "ok") {
                                navigation.replace("search", {token: response.data.token});
+                           } else {
+                               alert("Login failed");
                            }
                        })
                        .catch(error => {

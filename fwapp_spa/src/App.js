@@ -1,50 +1,48 @@
-import logo from './logo.svg';
 import './App.css';
-import axios from "axios";
-import {useState} from "react";
-import {PhasePage} from "./PhasePage";
-import {BrowserRouter, Link, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
+import { BrowserTracing } from "@sentry/tracing";
+import * as Sentry from "@sentry/react";
 import {LoginPage} from "./LoginPage";
+import {AdminGroups} from "./AdminGroupsPage";
+import {useSelector} from "react-redux";
+import {AdminFacilitators} from "./AdminFacilitators";
+import {AdminQuestionSets} from "./AdminQuestionSets";
+import {AdminPhases} from "./AdminPhasesPage";
 
+export const BASE_URL = "/fwApp/html/admin"
+
+Sentry.init({
+    dsn: "https://c474b8e331584729b06eb608ac43c9b6@o1155143.ingest.sentry.io/6255121",
+    integrations: [new BrowserTracing()],
+
+    // We recommend adjusting this value in production, or using tracesSampler
+    // for finer control
+    tracesSampleRate: 1.0,
+});
 
 function App() {
+    const token = useSelector((state) => state.userDetails.token)
+
   return (
       <BrowserRouter>
-        <div>
-          <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-              <div className="container-fluid">
-                  <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                      <span className="navbar-toggler-icon"></span>
-                  </button>
-                  <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                      <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                          <li className="nav-item">
-                              <Link className="nav-link active" to={"phase"}>Phase</Link>
-                          </li>
-                          <li className="nav-item">
-                              <Link className="nav-link" to={"/about"}>About</Link>
-                          </li>
-                          <li className="nav-item">
-                              <Link className="nav-link" to={"/account"}>Account</Link>
-                          </li>
-                          <li className="nav-item">
-                              <Link className="nav-link" to={"/admin"}>ADMIN</Link>
-                          </li>
-                      </ul>
-                      <form className="nav-item my-2 my-lg-0 dropdown">
-                          <input className="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search"></input>
-                          <ul className="dropdown-menu" id="result">
-                          </ul>
-                      </form>
-                  </div>
-              </div>
-          </nav>
-        </div>
-
-          <Routes>
-              <Route path="login" element={<LoginPage/>}/>
-              <Route path="phase" element={<PhasePage/>}/>
-          </Routes>
+          {token == null &&
+              <Routes>
+                  <Route exact path={ BASE_URL + "/"} element={<Navigate to={BASE_URL+ "/login"}/>}/>
+                  <Route exact path={ BASE_URL + "/login"} element={<LoginPage/>}/>
+                  {/*<Route path="phase" element={<PhasePage/>}/>*/}
+              </Routes>
+          }
+          { token != null &&
+              <Routes>
+                  <Route exact path={BASE_URL + "/"} element={<Navigate to={BASE_URL + "/admin/groups"}/>}/>
+                  <Route exact path={BASE_URL + "/login"} element={<Navigate to={BASE_URL + "/admin/users"}/>}/>
+                  {/*<Route path="phase" element={<PhasePage/>}/>*/}
+                  <Route exact path={BASE_URL + "/admin/groups"} element={<AdminGroups/>}/>
+                  <Route exact path={BASE_URL + "/admin/users"} element={<AdminFacilitators/>}/>
+                  <Route exact path={BASE_URL + "/admin/question_sets"} element={<AdminQuestionSets/>}/>
+                  <Route exact path={BASE_URL + "/admin/phases"} element={<AdminPhases/>}/>
+              </Routes>
+          }
       </BrowserRouter>
   );
 }

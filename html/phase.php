@@ -12,6 +12,8 @@ require_once '../config/Database.php';
 require_once '../model/Phase.php';
 require_once '../model/Type.php';
 require_once '../model/Specialism.php';
+include_once '../model/QuestionSet.php';
+
 //
 //use DebugBar\StandardDebugBar;
 //
@@ -42,6 +44,27 @@ require_once '../model/Specialism.php';
     <meta name="description" content="home page">
     <meta name="keywords" content="writing author book facilitated ">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script
+          src="https://browser.sentry-cdn.com/6.18.2/bundle.min.js"
+          integrity="sha384-hxcWlK1seT59Ftk+5StsgedF3GKBtJGRKWf6YgKV8FJzYpTJHgVc/IBzleXnfYDI"
+          crossorigin="anonymous"
+  ></script>
+  <script
+          src="https://browser.sentry-cdn.com/6.18.2/bundle.tracing.min.js"
+          integrity="sha384-mAvo+boV/DuDB7oEhXJlhWaxExqvniNXXZxhMk8Mp42k+1J6NbPlCbMHFis/KN2Y"
+          crossorigin="anonymous"
+  ></script>
+  <script>
+      Sentry.init({
+          dsn: "https://c474b8e331584729b06eb608ac43c9b6@o1155143.ingest.sentry.io/6255121",
+          integrations: [new Sentry.BrowserTracing()],
+          // We recommend adjusting this value in production, or using tracesSampler
+          // for finer control
+          tracesSampleRate: 1.0,
+      });
+  </script>
+
     <script src="/fwApp/js/jquery/jquery.min.js"></script>
     <link href="/fwApp/css/bootstrap-5.1/bootstrap.min.css" rel="stylesheet">
     <script src="/fwApp/js/bootstrap-5.1/bootstrap.bundle.min.js"></script>
@@ -60,7 +83,7 @@ require_once '../model/Specialism.php';
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <ul class="navbar-nav me-5 mb-2 mb-lg-0">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="/fwApp/html/phase.php">Home</a>
         </li>
@@ -71,21 +94,21 @@ require_once '../model/Specialism.php';
           <a class="nav-link" href="/fwApp/html/account.php">Account</a>
         </li>
           <?php
-          if (!array_key_exists("admin", $_SESSION) || $_SESSION["admin"] === "admin") {
+          if (array_key_exists("admin", $_SESSION) && $_SESSION["admin"] === "admin") {
           ?>
           <li class="nav-item">
-            <a class="nav-link" href="/fwApp/html/admin/question_sets.php">ADMIN</a>
+            <a class="nav-link" href="/fwApp/html/admin/">ADMIN</a>
           </li>
           <?php
           }
           ?>
       </ul>
-      <form class="nav-item my-2 my-lg-0 dropdown">
-        <input class="form-control me-2" type="search" id="search" placeholder="Search" aria-label="Search">
-        <ul class="dropdown-menu" id="result">
-        </ul>
-      </form>
     </div>
+    <form class="nav-item my-2 my-lg-0 dropdown" style="width: 33%; margin-right: 33%">
+      <input class="form-control me-5" type="search" id="search" placeholder="Search" aria-label="Search">
+      <ul class="dropdown-menu" style="width: 100%" id="result">
+      </ul>
+    </form>
   </div>
 </nav>
 <nav class="navbar mynav navbar-expand-lg navbar-light bg-light">
@@ -98,9 +121,8 @@ require_once '../model/Specialism.php';
 
           <?php
           $phase = new Phase();
-          $results = $phase->read();
-          while ($title = $results->fetch_assoc()) {
-              $href = "/fwApp/api/Request.php/categorised.php?phase=" . $title["title"] . " ";
+          $results = $phase->read_not_empty($_SESSION["email"]);
+          foreach ($results as $title) {
               echo "<li class='phase-links' id='" . $title["title"]. "' onclick='qs(`" . $title["title"]. "`)'> <a  class='nav-link' href='#phase=" . $title["title"] ."'>" . $title["title"] . "</a> </li>";
           }
           ?>
@@ -221,7 +243,6 @@ require_once '../model/Specialism.php';
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Questions</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
             <div id = "questionList">
@@ -318,7 +339,7 @@ require_once '../model/Specialism.php';
         var html = "";
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
-        titleCategory(data, "title-uncategorised", "Uncategorised")
+        titleCategory(data, "title-uncategorised")
         for (var data_qs in data) {
             var qs = data[data_qs];
             if (qs.length != 0 ) {
@@ -335,12 +356,8 @@ require_once '../model/Specialism.php';
     //     Launch demo modal
     // </button>
 
-    function titleCategory(data, id, kind) {
-        if (data.length == 0) {
-            document.getElementById(id).innerHTML = kind + ": None available"
-        } else {
-            document.getElementById(id).innerHTML = "";
-        }
+    function titleCategory(data, id) {
+        document.getElementById(id).innerHTML = "";
         console.log(data);
     }
 
@@ -349,7 +366,7 @@ require_once '../model/Specialism.php';
         document.getElementById("qsets").style.display = "block";
         var data = JSON.parse(xhttp.responseText);
 
-        titleCategory(data, "title-categorised", "Categorised")
+        titleCategory(data, "title-categorised")
 
         var categories = [];
         
@@ -392,7 +409,8 @@ require_once '../model/Specialism.php';
 
     function questionList(xhttp) {
         var html = "<div id = 'modal-body'>";
-        html += "<ol class='list-group m-5' id = 'questionList'>"
+        html += "<div class='ml-auto mr-auto' style='display: flex'><a class='btn btn-primary ml-auto mr-auto' style='margin: auto; width: 80%; margin-top: 1rem;' href= '/fwApp/html/question.php?id=" + question_set_id + "'> Use these questions </a></div>";
+        html += "<ol class='list-group m-5' style='margin-top: 1rem !important !important;' id = 'questionList'>"
         var data = JSON.parse(xhttp.responseText);
         console.log(data);
         for (var data_qs in data) {
@@ -411,7 +429,7 @@ require_once '../model/Specialism.php';
         html += "<form action='/fwApp/html/question.php' method='get'/>";
         html += "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>";
         html += "<span> </span>"
-        html += "<button class='btn btn-primary' name = 'id' value= '" + question_set_id + "'> Use this question set! </button>";
+        html += "<button class='btn btn-primary' name = 'id' value= '" + question_set_id + "'> Use these questions </button>";
         html += "</form>";
         html += "</div>"
 
@@ -440,7 +458,7 @@ require_once '../model/Specialism.php';
 
 
     window.onload = function() {
-        makeNavItemActive("Starters");
+        makeNavItemActive("Main Course");
         loadQuestionSets([], [])
     }
 

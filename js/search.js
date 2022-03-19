@@ -1,7 +1,12 @@
 $(document).ready(function() {
     $.ajaxSetup({ cache: false });
 
-    $('#search').keyup(function(){
+    $('#search').keyup(function(keycode){
+        // If pressing enter
+        if (keycode.which === 13) {
+            const sr  = $("#searchResult-0")[0].click();
+        }
+
         $.getJSON('/fwApp/api/search.php?l=5&q='+$('#search').val(), function(data) {
             if ($('#search').val().length > 0) {
                 $("#result").html(" ");
@@ -9,7 +14,7 @@ $(document).ready(function() {
                 $("#result").addClass("show");
                 let overall = "";
                 $.each(data, function(key, value){
-                    overall += '<li> <a href= "/fwApp/html/question.php?id=' + value.ID + '" class="text-muted dropdown-item">'+ value.ID + ' | ' + value.title+'</a></li>';
+                    overall += '<li> <a id="searchResult-' + key + '" href= "/fwApp/html/question.php?id=' + value.ID + '" class="text-muted dropdown-item">'+ value.ID + ' | ' + value.title+'</a></li>';
                 });
                 $('#result').html(overall);
             }

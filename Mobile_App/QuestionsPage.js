@@ -19,7 +19,7 @@ Array.prototype.sortOn = function(key){
 }
 
 export const QuestionsPage = ({ route, navigation }) => {
-    const { token, questionId } = route.params;
+    const { token, questionSetId } = route.params;
 
     const [results, onChangeResults] = useState([]);
     const [sound, setSound] = React.useState();
@@ -29,12 +29,23 @@ export const QuestionsPage = ({ route, navigation }) => {
     React.useEffect(() => {
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return navigation.addListener('focus', () => {
-            instance.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionId, { headers: {"X-Auth-Token": token}})
+            // Load the questions for this question set
+            instance.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionSetId, { headers: {"X-Auth-Token": token}})
                 .then(response => {
                     let data = response.data;
                     data.sortOn("qOrder");
                     console.log(data);
-                    onChangeResults(data);
+
+                    let repeatedData = [];
+                    data.forEach((item) => {
+                        const repeats = item.repeats == null ? 1 : item.repeats;
+                        for(let i = 0; i < repeats; i++) {
+                            repeatedData.push(item);
+                        }
+                    });
+                    console.log(repeatedData);
+
+                    onChangeResults(repeatedData);
                 })
                 .catch(error => {
                     console.log(error);
@@ -50,49 +61,56 @@ export const QuestionsPage = ({ route, navigation }) => {
             : undefined;
     }, [sound]);
 
-    const renderQuestion = ({ item, index, sep }) => (
-        new Array(item.repeats == null ? 1 : item.repeats).fill(0).map(() =>
-                    <TouchableOpacity onPress={() => {{
-                        setPosition(index);
-                        questionList.scrollToIndex({animated: true, index: index});
-                    }}} key={item.id}>
-                        <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
-                        { item.details != null && <Text>{item.details}</Text> }
-                        { item.audio != null && <View>
-                            <Text>Hear the question:</Text>
-                            <Icon type={"antdesign"} name={"sound"} onPress={async () => {
-                                const {sound} = await Audio.Sound.createAsync(
-                                    {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
-                                );
+    const renderQuestion = ({ item, index }) => (
+        <TouchableOpacity style={{marginLeft: 32, marginRight: 32}} onPress={() => {{
+            setPosition(index);
+            questionList.scrollToIndex({animated: true, index: index});
+        }}} key={index}>
+            <Text style={ index === position ? styles.selected : styles.unselected}>{item.question}</Text>
+            {/*{ item.details != null && <Text>{item.details}</Text> }*/}
+            { item.audio != null && <View style={{marginBottom: 16}}>
+                <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                    // Load and play sound
+                    const {sound} = await Audio.Sound.createAsync(
+                        {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
+                    );
 
-                                setSound(sound);
+                    setSound(sound);
 
-                                console.log("Playing sound");
-                                await sound.playAsync();
-                            }}/>
-                        </View>}
-                        { item.audio_details != null && <View>
-                            <Text>Hear details:</Text>
-                            <Icon type={"antdesign"} name={"sound"} onPress={async () => {
-                                const {sound} = await Audio.Sound.createAsync(
-                                    {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
-                                );
+                    console.log("Playing sound");
+                    await sound.playAsync();
 
-                                setSound(sound);
+                    // Update highlight
+                    setPosition(index);
+                    questionList.scrollToIndex({animated: true, index: index});
+                }}/>
+            </View>}
+            { item.audio_details != null && <View style={{marginBottom: 16}}>
+                <Icon type={"antdesign"} name={"sound"} onPress={async () => {
+                    // Load and play sound
+                    const {sound} = await Audio.Sound.createAsync(
+                        {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
+                    );
 
-                                console.log("Playing details sound");
-                                await sound.playAsync();
-                            }}/>
-                        </View>}
-                        { (item.audio != null && item.audio_details != null) && <Image style={{marginLeft: "auto", marginRight: "auto"}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.audio_details}/>}
-                        <Divider/>
-                    </TouchableOpacity>
-                )
+                    setSound(sound);
+
+                    console.log("Playing details sound");
+                    await sound.playAsync();
+
+                    // Update highlight
+                    setPosition(index);
+                    questionList.scrollToIndex({animated: true, index: index});
+                }}/>
+                <Text style={{textAlign: "center", fontSize: 12}}>Explanation</Text>
+            </View>}
+            { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto", marginBottom: 16}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
+            <Divider/>
+        </TouchableOpacity>
     );
 
     return (
    <SafeAreaView style={styles.container}>
-       <FlatList style={{marginLeft: 32, marginRight: 32, marginTop: 32}} data={results} extraData={position} keyExtractor={item => item.id} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
+       <FlatList data={results} extraData={position} keyExtractor={(item, index) => index} renderItem={renderQuestion} ref={(ref) => {setQuestionList(ref);}} />
 
        <View style={{flexDirection: 'row', justifyContent: "space-between", marginRight: 32, marginLeft: 32}}>
            <Icon size={48} type={"font-awesome-5"} name={"caret-square-down"} onPress={() => {
@@ -102,7 +120,7 @@ export const QuestionsPage = ({ route, navigation }) => {
            }}/>
 
            <Button style={{marginLeft: 32, marginRight: 32, marginBottom: 8, flexGrow: 1}} title={"Done"} onPress={() => {
-               axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionId, { withCredentials: true })
+               axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionSetId, { withCredentials: true })
                    .then(response => {
                        console.log("Frequency updated");
                    })
@@ -130,9 +148,15 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     selected: {
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 18,
         backgroundColor: '#ffff00'
     },
     unselected: {
+        marginTop: 16,
+        marginBottom: 16,
+        fontSize: 18,
         backgroundColor: '#fff'
     },
 });

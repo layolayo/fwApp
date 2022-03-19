@@ -29,8 +29,8 @@ export default function App() {
       <NavigationContainer>
         <NavigationStack.Navigator>
           <NavigationStack.Screen name="login" component={LoginPage}/>
-          <NavigationStack.Screen name="search" component={SearchPage}/>
-          <NavigationStack.Screen name="questions" component={QuestionsPage}/>
+          <NavigationStack.Screen name="search" options={{title: 'And...?'}} component={SearchPage}/>
+          <NavigationStack.Screen name="questions" options={({ route }) => ({ title: "" + route.params.questionSetId})} component={QuestionsPage}/>
         </NavigationStack.Navigator>
       </NavigationContainer>
   );
