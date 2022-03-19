@@ -1,6 +1,6 @@
 import {useState} from "react";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector} from 'react-redux'
 import ReactModal from 'react-modal';
 import {AdminNav} from "./AdminNav";
 
@@ -180,8 +180,8 @@ export const AdminQuestionSets = () => {
                 </tr>
                 </thead>
                 <tbody>
-                    { filteredQuestionSets.map((qs) =>
-                        <tr>
+                    { filteredQuestionSets.map((qs, ind) =>
+                        <tr key={ind}>
                             <td>{qs.ID}</td>
                             <td>{qs.title}</td>
                             <td>

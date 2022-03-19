@@ -1,6 +1,6 @@
 import {useState} from "react";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector} from 'react-redux'
 import ReactModal from 'react-modal';
 import {AdminNav} from "./AdminNav";
 
@@ -64,7 +64,7 @@ export const AdminFacilitators = () => {
                 </thead>
                 <tbody>
                     { facilitators.map((f, ind) =>
-                        <tr>
+                        <tr key={ind}>
                             <td>{ind + 1}</td>
                             <td>{f.facilitator.email}</td>
                             <td>

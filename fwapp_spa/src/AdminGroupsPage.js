@@ -1,13 +1,11 @@
 import {useState} from "react";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector} from 'react-redux'
 import ReactModal from 'react-modal';
-import {Link} from "react-router-dom";
-import {BASE_URL} from "./App";
 import {AdminNav} from "./AdminNav";
 
 function deleteGroup(token, id) {
-    axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_del.php?gid="+id, { headers: {"X-Auth-Token": token} })
+    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_del.php?gid="+id, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("group deleted")
         })
@@ -46,6 +44,16 @@ function addGroupQuestionSet(token, gid, qsid) {
         });
 }
 
+function cloneGroup(token, gid, newGroupName) {
+    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_clone.php?ogid="+gid+"&name="+newGroupName, { headers: {"X-Auth-Token": token} })
+        .then(response => {
+            console.log("Group cloned")
+        })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
 function fetchGroups(token, setGroups) {
     axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_get.php", { headers: {"X-Auth-Token": token} })
         .then(response => {
@@ -63,6 +71,7 @@ export const AdminGroups = () => {
     let [groupName, setGroupName] = useState("")
     let [questionSetId, setQuestionSetId] = useState("")
     let [activeGroupId, setActiveGroupId] = useState(null)
+    let [cloneGroupName, setCloneGroupName] = useState(null)
 
     const token = useSelector((state) => state.userDetails.token)
 
@@ -85,7 +94,7 @@ export const AdminGroups = () => {
                 </thead>
                 <tbody>
                     { groups.map((g, ind) =>
-                        <tr>
+                        <tr key={ind}>
                             <td>{g.group.id}</td>
                             <td>{g.group.name}</td>
                             <td>
@@ -95,19 +104,30 @@ export const AdminGroups = () => {
                             </td>
                             <td>
                                 <button className="btn btn-danger" onClick={() => {
-                                    deleteGroup(token, g.group.id);
-                                    fetchGroups(token, setGroups);
+                                    deleteGroup(token, g.group.id).then((req) => {
+                                        fetchGroups(token, setGroups);
+                                    });
                                 }}>Delete</button>
                             </td>
                         </tr>
                     )}
                 </tbody>
             </table>
-            <input type="text" onChange={(t) => setGroupName(t.target.value)}/>
-            <button onClick={() => {
-                addGroup(token, groupName);
-                fetchGroups(token, setGroups);
-            }}>Add Group</button>
+            {/*Hide the input box when the modal is open, this is because the input-group-append makes the button overlap the modal*/}
+            {activeGroupId == null &&
+                <div className="row col-4 mt-3">
+                    <div className="input-group mb-3">
+                        <input type="text" className="form-control" placeholder={"New Group Name"} onChange={(t) => setGroupName(t.target.value)}/>
+                        <div className="input-group-append">
+                            <button className="btn btn-primary" onClick={() => {
+                                addGroup(token, groupName);
+                                fetchGroups(token, setGroups);
+                            }}>Add Group
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
 
             { activeGroupId != null && <ReactModal isOpen={true}>
                 <div className="container">
@@ -141,13 +161,28 @@ export const AdminGroups = () => {
                         <div className="input-group mb-3">
                             <input type="text" className="form-control" placeholder="Question set ID"
                                    aria-label="Question set id" aria-describedby="basic-addon2" onChange={(t) => setQuestionSetId(t.target.value)}/>
-                                <div className="input-group-append">
-                                    <button className="btn btn-primary" onClick={() => {
-                                        addGroupQuestionSet(token, activeGroupId, questionSetId).then((res) => {
-                                            fetchGroups(token, setGroups);
-                                        });
-                                    }}>Add Question Set</button>
-                                </div>
+                            <div className="input-group-append">
+                                <button className="btn btn-primary" onClick={() => {
+                                    addGroupQuestionSet(token, activeGroupId, questionSetId).then((res) => {
+                                        fetchGroups(token, setGroups);
+                                    });
+                                }}>Add Question Set</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3>Clone Group</h3>
+                    <div className="row col-4 mt-3">
+                        <div className="input-group mb-3">
+                            <input type="text" className="form-control" placeholder="New Group Name"
+                                   aria-label="New Group Name" aria-describedby="basic-addon2" onChange={(t) => setCloneGroupName(t.target.value)}/>
+                            <div className="input-group-append">
+                                <button className="btn btn-primary" onClick={() => {
+                                    cloneGroup(token, activeGroupId, cloneGroupName).then((res) => {
+                                        fetchGroups(token, setGroups);
+                                    });
+                                }}>Clone Group</button>
+                            </div>
                         </div>
                     </div>
                     <button className="btn btn-danger" onClick={() => setActiveGroupId(null)}>Close</button>

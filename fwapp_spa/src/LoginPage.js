@@ -1,7 +1,6 @@
 import {useState} from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import {login} from "./userDetailsSlice";
 
 
@@ -10,8 +9,6 @@ export const LoginPage = () => {
     const [password, onChangePassword] = useState("");
 
     const dispatch = useDispatch()
-
-    let navigate = useNavigate();
 
     return (
         <div className={"text-center"}>
@@ -75,16 +72,12 @@ export const LoginPage = () => {
             <img className="mb-4" src="https://getbootstrap.com/docs/4.0/assets/brand/bootstrap-solid.svg" alt=""
                  width="72" height="72"/>
                 <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-                <label htmlFor="inputEmail" className="sr-only">Email address</label>
+                <label htmlFor="inputEmail" className="sr-only">Username</label>
                 <input type="email" id="inputEmail" name="inputEmail" className="form-control"
                        placeholder="Email address" required autoFocus onChange={(v) => onChangeEmail(v.target.value)}/>
                     <label htmlFor="inputPassword" className="sr-only">Password</label>
                     <input type="password" name="inputPassword" id="inputPassword" className="form-control"
     placeholder="Password" required onChange={(v) => onChangePassword(v.target.value)}/>
-                        <div className="checkbox mb-3">
-                            <label htmlFor={"remember-me"}>Remember me</label>
-                            <input type="checkbox" value="remember-me"/>
-                        </div>
                         <button className="btn btn-lg btn-primary btn-block" onClick={async () => {
                             console.log("Logging in");
 
@@ -115,7 +108,7 @@ export const LoginPage = () => {
                                 });
                         }
                         }>Sign in</button>
-                        <p className="mt-5 mb-3 text-muted">&copy; 2017-2018</p>
+                        <p className="mt-5 mb-3 text-muted">&copy; 2017-2022</p>
         </div>
         </div>
     );

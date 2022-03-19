@@ -1,9 +1,7 @@
 import {useState} from "react";
 import axios from "axios";
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector} from 'react-redux'
 import ReactModal from 'react-modal';
-import {Link} from "react-router-dom";
-import {BASE_URL} from "./App";
 import {AdminNav} from "./AdminNav";
 
 function fetchPhases(token, setPhases) {
@@ -45,7 +43,7 @@ export const AdminPhases = () => {
                 </thead>
                 <tbody>
                     { phases.map((p, ind) =>
-                        <tr>
+                        <tr key={ind}>
                             <td>{p.ID}</td>
                             <td>{p.title}</td>
                             <td>
