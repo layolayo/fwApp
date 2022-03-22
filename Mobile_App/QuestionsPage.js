@@ -38,7 +38,9 @@ export const QuestionsPage = ({ route, navigation }) => {
 
                     let repeatedData = [];
                     data.forEach((item) => {
-                        const repeats = item.repeats == null ? 1 : item.repeats;
+                        // If we have no repeats, we should put it in once
+                        // If we have n repeats we shold put it in once and then repeat it n times, hence n+1
+                        const repeats = item.repeats == null ? 1 : (item.repeats+1);
                         for(let i = 0; i < repeats; i++) {
                             repeatedData.push(item);
                         }
