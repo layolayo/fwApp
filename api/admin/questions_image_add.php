@@ -44,7 +44,7 @@ header('Content-Type: application/json');
 if ($fileExtension !== "png") {
     echo json_encode(["status" => "fail", "error" => "Upload failed, must be a .png"]);
 } else {
-    $target_file = "/kunden/homepages/4/d475696686/htdocs/uniquechange/fwApp/image-store/" . $_GET["image"] . ".png";
+    $target_file = "/public_html/fwApp/image-store/" . $_GET["image"] . ".png";
     if (move_uploaded_file($fileTmpName, $target_file)) {
         $stmt = $conn->prepare("UPDATE `question` SET image = ? WHERE question.ID = ?");
         $stmt->bind_param("ss", $_GET["image"], $question_id);

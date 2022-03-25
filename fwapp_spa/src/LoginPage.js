@@ -94,7 +94,7 @@ export const LoginPage = () => {
 
                             const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
 
-                            await axios.post('http://www.uniquechange.com/fwApp/api/mobile_auth.php', formBody, config)
+                            await axios.post('https://facilitatedwriting.com/fwApp/api/mobile_auth.php', formBody, config)
                                 .then(response => {
                                     console.log("Status: ", response.data.status);
                                     if(response.data.status === "ok") {

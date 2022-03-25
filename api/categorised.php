@@ -1,15 +1,12 @@
 <?php
 
-include_once '../config/Database.php';
-include_once '../model/QuestionSet.php';
-include_once '../model/Facilitator.php';
+require_once 'api_common.php';
 
-session_start();
-
-// Set cors header
-header('Access-Control-Allow-Origin: http://uniquechange.com');
-header('Access-Control-Allow-Headers: *');
-header('Access-Control-Allow-Credentials: true');
+// Ensure that the requester is actually authenticated
+if (!array_key_exists("authenticated", $_SESSION ?? []) || $_SESSION["authenticated"] !==  "authenticated") {
+    echo json_encode(["success" => false, "error" => "Not authenticated"]);
+    die;
+}
 
 function typeArray($type) {
     if (is_array($type) || empty($type)) {

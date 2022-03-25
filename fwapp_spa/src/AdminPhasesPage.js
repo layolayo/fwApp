@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import {AdminNav} from "./AdminNav";
 
 function fetchPhases(token, setPhases) {
-    axios.get("http://www.uniquechange.com/fwApp/api/admin/phases_get.php", { headers: {"X-Auth-Token": token} })
+    axios.get("https://facilitatedwriting.com/fwApp/api/admin/phases_get.php", { headers: {"X-Auth-Token": token} })
         .then(response => {
             let data = response.data;
             console.log("Got phases: ", data);

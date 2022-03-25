@@ -30,7 +30,7 @@ export const LoginPage = ({ navigation }) => {
 
                    const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
 
-                   await instance.post('http://www.uniquechange.com/fwApp/api/mobile_auth.php', formBody, config)
+                   await instance.post('https://facilitatedwriting.com/fwApp/api/mobile_auth.php', formBody, config)
                        .then(response => {
                            console.log("Status: ", response.data);
                            if(response.data.status === "ok") {

@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import {AdminNav} from "./AdminNav";
 
 function deleteGroupFromFacilitator(token, gid, facilitator) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/facilitators_group_del.php?email="+facilitator+"&gid="+gid, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/facilitators_group_del.php?email="+facilitator+"&gid="+gid, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("Deleted group from facilitator");
         })
@@ -15,7 +15,7 @@ function deleteGroupFromFacilitator(token, gid, facilitator) {
 }
 
 function fetchFacilitators(token, setFacilitators) {
-    axios.get("http://www.uniquechange.com/fwApp/api/admin/facilitators_get.php", { headers: {"X-Auth-Token": token} })
+    axios.get("https://facilitatedwriting.com/fwApp/api/admin/facilitators_get.php", { headers: {"X-Auth-Token": token} })
         .then(response => {
             let data = response.data;
             console.log("Got groups: ", data);
@@ -27,7 +27,7 @@ function fetchFacilitators(token, setFacilitators) {
 }
 
 function addFacilitatorGroup(token, email, gid) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/facilitators_group_add.php?email="+email+"&gid="+gid, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/facilitators_group_add.php?email="+email+"&gid="+gid, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("Add group");
         })

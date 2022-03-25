@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import {AdminNav} from "./AdminNav";
 
 function deleteGroup(token, id) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_del.php?gid="+id, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/groups_del.php?gid="+id, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("group deleted")
         })
@@ -15,7 +15,7 @@ function deleteGroup(token, id) {
 }
 
 function deleteQuestionSetFromGroup(token, gid, qsid) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_questionset_del.php?gid="+gid+"&qsid="+qsid, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/groups_questionset_del.php?gid="+gid+"&qsid="+qsid, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("group qs deleted")
         })
@@ -25,7 +25,7 @@ function deleteQuestionSetFromGroup(token, gid, qsid) {
 }
 
 function addGroup(token, name) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_add.php?name="+name, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/groups_add.php?name="+name, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("group added")
         })
@@ -35,7 +35,7 @@ function addGroup(token, name) {
 }
 
 function addGroupQuestionSet(token, gid, qsid) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_questionset_add.php?gid="+gid+"&qsid="+qsid, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/groups_questionset_add.php?gid="+gid+"&qsid="+qsid, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("group qs added")
         })
@@ -45,7 +45,7 @@ function addGroupQuestionSet(token, gid, qsid) {
 }
 
 function cloneGroup(token, gid, newGroupName) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_clone.php?ogid="+gid+"&name="+newGroupName, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/groups_clone.php?ogid="+gid+"&name="+newGroupName, { headers: {"X-Auth-Token": token} })
         .then(response => {
             console.log("Group cloned")
         })
@@ -55,7 +55,7 @@ function cloneGroup(token, gid, newGroupName) {
 }
 
 function fetchGroups(token, setGroups) {
-    axios.get("http://www.uniquechange.com/fwApp/api/admin/groups_get.php", { headers: {"X-Auth-Token": token} })
+    axios.get("https://facilitatedwriting.com/fwApp/api/admin/groups_get.php", { headers: {"X-Auth-Token": token} })
         .then(response => {
             let data = response.data;
             console.log("Got groups: ", data);

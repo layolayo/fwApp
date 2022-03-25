@@ -298,8 +298,8 @@ include_once '../model/QuestionSet.php';
 
     function loadQuestionSets(checkboxesType, checkboxesSpecialism) {
         var phase = getPhase();
-        var categoriedURL = new URL("http://www.uniquechange.com/fwApp/api/categorised.php?title=sf");
-        var uncategoriedURL = new URL("http://www.uniquechange.com/fwApp/api/uncategorised.php");
+        var categoriedURL = new URL("https://facilitatedwriting.com/fwApp/api/categorised.php?title=sf");
+        var uncategoriedURL = new URL("https://facilitatedwriting.com/fwApp/api/uncategorised.php");
 
         console.log(phase);
         if (checkboxesType.length != 0) {

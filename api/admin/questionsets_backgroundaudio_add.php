@@ -44,7 +44,7 @@ header('Content-Type: application/json');
 if ($fileExtension !== "mp3") {
     echo json_encode(["status" => "fail", "error" => "Upload failed, must be a .mp3"]);
 } else {
-    $target_file = "/kunden/homepages/4/d475696686/htdocs/uniquechange/fwApp/audio-store/" . $_GET["audio"] . ".mp3";
+    $target_file = "/public_html/fwApp/audio-store/" . $_GET["audio"] . ".mp3";
     if (move_uploaded_file($fileTmpName, $target_file)) {
 //        echo "The file " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
         $stmt = $conn->prepare("UPDATE `question_set` SET background_audio = ? WHERE question_set.ID = ?");

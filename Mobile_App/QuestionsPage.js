@@ -30,7 +30,7 @@ export const QuestionsPage = ({ route, navigation }) => {
         // Return the function to unsubscribe from the event so it gets removed on unmount
         return navigation.addListener('focus', () => {
             // Load the questions for this question set
-            instance.get("http://www.uniquechange.com/fwApp/api/questions.php?id=" + questionSetId, { headers: {"X-Auth-Token": token}})
+            instance.get("https://facilitatedwriting.com/fwApp/api/questions.php?id=" + questionSetId, { headers: {"X-Auth-Token": token}})
                 .then(response => {
                     let data = response.data;
                     data.sortOn("qOrder");
@@ -74,7 +74,7 @@ export const QuestionsPage = ({ route, navigation }) => {
                 <Icon type={"antdesign"} name={"sound"} onPress={async () => {
                     // Load and play sound
                     const {sound} = await Audio.Sound.createAsync(
-                        {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio + ".mp3" }
+                        {uri: "https://facilitatedwriting.com/fwApp/audio-store/" + item.audio + ".mp3" }
                     );
 
                     setSound(sound);
@@ -91,7 +91,7 @@ export const QuestionsPage = ({ route, navigation }) => {
                 <Icon type={"antdesign"} name={"sound"} onPress={async () => {
                     // Load and play sound
                     const {sound} = await Audio.Sound.createAsync(
-                        {uri: "http://www.uniquechange.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
+                        {uri: "https://facilitatedwriting.com/fwApp/audio-store/" + item.audio_details + ".mp3" }
                     );
 
                     setSound(sound);
@@ -105,7 +105,7 @@ export const QuestionsPage = ({ route, navigation }) => {
                 }}/>
                 <Text style={{textAlign: "center", fontSize: 12}}>Explanation</Text>
             </View>}
-            { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto", marginBottom: 16}} source={{uri: "http://www.uniquechange.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
+            { (item.image != null && item.image_alttext != null) && <Image style={{marginLeft: "auto", marginRight: "auto", marginBottom: 16}} source={{uri: "https://facilitatedwriting.com/fwApp/image-store/" + item.image + ".png", width: 128, height: 128}} accessibilityLabel={item.image_alttext}/>}
             <Divider/>
         </TouchableOpacity>
     );
@@ -122,7 +122,7 @@ export const QuestionsPage = ({ route, navigation }) => {
            }}/>
 
            <Button style={{marginLeft: 32, marginRight: 32, marginBottom: 8, flexGrow: 1}} title={"Done"} onPress={() => {
-               axios.get("http://www.uniquechange.com/fwApp/api/frequency.php?id=" + questionSetId, { withCredentials: true })
+               axios.get("https://facilitatedwriting.com/fwApp/api/frequency.php?id=" + questionSetId, { withCredentials: true })
                    .then(response => {
                        console.log("Frequency updated");
                    })

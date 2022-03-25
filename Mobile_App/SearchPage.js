@@ -17,7 +17,7 @@ export const SearchPage = ({ route, navigation }) => {
                    if(new_text.length === 0) {
                        onChangeResults([]);
                    } else {
-                       instance.get("http://www.uniquechange.com/fwApp/api/search.php?l=5&q=" + new_text, { headers: {"X-Auth-Token": token} })
+                       instance.get("https://facilitatedwriting.com/fwApp/api/search.php?l=5&q=" + new_text, { headers: {"X-Auth-Token": token} })
                            .then(response => {
                                if(response.data.error != null) {
                                    console.log("Network error: ", response.data);

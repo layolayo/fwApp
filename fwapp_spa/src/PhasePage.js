@@ -7,7 +7,7 @@ export const PhasePage = () => {
     let [type, setType] = useState([]);
     let [specialism, setSpecialism] = useState([]);
 
-    axios.get("http://www.uniquechange.com/fwApp/api/phase.php", { withCredentials: true })
+    axios.get("https://facilitatedwriting.com/fwApp/api/phase.php", { withCredentials: true })
         .then(response => {
             if(phases.length === 0) {
                 let data = response.data;
@@ -18,7 +18,7 @@ export const PhasePage = () => {
             console.log(error);
         });
 
-    axios.get("http://www.uniquechange.com/fwApp/api/type.php", { withCredentials: true })
+    axios.get("https://facilitatedwriting.com/fwApp/api/type.php", { withCredentials: true })
         .then(response => {
             if(type.length === 0) {
                 let data = response.data;
@@ -29,7 +29,7 @@ export const PhasePage = () => {
             console.log(error);
         });
 
-    axios.get("http://www.uniquechange.com/fwApp/api/specialism.php", { withCredentials: true })
+    axios.get("https://facilitatedwriting.com/fwApp/api/specialism.php", { withCredentials: true })
         .then(response => {
             if(specialism.length === 0) {
                 let data = response.data;

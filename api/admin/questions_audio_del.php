@@ -45,7 +45,7 @@ $stmt = $conn->prepare("UPDATE `question` SET audio = NULL WHERE question.ID = ?
 $stmt->bind_param("s", $question_id);
 $stmt->execute();
 
-$target_file = "/kunden/homepages/4/d475696686/htdocs/uniquechange/fwApp/audio-store/" . $_GET["audio"] . ".mp3";
+$target_file = "/public_html/fwApp/audio-store/" . $_GET["audio"] . ".mp3";
 unlink($target_file);
 
 // Set content type

@@ -5,7 +5,7 @@ import ReactModal from 'react-modal';
 import {AdminNav} from "./AdminNav";
 
 function fetchQuestionSets(token, setQuestionSets) {
-    axios.get("http://www.uniquechange.com/fwApp/api/admin/questionsets_get.php", { headers: {"X-Auth-Token": token} })
+    axios.get("https://facilitatedwriting.com/fwApp/api/admin/questionsets_get.php", { headers: {"X-Auth-Token": token} })
         .then(response => {
             let data = response.data;
             setQuestionSets(data);
@@ -16,7 +16,7 @@ function fetchQuestionSets(token, setQuestionSets) {
 }
 
 function questionSetDeleteBackgroundAudio(token, questionSetId) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/questionsets_backgroundaudio_del.php?id="+questionSetId, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/questionsets_backgroundaudio_del.php?id="+questionSetId, { headers: {"X-Auth-Token": token} })
         .catch(error => {
             console.log(error);
         });
@@ -44,7 +44,7 @@ function addBackgroundAudioToQuestionSet(token, qsid, audio, file) {
     formData.append("fileToUpload", file);
 
     return axios({
-        url: "http://www.uniquechange.com/fwApp/api/admin/questionsets_backgroundaudio_add.php?id="+qsid+"&audio="+audio,
+        url: "https://facilitatedwriting.com/fwApp/api/admin/questionsets_backgroundaudio_add.php?id="+qsid+"&audio="+audio,
         method: "POST",
         headers: {
             "X-Auth-Token": token,
@@ -61,14 +61,14 @@ function addBackgroundAudioToQuestionSet(token, qsid, audio, file) {
 }
 
 function questionDeleteAudio(token, questionId) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/questions_audio_del.php?id="+questionId, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/questions_audio_del.php?id="+questionId, { headers: {"X-Auth-Token": token} })
         .catch(error => {
             console.log(error);
         });
 }
 
 function questionDeleteAudioDetails(token, questionId) {
-    return axios.get("http://www.uniquechange.com/fwApp/api/admin/questions_audiodetails_del.php?id="+questionId, { headers: {"X-Auth-Token": token} })
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/questions_audiodetails_del.php?id="+questionId, { headers: {"X-Auth-Token": token} })
         .catch(error => {
             console.log(error);
         });
@@ -79,7 +79,7 @@ function addAudioToQuestion(token, qsid, audio, file) {
     formData.append("fileToUpload", file);
 
     return axios({
-        url: "http://www.uniquechange.com/fwApp/api/admin/questions_audio_add.php?id="+qsid+"&audio="+audio,
+        url: "https://facilitatedwriting.com/fwApp/api/admin/questions_audio_add.php?id="+qsid+"&audio="+audio,
         method: "POST",
         headers: {
             "X-Auth-Token": token,
@@ -99,7 +99,7 @@ function addAudioDetailsToQuestion(token, qsid, audio, file) {
     formData.append("fileToUpload", file);
 
     return axios({
-        url: "http://www.uniquechange.com/fwApp/api/admin/questions_audiodetails_add.php?id="+qsid+"&audio="+audio,
+        url: "https://facilitatedwriting.com/fwApp/api/admin/questions_audiodetails_add.php?id="+qsid+"&audio="+audio,
         method: "POST",
         headers: {
             "X-Auth-Token": token,
@@ -119,7 +119,7 @@ function addImageToQuestion(token, qsid, image, file, altText) {
     formData.append("fileToUpload", file);
 
     return axios({
-        url: "http://www.uniquechange.com/fwApp/api/admin/questions_image_add.php?id="+qsid+"&image="+image+"&alt="+altText,
+        url: "https://facilitatedwriting.com/fwApp/api/admin/questions_image_add.php?id="+qsid+"&image="+image+"&alt="+altText,
         method: "POST",
         headers: {
             "X-Auth-Token": token,
@@ -223,7 +223,7 @@ export const AdminQuestionSets = () => {
                     {activeQuestionSet.background_audio &&
                         <>
                             <audio controls>
-                              <source src={"http://uniquechange.com/fwApp/audio-store/" + activeQuestionSet.background_audio + ".mp3"} type="audio/mpeg"/>
+                              <source src={"https://facilitatedwriting.com/fwApp/audio-store/" + activeQuestionSet.background_audio + ".mp3"} type="audio/mpeg"/>
                             </audio>
                         </>
                     }
@@ -290,7 +290,7 @@ export const AdminQuestionSets = () => {
                 {activeQuestion.audio != null &&
                     <>
                         <audio controls>
-                            <source src={"http://uniquechange.com/fwApp/audio-store/" + activeQuestion.audio + ".mp3"} type="audio/mpeg"/>
+                            <source src={"https://facilitatedwriting.com/fwApp/audio-store/" + activeQuestion.audio + ".mp3"} type="audio/mpeg"/>
                         </audio>
                     </>
                 }
@@ -320,7 +320,7 @@ export const AdminQuestionSets = () => {
                 {activeQuestion.audio_details &&
                     <>
                         <audio controls>
-                            <source src={"http://uniquechange.com/fwApp/audio-store/" + activeQuestion.audio_details + ".mp3"} type="audio/mpeg"/>
+                            <source src={"https://facilitatedwriting.com/fwApp/audio-store/" + activeQuestion.audio_details + ".mp3"} type="audio/mpeg"/>
                         </audio>
                     </>
                 }
@@ -349,7 +349,7 @@ export const AdminQuestionSets = () => {
 
                 <h4>Image</h4>
                 {activeQuestion.image &&
-                    <img style={{width: "auto", height: 128}} src={"http://uniquechange.com/fwApp/image-store/" + activeQuestion.image + ".png"} alt={activeQuestion.image_alttext}/>
+                    <img style={{width: "auto", height: 128}} src={"https://facilitatedwriting.com/fwApp/image-store/" + activeQuestion.image + ".png"} alt={activeQuestion.image_alttext}/>
                 }
                 <div className="row col-4 mt-3">
                     <div className="input-group mb-3">
