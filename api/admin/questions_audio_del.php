@@ -47,7 +47,7 @@ $stmt = $conn->prepare("UPDATE `question` SET audio = NULL WHERE question.ID = ?
 $stmt->bind_param("s", $question_id);
 $stmt->execute();
 
-$target_file = $STORAGE_PATH . $_GET["audio"] . ".mp3";
+$target_file = $STORAGE_PATH . $audio . ".mp3";
 unlink($target_file);
 
 // Set content type

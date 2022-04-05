@@ -74,6 +74,13 @@ function questionDeleteAudioDetails(token, questionId) {
         });
 }
 
+function questionDeleteImage(token, questionId) {
+    return axios.get("https://facilitatedwriting.com/fwApp/api/admin/questions_image_del.php?id="+questionId, { headers: {"X-Auth-Token": token} })
+        .catch(error => {
+            console.log(error);
+        });
+}
+
 function addAudioToQuestion(token, qsid, audio, file) {
     let formData = new FormData();
     formData.append("fileToUpload", file);
@@ -360,7 +367,7 @@ export const AdminQuestionSets = () => {
                         <input type="text" className="form-control" placeholder="Alt Text"
                                aria-label="Alt Text" aria-describedby="basic-addon2" onChange={(t) => setQuestionImageAltText(t.target.value)}/>
                     </div>
-                    <div className="input-group-append">
+                    <div className="input-group-append mb-3">
                         <button className="btn btn-primary" onClick={() => {
                             addImageToQuestion(token, activeQuestionId, activeQuestion.image ?? uuidv4(), questionImageFile, questionImageAltText).then((res) => {
                                 fetchQuestionSets(token, setQuestionSets);
@@ -368,13 +375,13 @@ export const AdminQuestionSets = () => {
                         }}>Upload</button>
                     </div>
 
-                    {/*<div className="input-group mb-3">*/}
-                    {/*    <button className="btn btn-danger" onClick={() => {*/}
-                    {/*        questionDeleteAudioDetails(token, activeQuestionId).then((res) => {*/}
-                    {/*            fetchQuestionSets(token, setQuestionSets);*/}
-                    {/*        });*/}
-                    {/*    }}>Delete</button>*/}
-                    {/*</div>*/}
+                    <div className="input-group mb-3">
+                        <button className="btn btn-danger" onClick={() => {
+                            questionDeleteImage(token, activeQuestionId).then((res) => {
+                                fetchQuestionSets(token, setQuestionSets);
+                            });
+                        }}>Delete</button>
+                    </div>
                 </div>
 
 

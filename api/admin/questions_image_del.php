@@ -30,24 +30,28 @@ if($_ENV["AUTH_DISABLE"] !== true) {
     }
 }
 
-$question_id = $_GET["id"] ?? die("No question id");
+$question_id = $_GET["id"];
 
-$STORAGE_PATH = $_SERVER["DOCUMENT_ROOT"] . "/public_html/fwApp/audio-store/";
+$STORAGE_PATH = $_SERVER["DOCUMENT_ROOT"] . "/fwApp/image-store/";
 
 // Connect to db
 $database = new Database();
 $conn = $database->connect();
 
-$stmt = $conn->prepare("SELECT audio_details FROM `question` WHERE question.ID = ?");
+$stmt = $conn->prepare("SELECT image FROM `question` WHERE question.ID = ?");
 $stmt->bind_param("s", $question_id);
 $stmt->execute();
-$audio = $stmt->get_result()->fetch_assoc()["audio"];
+$image = $stmt->get_result()->fetch_assoc()["image"];
 
-$stmt = $conn->prepare("UPDATE `question` SET audio_details = NULL WHERE question.ID = ?");
+$stmt = $conn->prepare("UPDATE `question` SET image = NULL WHERE question.ID = ?");
 $stmt->bind_param("s", $question_id);
 $stmt->execute();
 
-$target_file = $STORAGE_PATH . $audio . ".mp3";
+$stmt = $conn->prepare("UPDATE `question` SET image_alttext = NULL WHERE question.ID = ?");
+$stmt->bind_param("s", $question_id);
+$stmt->execute();
+
+$target_file = $STORAGE_PATH . $image . ".mp3";
 unlink($target_file);
 
 // Set content type
