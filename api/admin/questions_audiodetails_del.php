@@ -30,7 +30,10 @@ if($_ENV["AUTH_DISABLE"] !== true) {
     }
 }
 
-$question_id = $_GET["id"];
+$question_id = $_GET["id"] ?? die("No question id");
+$audio = $_GET["audio"] ?? die("No audio id");
+
+$STORAGE_PATH = $_SERVER["DOCUMENT_ROOT"] . "/public_html/fwApp/audio-store/";
 
 // Connect to db
 $database = new Database();
@@ -45,7 +48,7 @@ $stmt = $conn->prepare("UPDATE `question` SET audio_details = NULL WHERE questio
 $stmt->bind_param("s", $question_id);
 $stmt->execute();
 
-$target_file = "/public_html/fwApp/audio-store/" . $_GET["audio"] . ".mp3";
+$target_file = $STORAGE_PATH . $_GET["audio"] . ".mp3";
 unlink($target_file);
 
 // Set content type

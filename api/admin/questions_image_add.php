@@ -35,6 +35,8 @@ $fileName = $_FILES['fileToUpload']['name'];
 $fileExtension = strtolower(end(explode('.', $fileName)));
 $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
 
+$STORAGE_PATH = $_SERVER["DOCUMENT_ROOT"] . "/fwApp/image-store/";
+
 // Connect to db
 $database = new Database();
 $conn = $database->connect();
@@ -44,7 +46,7 @@ header('Content-Type: application/json');
 if ($fileExtension !== "png") {
     echo json_encode(["status" => "fail", "error" => "Upload failed, must be a .png"]);
 } else {
-    $target_file = "/public_html/fwApp/image-store/" . $_GET["image"] . ".png";
+    $target_file = $STORAGE_PATH . $_GET["image"] . ".png";
     if (move_uploaded_file($fileTmpName, $target_file)) {
         $stmt = $conn->prepare("UPDATE `question` SET image = ? WHERE question.ID = ?");
         $stmt->bind_param("ss", $_GET["image"], $question_id);
@@ -55,6 +57,7 @@ if ($fileExtension !== "png") {
         $stmt->execute();
     } else {
         echo json_encode(["status" => "fail", "error" => "Sorry, there was an error uploading your file."]);
+        die();
     }
 }
 

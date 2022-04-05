@@ -35,6 +35,8 @@ $fileName = $_FILES['fileToUpload']['name'];
 $fileExtension = strtolower(end(explode('.', $fileName)));
 $fileTmpName = $_FILES['fileToUpload']['tmp_name'];
 
+$STORAGE_PATH = $_SERVER["DOCUMENT_ROOT"] . "/fwApp/audio-store/";
+
 // Connect to db
 $database = new Database();
 $conn = $database->connect();
@@ -44,15 +46,14 @@ header('Content-Type: application/json');
 if ($fileExtension !== "mp3") {
     echo json_encode(["status" => "fail", "error" => "Upload failed, must be a .mp3"]);
 } else {
-    $target_file = "/public_html/fwApp/audio-store/" . $_GET["audio"] . ".mp3";
+    $target_file = $STORAGE_PATH . $_GET["audio"] . ".mp3";
     if (move_uploaded_file($fileTmpName, $target_file)) {
-//        echo "The file " . htmlspecialchars(basename($_FILES["fileToUpload"]["name"])) . " has been uploaded.";
         $stmt = $conn->prepare("UPDATE `question` SET audio = ? WHERE question.ID = ?");
         $stmt->bind_param("ss", $_GET["audio"], $question_id);
         $stmt->execute();
-//        echo "set background_audio=" . $_GET["audio"] . " for id=" . $question_set_id;
     } else {
         echo json_encode(["status" => "fail", "error" => "Sorry, there was an error uploading your file."]);
+        die();
     }
 }
 

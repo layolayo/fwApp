@@ -18,7 +18,9 @@ $results = $facilitator->read($email);
 $output = $results->fetch_assoc();
 
 if (password_verify($password, $output["userpassword"]) == $password) {
-    session_destroy();
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_destroy();
+    }
     session_start();
     $_SESSION["email"] = $email;
     $_SESSION["authenticated"] = "authenticated";
