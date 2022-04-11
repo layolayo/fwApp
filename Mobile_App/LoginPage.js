@@ -14,7 +14,7 @@ export const LoginPage = ({ navigation }) => {
            <View style={styles.innerContainer}>
                <TextInput autoCapitalize="none" autoCorrect={false} onSubmitEditing={() => passwordInput.focus()} keyboardType='default' returnKeyType="next" placeholder="Username" variant="standard" onChangeText={onChangeEmail} value={email}/>
                <TextInput autoCapitalize="none" autoCorrect={false} ref={(input)=> onChangePasswordInput(input) } returnKeyType="go" placeholder="password" variant="standard" onChangeText={onChangePassword} value={password} secureTextEntry/>
-               <Button title={"Log In"} onPress={async () => {
+               <Button disabled={email.length === 0 || password.length === 0} title={"Log In"} onPress={async () => {
                    console.log("Logging in");
 
                    const config = {
@@ -42,7 +42,7 @@ export const LoginPage = ({ navigation }) => {
                        .catch(error => {
                            console.log(error);
                        });
-               }}/>
+               }} dis/>
            </View>
        </View>
     );

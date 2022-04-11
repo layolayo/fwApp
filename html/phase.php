@@ -458,7 +458,7 @@ include_once '../model/QuestionSet.php';
 
 
     window.onload = function() {
-        makeNavItemActive("Main Course");
+        makeNavItemActive("Purpose");
         loadQuestionSets([], [])
     }
 
