@@ -156,6 +156,19 @@ include_once '../model/QuestionSet.php';
           <?php
           }
           ?>
+
+          <?php
+          if(!empty(trim($results["preparation"] ?? ""))) {
+          ?>
+          <a class="btn link-primary" data-bs-toggle="collapse" href="#preparation" role="button" aria-expanded="false" aria-controls="preparation">
+            ❯ Preparation
+          </a>
+          <div class="collapse" id="preparation">
+            <p class="lead" > <?php echo $results["preparation"]; ?> </p>
+          </div>
+          <?php
+          }
+          ?>
         </div>
         <div class='row justify-content-md-center'>
           <div class='w-25 alert alert-success col col-lg-2 text-center' role='alert' id='alert' onmouseout='oldText()' style='visibility:hidden'> Copy to clipboard</div>
