@@ -82,7 +82,7 @@ final class AddInitialTables extends AbstractMigration
 
         $phase = $this->table("phase", ['id' => false]);
         $phase->addColumn("title", 'string', ['limit' => 255, 'null' => false])
-            ->addColumn("questionSetID", 'string', ['limit' => 255, 'null' => false])
+            ->addColumn("questionSetID", 'string', ['limit' => 255, 'null' => false, 'unique' => true])
             ->addForeignKey('questionSetID', 'question_set', 'ID', ['delete'=> 'RESTRICT', 'update'=> 'RESTRICT'])
 //            ->addForeignKey('title', 'phase_title', 'title', ['delete'=> 'RESTRICT', 'update'=> 'RESTRICT'])
             ->changePrimaryKey(["title", "questionSetID"])
