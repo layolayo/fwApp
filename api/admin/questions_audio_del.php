@@ -43,12 +43,16 @@ $stmt->bind_param("s", $question_id);
 $stmt->execute();
 $audio = $stmt->get_result()->fetch_assoc()["audio"];
 
-$stmt = $conn->prepare("UPDATE `question` SET audio = NULL WHERE question.ID = ?");
-$stmt->bind_param("s", $question_id);
-$stmt->execute();
+if(!$audio) {
+    echo json_encode(["status" => "ok", "note" => "No audio to delete"]);
+} else {
 
-$target_file = $STORAGE_PATH . $audio . ".mp3";
-unlink($target_file);
+    $stmt = $conn->prepare("UPDATE `question` SET audio = NULL WHERE question.ID = ?");
+    $stmt->bind_param("s", $question_id);
+    $stmt->execute();
 
-// Set content type
-echo json_encode(["status" => "ok"]);
+    $target_file = $STORAGE_PATH . $audio . ".mp3";
+    unlink($target_file);
+
+    echo json_encode(["status" => "ok"]);
+}

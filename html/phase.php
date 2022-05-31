@@ -458,7 +458,7 @@ include_once '../model/QuestionSet.php';
 
 
     window.onload = function() {
-        makeNavItemActive("Purpose");
+        makeNavItemActive("Search");
         loadQuestionSets([], [])
     }
 
