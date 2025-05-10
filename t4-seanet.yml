@@ -1,0 +1,46 @@
+connectors:
+  XLX:
+    type: Burton 1508
+    pins: [1,2,3,4,5,6,7,8]
+    pinlabels: [VIDEO,N/C,N/C,DATA Rx,DATA Tx,PWR RET,26V,PWR RET]
+    loops: [[6, 8]]
+    show_name: true
+    bgcolor_title: CU
+    bgcolor: BG
+  T4:
+    type: Seanet
+    pins: [1,2,3,4,5,6,7]
+    pinlabels: [26V,PWR RET,N/C,N/C,DATA Tx,DATA Rx,VIDEO]
+    show_name: true
+    bgcolor_title: CU
+    bgcolor: BG
+    
+cables:
+  W1:
+     gauge: 18 AWG
+     show_equiv: true
+     colors: [RD, WH]
+     show_wirecount: false     
+     show_wirenumbers: false
+     show_name: false
+     bgcolor_title: VT
+     bgcolor: IV
+  W2:
+     gauge: 22 AWG
+     show_equiv: true
+     colors: [BK, BU, YE]
+     show_wirecount: false     
+     show_wirenumbers: false
+     show_name: false
+     bgcolor_title: PK
+     bgcolor: IV   
+     
+connections:
+  -
+    - XLX: [7,6] 
+    - W1: [1,2]
+    - T4: [1,2]
+  -
+    - XLX: [4,5,1]
+    - W2: [1,2,3]
+    - T4: [5,6,7]
