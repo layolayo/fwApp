@@ -1,0 +1,398 @@
+connectors:
+  TERMINATION-JB:
+    type: SUPPLY
+    pinlabels: [ 120VAC INST,29VAC SOL,120VAC LTS,120VAC TOOL ]
+    show_name: true
+    bgcolor_title: RD
+    bgcolor: SN
+  CONTROL-CAN:
+    type: FILTER
+    pinlabels: [120VAC IN,120VAC OUT]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: SN
+  PS1:
+    type: PSU
+    pinlabels: [120V IN,5V OUT,12V OUT]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: LB
+  PS2:
+    type: PSU
+    pinlabels: [ 120V IN,24V OUT ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: LB
+  PS3:
+    type: PSU
+    pinlabels: [ 120V IN,24V OUT ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: LB
+  PS4:
+    type: PSU
+    pinlabels: [ 120V IN,48V OUT ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: LB
+  PS5:
+    type: PSU
+    pinlabels: [ 120V IN,5V OUT,12V OUT ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: LB
+  EOI1:
+    type: PWR
+    pinlabels: [ 5V ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: GD
+  CORE-JB-AC:
+    type: AC PWR
+    pinlabels: [ 120VAC INST,29VAC SOL,120VAC LTS,120VAC TOOL ]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: SN
+  CBB1:
+    type: CBB
+    pinlabels: [ 24V-IN, 24V-OUT ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: SN
+  LSI(1-3):
+    type: PWR
+    pinlabels: [ 24V ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: GD
+  SEC(1-3):
+    type: PWR
+    pinlabels: [ 24V ]
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: GD
+  CC-CORE-JB-DATA:
+    type: J100
+    pinlabels: [ 24V IN,37 WAY ]
+    pincount: 37
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: SN
+  CC-CORE-JB-PWR:
+    type: J103
+    pinlabels: [ 12V IN,24V IN,120VAC OUT,12 WAY ]
+    pincount: 12
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: SN
+  CC-SURVEY-JB-PWR:
+    type: J104
+    pinlabels: [ 24V IN,48V IN,12 WAY ]
+    pincount: 12
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: SN
+  CC-SURVEY-JB-DATA:
+    type: J105
+    pinlabels: [ 5V IN,24V IN,37 WAY ]
+    pincount: 37
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: TQ
+    bgcolor: SN
+  CORE-JB-DATA:
+    type: J300
+    pinlabels: [ 24V,37 WAY ]
+    pincount: 37
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: SN
+  CORE-JB-PWR:
+    type: J342
+    pinlabels: [ 120VAC (C-CAN) IN,12V OUT,24V OUT,12 WAY ]
+    pincount: 12
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: SN
+  SURVEY-JB-DATA:
+    type: J400
+    pinlabels: [ 5V OUT,24V OUT,37 WAY ]
+    pincount: 37
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: OG
+    bgcolor: SN
+  SURVEY-JB-PWR:
+    type: J401
+    pinlabels: [ 24V OUT,48V OUT,12 WAY ]
+    pincount: 12
+    hide_disconnected_pins: true
+    show_name: true
+    bgcolor_title: OG
+    bgcolor: SN
+  CIRCUIT-BREAKERS:
+    type: CB(1-6)
+    pinlabels: [ CB1 (C-CAN) 16A,CB2 (TOOL) 16A,CB3 (LTS1/2) 5A,CB4 (LTS3/4) 5A,CB5 (LTS5/6) 5A,CB6 (LPA) 10A]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: SN
+  LAM(1-2):
+    type: PWR
+    pinlabels: [ 24V ]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: GD
+  BRIDGE-RECTIFIER:
+    type: FWB
+    pinlabels: [ 29VAC IN, 29V OUT]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: SN
+  LPA:
+    type: LPA
+    pinlabels: [ 24V BOARD, 120VAC SUPPLY ]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: GD
+  LPD1:
+    type: LPD
+    pinlabels: [ 24V BOARD,12V SUPPLY,24V SUPPLY,29V SOL ]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: GD
+  LPD(2-3):
+    type: LPD
+    pinlabels: [ 24V BOARD,12V SUPPLY,24V SUPPLY ]
+    show_name: true
+    bgcolor_title: YE
+    bgcolor: GD
+  LAM3:
+    type: PWR
+    pinlabels: [ 24V ]
+    show_name: true
+    bgcolor_title: OG
+    bgcolor: GD
+  LPD(4-5):
+    type: LPD
+    pinlabels: [ 24V BOARD,24V SUPPLY,48V SUPPLY ]
+    show_name: true
+    bgcolor_title: OG
+    bgcolor: GD
+  EOI2:
+    type: PWR
+    pinlabels: [ 5V ]
+    show_name: true
+    bgcolor_title: OG
+    bgcolor: GD
+  SOI:
+    type: PWR
+    pinlabels: [ 5V ]
+    show_name: true
+    bgcolor_title: OG
+    bgcolor: GD
+
+connections:
+  -
+    - TERMINATION-JB: [1]
+    - ->
+    - CORE-JB-AC: [1]
+  -
+    - TERMINATION-JB: [2]
+    - ->
+    - CORE-JB-AC: [2]
+  -
+    - TERMINATION-JB: [3]
+    - ->
+    - CORE-JB-AC: [3]
+  -
+    - TERMINATION-JB: [4]
+    - ->
+    - CORE-JB-AC: [4]
+  -
+    - CORE-JB-AC: [1]
+    - ->
+    - CIRCUIT-BREAKERS: [1]
+  -
+    - CORE-JB-AC: [1]
+    - ->
+    - CIRCUIT-BREAKERS: [6]
+  -
+    - CORE-JB-AC: [2]
+    - ->
+    - BRIDGE-RECTIFIER: [1]
+  -
+    - BRIDGE-RECTIFIER: [2]
+    - ->
+    - LPD1: [4]
+  -
+    - CORE-JB-AC: [4]
+    - ->
+    - CIRCUIT-BREAKERS: [2]
+  -
+    - CORE-JB-AC: [3]
+    - ->
+    - CIRCUIT-BREAKERS: [3]
+  -
+    - CORE-JB-AC: [ 3 ]
+    - ->
+    - CIRCUIT-BREAKERS: [ 4 ]
+  -
+    - CORE-JB-AC: [3]
+    - ->
+    - CIRCUIT-BREAKERS: [5]
+  -
+    - CIRCUIT-BREAKERS: [ 1 ]
+    - ->
+    - CORE-JB-PWR: [1]
+  -
+    - CIRCUIT-BREAKERS: [ 6 ]
+    - ->
+    - LPA: [ 2 ]
+  -
+    - CONTROL-CAN: [2]
+    - ->
+    - PS1: [1]
+  -
+    - CONTROL-CAN: [2]
+    - ->
+    - PS2: [1]
+  -
+    - CONTROL-CAN: [2]
+    - ->
+    - PS3: [1]
+  -
+    - CONTROL-CAN: [ 2 ]
+    - ->
+    - PS4: [ 1 ]
+  -
+    - CONTROL-CAN: [ 2 ]
+    - ->
+    - PS5: [ 1 ]
+  -
+    - CONTROL-CAN: [ 1 ]
+    - <-
+    - CC-CORE-JB-PWR: [ 3 ]
+  -
+    - PS1: [ 2 ]
+    - ->
+    - EOI1: [ 1 ]
+  -
+    - PS1: [ 3 ]
+    - ->
+    - CC-CORE-JB-PWR: [ 1 ]
+  -
+    - PS2: [ 2 ]
+    - ->
+    - CBB1: [ 1 ]
+  -
+    - PS2: [ 2 ]
+    - ->
+    - CC-CORE-JB-PWR: [ 2 ]
+  -
+    - CBB1: [ 2 ]
+    - ->
+    - LSI(1-3): [ 1 ]
+  -
+    - CBB1: [ 2 ]
+    - ->
+    - SEC(1-3): [ 1 ]
+  -
+    - CBB1: [ 2 ]
+    - ->
+    - CC-CORE-JB-DATA: [ 1 ]
+  -
+    - CBB1: [ 2 ]
+    - ->
+    - CC-SURVEY-JB-DATA: [ 2 ]
+  -
+    - PS3: [ 2 ]
+    - ->
+    - CC-SURVEY-JB-PWR: [ 1 ]
+  -
+    - PS4: [ 2 ]
+    - ->
+    - CC-SURVEY-JB-PWR: [ 2 ]
+  -
+    - PS5: [ 2 ]
+    - ->
+    - CC-SURVEY-JB-DATA: [ 1 ]
+  -
+    - CC-CORE-JB-DATA: [2]
+    - <-->
+    - CORE-JB-DATA: [2]
+  -
+    - CC-CORE-JB-PWR: [4]
+    - <-->
+    - CORE-JB-PWR: [4]
+  -
+    - CC-SURVEY-JB-PWR: [3]
+    - <-->
+    - SURVEY-JB-PWR: [3]
+  -
+    - CC-SURVEY-JB-DATA: [3]
+    - <-->
+    - SURVEY-JB-DATA: [3]
+  -
+    - CORE-JB-DATA: [ 1 ]
+    - ->
+    - LAM(1-2): [ 1 ]
+  -
+    - CORE-JB-DATA: [ 1 ]
+    - ->
+    - LPA: [ 1 ]
+  -
+    - CORE-JB-DATA: [ 1 ]
+    - ->
+    - LPD1: [ 1 ]
+  -
+    - CORE-JB-PWR: [ 2 ]
+    - ->
+    - LPD1: [ 2 ]
+  -
+    - CORE-JB-PWR: [ 3 ]
+    - ->
+    - LPD1: [ 3 ]
+  -
+    - CORE-JB-DATA: [ 1 ]
+    - ->
+    - LPD(2-3): [ 1 ]
+  -
+    - CORE-JB-PWR: [ 2 ]
+    - ->
+    - LPD(2-3): [ 2 ]
+  -
+    - CORE-JB-PWR: [ 3 ]
+    - ->
+    - LPD(2-3): [ 3 ]
+  -
+    - SURVEY-JB-DATA: [ 2 ]
+    - ->
+    - LAM3: [ 1 ]
+  -
+    - SURVEY-JB-DATA: [ 2 ]
+    - ->
+    - LPD(4-5): [ 1 ]
+  -
+    - SURVEY-JB-PWR: [ 1 ]
+    - ->
+    - LPD(4-5): [ 2 ]
+  -
+    - SURVEY-JB-PWR: [ 2 ]
+    - ->
+    - LPD(4-5): [ 3 ]
+  -
+    - SURVEY-JB-DATA: [ 1 ]
+    - ->
+    - EOI2: [ 1 ]
+  -
+    - SURVEY-JB-DATA: [ 1 ]
+    - ->
+    - SOI: [ 1 ]
+
+
+
